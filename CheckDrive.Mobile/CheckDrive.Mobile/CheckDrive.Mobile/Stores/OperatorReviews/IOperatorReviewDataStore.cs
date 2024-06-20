@@ -11,5 +11,6 @@ namespace CheckDrive.Web.Stores.OperatorReviews
         Task<GetOperatorReviewResponse> GetOperatorReviewsByDriverIdAsync(int driverId);
         Task<GetOperatorReviewResponse> GetOperatorReviewsAsync(DateTime date);
         Task<OperatorReviewDto> GetOperatorReviewAsync(int id);
+        Task<OperatorReviewDto> CreateOperatorReviewAsync(OperatorReviewForCreateDto operatorReview);
     }
 }

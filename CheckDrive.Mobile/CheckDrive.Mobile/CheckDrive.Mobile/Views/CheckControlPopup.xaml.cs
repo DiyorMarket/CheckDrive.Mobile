@@ -4,7 +4,6 @@ using CheckDrive.Mobile.Stores.MechanicAcceptances;
 using CheckDrive.Mobile.Stores.MechanicHandovers;
 using CheckDrive.Mobile.Stores.OperatorReviews;
 using CheckDrive.Mobile.ViewModels;
-using Rg.Plugins.Popup.Pages;
 using System;
 
 using Xamarin.Forms;
@@ -13,11 +12,9 @@ using Xamarin.Forms.Xaml;
 namespace CheckDrive.Mobile.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class CheckControlPopup : PopupPage
-    {
-        private RoadMapViewModel _mapViewModel;
-
-        public CheckControlPopup (string mes)
+	public partial class CheckControlPopup : ContentPage
+	{
+        public CheckControlPopup ()
         {
 			InitializeComponent ();
 
@@ -27,16 +24,16 @@ namespace CheckDrive.Mobile.Views
             var operatorReviewDS = new OperatorReviewDataStore(client);
             var mechanicAcceptanceDS = new MechanicAcceptanceDataStore(client);
 
-            _mapViewModel = new RoadMapViewModel(doctorReviewDS, mechanicAcceptanceDS, operatorReviewDS, mechanicHandoverDS);
-            _mapViewModel.Message = mes;
-
-            BindingContext = _mapViewModel;
+            var viewModel = new RoadMapViewModel(doctorReviewDS, mechanicAcceptanceDS, operatorReviewDS, mechanicHandoverDS);
+            BindingContext = viewModel;
         }
-
-        protected override void OnAppearing()
+        private async void CancelButton_Clicked(object sender, EventArgs e)
         {
-            base.OnAppearing();
-            _mapViewModel.LoadViewPage();
+            await Navigation?.PopModalAsync();
+        }
+        private async void OkButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation?.PopModalAsync();
         }
     }
 }

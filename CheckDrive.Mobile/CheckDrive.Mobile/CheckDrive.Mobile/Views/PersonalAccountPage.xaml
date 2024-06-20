@@ -58,7 +58,7 @@
                         <md:MaterialLabel
                             Margin="10,0"
                             FontSize="Medium"
-                            Text="{Binding Login}"
+                            Text="{Binding Driver.Login}"
                             TextColor="#00A3FF" />
                     </md:MaterialCard>
                     <md:MaterialCard
@@ -73,7 +73,7 @@
                         <md:MaterialLabel
                             Margin="10,0"
                             FontSize="Medium"
-                            Text="{Binding PhoneNumber}"
+                            Text="{Binding Driver.PhoneNumber}"
                             TextColor="#00A3FF" />
                     </md:MaterialCard>
                     <md:MaterialButton

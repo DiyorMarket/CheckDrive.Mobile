@@ -11,5 +11,6 @@ namespace CheckDrive.Web.Stores.DoctorReviews
         Task<GetDoctorReviewResponse> GetDoctorReviewsAsync();
         Task<GetDoctorReviewResponse> GetDoctorReviewsByDriverIdAsync(int driverId);
         Task<DoctorReviewDto> GetDoctorReviewAsync(int id);
+        Task<DoctorReviewDto> CreateDoctorReviewAsync(DoctorReviewForCreateDto review);
     }
 }

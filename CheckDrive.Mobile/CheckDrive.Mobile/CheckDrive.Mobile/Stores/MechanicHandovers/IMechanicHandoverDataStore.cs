@@ -11,5 +11,6 @@ namespace CheckDrive.Web.Stores.MechanicHandovers
         Task<GetMechanicHandoverResponse> GetMechanicHandoversByDriverIdAsync(int driverId);
         Task<GetMechanicHandoverResponse> GetMechanicHandoversAsync(DateTime date);
         Task<MechanicHandoverDto> GetMechanicHandoverAsync(int id);
+        Task<MechanicHandoverDto> CreateMechanicHandoverAsync(MechanicHandoverForCreateDto mechanicHandover);
     }
 }

@@ -12,5 +12,6 @@ namespace CheckDrive.Web.Stores.MechanicAcceptances
         Task<GetMechanicAcceptanceResponse> GetMechanicAcceptancesAsync();
         Task<GetMechanicAcceptanceResponse> GetMechanicAcceptancesByDriverIdAsync(int driverId);
         Task<MechanicAcceptanceDto> GetMechanicAcceptanceAsync(int id);
+        Task<MechanicAcceptanceDto> CreateMechanicAcceptanceAsync(MechanicAcceptanceForCreateDto mechanicAcceptance);
     }
 }

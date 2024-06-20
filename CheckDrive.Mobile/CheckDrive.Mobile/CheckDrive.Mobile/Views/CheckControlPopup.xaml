@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<popup:PopupPage
+<ContentPage
     x:Class="CheckDrive.Mobile.Views.CheckControlPopup"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    Padding="0,40,0,0"
     BackgroundColor="#80FFFFFF">
     <Frame
         BackgroundColor="{StaticResource Primary}"
-        CornerRadius="20"
         HeightRequest="200"
         HorizontalOptions="Center"
         VerticalOptions="Center"
-        WidthRequest="300">
+        WidthRequest="300"
+        CornerRadius="20">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -22,7 +22,6 @@
                 Margin="10"
                 FontSize="22"
                 HorizontalOptions="Center"
-                HorizontalTextAlignment="Center"
                 Text="{Binding Message}"
                 TextColor="Black"
                 VerticalOptions="CenterAndExpand" />
@@ -35,18 +34,18 @@
                 <Button
                     Margin="10,10,0,10"
                     BackgroundColor="#85929E"
-                    Command="{Binding RejectButtonCommand}"
+                    Clicked="CancelButton_Clicked"
                     CornerRadius="100"
                     Text="Yo'q"
                     WidthRequest="130" />
                 <Button
                     Margin="10"
                     BackgroundColor="#2A7BEF"
-                    Command="{Binding AcceptButtonCommand}"
+                    Clicked="OkButton_Clicked"
                     CornerRadius="100"
                     Text="Ha"
                     WidthRequest="130" />
             </StackLayout>
         </Grid>
     </Frame>
-</popup:PopupPage>
+</ContentPage>

@@ -14,7 +14,6 @@ namespace CheckDrive.Mobile.Views
     public partial class RoadMapPage : ContentPage
     {
         private RoadMapViewModel viewModel;
-
         public RoadMapPage()
         {
             InitializeComponent();
@@ -25,15 +24,23 @@ namespace CheckDrive.Mobile.Views
             var operatorReviewDS = new OperatorReviewDataStore(client);
             var mechanicAcceptanceDS = new MechanicAcceptanceDataStore(client);
 
-
             BindingContext = viewModel = new RoadMapViewModel(doctorReviewDS, mechanicAcceptanceDS, operatorReviewDS, mechanicHandoverDS);
-
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
             viewModel.LoadViewPage();
+        }
+
+        private async void ClickToShowPopup_Clicked(object sender, EventArgs e)
+        {
+            var popup = new CheckControlPopup()
+            {
+                BindingContext = BindingContext
+            };
+
+            await Navigation.PushModalAsync(popup);
         }
 
         private void RoadMapView_Refreshing(Object sender, EventArgs e)

@@ -62,7 +62,7 @@ namespace CheckDrive.Mobile.Stores.OperatorReviews
                 query.Append($"driverId={driverId}");
             }
 
-            var response =  _api.GetAsync("operators/reviews?" + query.ToString()).Result;
+            var response = await _api.GetAsync("operators/reviews?" + query.ToString());
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception("Could not fetch operator reviews.");
@@ -86,6 +86,19 @@ namespace CheckDrive.Mobile.Stores.OperatorReviews
             var result = JsonConvert.DeserializeObject<OperatorReviewDto>(json);
 
             return result;
+        }
+
+        public async Task<OperatorReviewDto> CreateOperatorReviewAsync(OperatorReviewForCreateDto operatorReview)
+        {
+            var json = JsonConvert.SerializeObject(operatorReview);
+            var response = await _api.PostAsync("operators/review", json);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Error creating operator reviews.");
+            }
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<OperatorReviewDto>(jsonResponse);
         }
     }
 }

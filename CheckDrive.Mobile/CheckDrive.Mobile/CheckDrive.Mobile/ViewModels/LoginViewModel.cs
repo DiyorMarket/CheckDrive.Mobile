@@ -2,9 +2,7 @@
 using CheckDrive.Mobile.Services;
 using CheckDrive.Web.Stores.Accounts;
 using CheckDrive.Web.Stores.Drivers;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -16,10 +14,6 @@ namespace CheckDrive.Mobile.ViewModels
         private readonly IAccountDataStore _accountDataStore;
         private readonly IDriverDataStore _driverDataStore;
 
-        public ICommand TogglePasswordVisibilityCommand { get; }
-        public ICommand ToggleLoginVisibilityCommand { get; }
-        public ICommand LoginCommand { get; }
-
         private DriverDto Account {  get; set; }
 
         private string _login;
@@ -28,12 +22,14 @@ namespace CheckDrive.Mobile.ViewModels
             get { return _login; }
             set { SetProperty(ref _login, value); }
         }
+
         private string _password;
         public string Password
         {
             get { return _password; }
             set { SetProperty(ref _password, value); }
         }
+
         private bool _isPasswordVisible;
         public bool IsPasswordVisible
         {
@@ -44,6 +40,7 @@ namespace CheckDrive.Mobile.ViewModels
                 OnPropertyChanged();
             }
         }
+
         private bool _isLoginVisible;
         public bool IsLoginVisible
         {
@@ -54,6 +51,11 @@ namespace CheckDrive.Mobile.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public ICommand TogglePasswordVisibilityCommand { get; }
+        public ICommand ToggleLoginVisibilityCommand { get; }
+
+        public Command LoginCommand { get; }
 
         public LoginViewModel(IAccountDataStore accountDataStore, IDriverDataStore driverDataStore)
         {
@@ -102,11 +104,10 @@ namespace CheckDrive.Mobile.ViewModels
                 DataService.SaveToken(token);
             }
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
-            var accountId = int.Parse(jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var accountsResponse = await _accountDataStore.GetAccountsAsync(Login);
+            var account = accountsResponse.Data.ToList().First();
 
-            var driverResponse = await _driverDataStore.GetDriversAsync(accountId);
+            var driverResponse = await _driverDataStore.GetDriversAsync(account.Id);
             var driver = driverResponse.Data.ToList().First();
 
             if (driver != null)

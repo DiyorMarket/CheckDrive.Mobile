@@ -106,5 +106,18 @@ namespace CheckDrive.Mobile.Stores.MechanicAcceptances
 
             return result;
         }
+
+        public async Task<MechanicAcceptanceDto> CreateMechanicAcceptanceAsync(MechanicAcceptanceForCreateDto mechanicAcceptance)
+        {
+            var json = JsonConvert.SerializeObject(mechanicAcceptance);
+            var response = await _api.PostAsync("mechanics/acceptances", json);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Error creating mechanic acceptance.");
+            }
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<MechanicAcceptanceDto>(jsonResponse);
+        }
     }
 }

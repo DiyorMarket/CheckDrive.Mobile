@@ -138,12 +138,6 @@
     <PackageReference Include="CheckDrive.ApiContracts">
       <Version>1.0.9</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client">
-      <Version>9.0.0-preview.5.24306.11</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Console">
-      <Version>9.0.0-preview.5.24306.7</Version>
-    </PackageReference>
     <PackageReference Include="Plugin.MaterialDesignControls">
       <Version>3.1.7</Version>
     </PackageReference>

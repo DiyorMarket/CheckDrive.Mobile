@@ -81,5 +81,18 @@ namespace CheckDrive.Mobile.Stores.MechanicHandovers
 
             return result;
         }
+
+        public async Task<MechanicHandoverDto> CreateMechanicHandoverAsync(MechanicHandoverForCreateDto mechanicHandover)
+        {
+            var json = JsonConvert.SerializeObject(mechanicHandover);
+            var response = await _api.PostAsync("mechanics/handover", json);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Error creating mechanic handover.");
+            }
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<MechanicHandoverDto>(jsonResponse);
+        }
     }
 }

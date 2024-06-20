@@ -19,7 +19,26 @@ namespace CheckDrive.Mobile.Stores.Accounts
             _api = apiClient;
         }
 
-        
+        public async Task<GetAccountResponse> GetAccountsAsync(string login)
+        {
+            StringBuilder query = new StringBuilder("");
+
+            if (login != null)
+            {
+                query.Append("Login=" + login.Trim());
+            }
+
+            var response = await _api.GetAsync("accounts?" + query.ToString());
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Could not fetch accounts.");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<GetAccountResponse>(json);
+
+            return result;
+        }
 
         public async Task<string> CreateTokenAsync(string login, string password)
         {
@@ -39,6 +58,33 @@ namespace CheckDrive.Mobile.Stores.Accounts
             return token;
         }
 
-        
+        public async Task<AccountDto> GetAccountAsync(int id)
+        {
+            var response = await _api.GetAsync($"accounts/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Could not fetch accounts with id: {id}.");
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<AccountDto>(json);
+
+            return result;
+        }
+
+        public async Task<AccountDto> CreateAccountAsync(AccountDto account)
+        {
+            var json = JsonConvert.SerializeObject(account);
+            var response = await _api.PostAsync("accounts", json);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Error creating accounts.");
+            }
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<AccountDto>(jsonResponse);
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using CheckDrive.Mobile.Services;
-using CheckDrive.Mobile.Views;
+﻿using CheckDrive.Mobile.Views;
 using System;
 using Xamarin.Forms;
 
@@ -7,8 +6,6 @@ namespace CheckDrive.Mobile
 {
     public partial class AppShell : Xamarin.Forms.Shell
     {
-        
-
         public AppShell()
         {
             InitializeComponent();
@@ -24,8 +21,6 @@ namespace CheckDrive.Mobile
         {
             await Shell.Current.GoToAsync("//LoginPage");
         }
-
-
 
     }
 }

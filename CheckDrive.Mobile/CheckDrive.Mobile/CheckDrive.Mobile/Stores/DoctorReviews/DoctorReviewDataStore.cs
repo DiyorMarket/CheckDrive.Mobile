@@ -80,5 +80,19 @@ namespace CheckDrive.Mobile.Stores.DoctorReviews
 
             return result;
         }
+
+        public async Task<DoctorReviewDto> CreateDoctorReviewAsync(DoctorReviewForCreateDto review)
+        {
+            var json = JsonConvert.SerializeObject(review);
+            var response = await _api.PostAsync("doctors/reviews", json);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Error creating doctor reviews.");
+            }
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<DoctorReviewDto>(jsonResponse);
+        }
     }
 }
