@@ -88,5 +88,4 @@
             IsVisible="False"
             Route="LoginPage" />
     </TabBar>
-
 </Shell>

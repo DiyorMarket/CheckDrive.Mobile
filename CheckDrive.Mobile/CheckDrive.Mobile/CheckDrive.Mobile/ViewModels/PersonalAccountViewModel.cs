@@ -44,7 +44,6 @@ namespace CheckDrive.Mobile.ViewModels
 
             await Task.Run(() =>
             {
-                Task.Delay(10000).Wait();
                 var _driver = DataService.GetAccount();
                 FullName = $"{_driver.FirstName} {_driver.LastName}";
                 PhoneNumber = _driver.PhoneNumber;

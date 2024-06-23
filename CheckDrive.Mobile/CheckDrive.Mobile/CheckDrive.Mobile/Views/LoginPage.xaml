@@ -116,6 +116,7 @@
                 </StackLayout>
             </StackLayout>
         </Grid>
+
         <!-- Spinner -->
         <md:MaterialProgressIndicator
             AbsoluteLayout.LayoutBounds="0.5,0.5,0.2,0.2"

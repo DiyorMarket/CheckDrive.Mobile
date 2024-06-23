@@ -20,7 +20,7 @@ namespace CheckDrive.Mobile.ViewModels
         public ICommand ToggleLoginVisibilityCommand { get; }
         public ICommand LoginCommand { get; }
 
-        private DriverDto Account {  get; set; }
+        private DriverDto Account { get; set; }
 
         private string _login;
         public string Login
@@ -28,12 +28,14 @@ namespace CheckDrive.Mobile.ViewModels
             get { return _login; }
             set { SetProperty(ref _login, value); }
         }
+
         private string _password;
         public string Password
         {
             get { return _password; }
             set { SetProperty(ref _password, value); }
         }
+
         private bool _isPasswordVisible;
         public bool IsPasswordVisible
         {
@@ -44,6 +46,7 @@ namespace CheckDrive.Mobile.ViewModels
                 OnPropertyChanged();
             }
         }
+
         private bool _isLoginVisible;
         public bool IsLoginVisible
         {
@@ -59,34 +62,50 @@ namespace CheckDrive.Mobile.ViewModels
         {
             _accountDataStore = accountDataStore;
             _driverDataStore = driverDataStore;
-            LoginCommand = new Command(OnLoginClicked);
+            LoginCommand = new Command(async (obj) => await OnLoginClicked());
             TogglePasswordVisibilityCommand = new Command(TogglePasswordVisibility);
             ToggleLoginVisibilityCommand = new Command(ToggleLoginVisibility);
         }
 
-        private void OnLoginClicked(object obj)
+        public async Task OnLoginClicked()
         {
             IsBusy = true;
+
             if (string.IsNullOrWhiteSpace(Login))
             {
+                IsBusy = false;
+                await Application.Current.MainPage.DisplayAlert("Error", "Login cannot be empty", "OK");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(Password))
             {
+                IsBusy = false;
+                await Application.Current.MainPage.DisplayAlert("Error", "Password cannot be empty", "OK");
                 return;
             }
 
             try
             {
-                var isSuccess = CheckingDriverLogin();
-                Application.Current.MainPage = new AppShell();
+                var isSuccess = await CheckingDriverLogin();
+
+                if (isSuccess)
+                {
+                    Application.Current.MainPage = new AppShell();
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Login Failed", "Please check your credentials and try again.", "OK");
+                }
             }
             catch
             {
-                Application.Current.MainPage.DisplayAlert("Login Failed", "Please check your credentials and try again.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Login Failed", "An error occurred. Please try again.", "OK");
             }
-            IsBusy = false;
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task<bool> CheckingDriverLogin()
@@ -103,7 +122,7 @@ namespace CheckDrive.Mobile.ViewModels
             var accountId = int.Parse(jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
             var driverResponse = await _driverDataStore.GetDriversAsync(accountId);
-            var driver = driverResponse.Data.ToList().First();
+            var driver = driverResponse.Data.ToList().FirstOrDefault();
 
             if (driver != null)
             {
