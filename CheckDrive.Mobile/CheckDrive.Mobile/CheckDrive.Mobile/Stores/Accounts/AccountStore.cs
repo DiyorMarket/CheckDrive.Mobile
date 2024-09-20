@@ -37,6 +37,11 @@ namespace CheckDrive.Mobile.Stores.Accounts
             return Task.CompletedTask;
         }
 
+        public Task<DriverDto> GetCurrentDriverAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         private async Task<string> AuthenticateUserAsync(string login, string password)
         {
             var request = new { login, password };
