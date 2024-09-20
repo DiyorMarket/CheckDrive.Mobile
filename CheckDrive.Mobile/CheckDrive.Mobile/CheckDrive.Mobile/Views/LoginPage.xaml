@@ -7,7 +7,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:md="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
              BackgroundColor="#1C375C"
-             NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="False">
     <ContentPage.Content>
         <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">

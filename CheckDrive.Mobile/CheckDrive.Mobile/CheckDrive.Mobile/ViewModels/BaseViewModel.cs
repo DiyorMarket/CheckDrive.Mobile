@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public abstract class BaseViewModel : INotifyPropertyChanged
     {
         protected readonly INavigationService _navigationService;
 
@@ -25,21 +25,21 @@ namespace CheckDrive.Mobile.ViewModels
             }
         }
 
-        public BaseViewModel()
-        {
-            _navigationService = DependencyService.Get<INavigationService>();
-        }
-
-        string title = string.Empty;
+        private string title = string.Empty;
         public string Title
         {
             get { return title; }
             set { SetProperty(ref title, value); }
         }
 
+        protected BaseViewModel()
+        {
+            _navigationService = DependencyService.Get<INavigationService>();
+        }
+
         protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName] string propertyName = "",
-            Action onChanged = null)
+            Action onChanged = null,
+            [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
                 return false;
@@ -49,13 +49,19 @@ namespace CheckDrive.Mobile.ViewModels
             OnPropertyChanged(propertyName);
             return true;
         }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var changed = PropertyChanged;
+            if (changed == null)
+                return;
+
+            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         #endregion
     }
 }

@@ -71,7 +71,7 @@ namespace CheckDrive.Mobile.ViewModels
             {
                 await _accountDataStore.LoginAsync(Login, Password);
 
-                await _navigationService.NavigateToAsync(NavigationPageType.Profile);
+                await _navigationService.NavigateToAsync(NavigationPageType.Home);
             }
             catch (Exception ex)
             {
