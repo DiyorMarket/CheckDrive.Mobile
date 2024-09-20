@@ -3,7 +3,7 @@ using CheckDrive.Mobile.Responses;
 using System;
 using System.Threading.Tasks;
 
-namespace CheckDrive.Web.Stores.OperatorReviews
+namespace CheckDrive.Mobile.Stores.OperatorReviews
 {
     public interface IOperatorReviewDataStore
     {

@@ -3,7 +3,7 @@ using CheckDrive.Mobile.Responses;
 using System;
 using System.Threading.Tasks;
 
-namespace CheckDrive.Web.Stores.MechanicAcceptances
+namespace CheckDrive.Mobile.Stores.MechanicAcceptances
 {
     public interface IMechanicAcceptanceDataStore
     {

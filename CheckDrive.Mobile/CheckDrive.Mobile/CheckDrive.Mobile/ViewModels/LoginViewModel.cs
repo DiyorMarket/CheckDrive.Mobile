@@ -1,5 +1,5 @@
-﻿using CheckDrive.Web.Stores.Accounts;
-using CheckDrive.Web.Stores.Drivers;
+﻿using CheckDrive.Mobile.Stores.Accounts;
+using CheckDrive.Mobile.Stores.Drivers;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,7 +9,7 @@ namespace CheckDrive.Mobile.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        private readonly IAccountDataStore _accountDataStore;
+        private readonly IAccountStore _accountDataStore;
         private readonly IDriverDataStore _driverDataStore;
 
         public ICommand LoginCommand { get; }
@@ -46,7 +46,7 @@ namespace CheckDrive.Mobile.ViewModels
             set => SetProperty(ref _isErrorVisible, value);
         }
 
-        public LoginViewModel(IAccountDataStore accountDataStore, IDriverDataStore driverDataStore)
+        public LoginViewModel(IAccountStore accountDataStore, IDriverDataStore driverDataStore)
         {
             _accountDataStore = accountDataStore;
             _driverDataStore = driverDataStore;

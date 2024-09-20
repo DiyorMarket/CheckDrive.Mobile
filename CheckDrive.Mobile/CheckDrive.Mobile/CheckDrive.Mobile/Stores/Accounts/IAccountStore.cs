@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace CheckDrive.Web.Stores.Accounts
+namespace CheckDrive.Mobile.Stores.Accounts
 {
     public interface IAccountStore
     {

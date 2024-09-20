@@ -1,7 +1,6 @@
 ﻿using CheckDrive.ApiContracts.MechanicAcceptance;
 using CheckDrive.Mobile.Responses;
 using CheckDrive.Mobile.Services;
-using CheckDrive.Web.Stores.MechanicAcceptances;
 using Newtonsoft.Json;
 using System;
 using System.Text;

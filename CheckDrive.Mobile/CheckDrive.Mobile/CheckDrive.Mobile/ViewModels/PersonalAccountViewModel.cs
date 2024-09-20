@@ -1,4 +1,4 @@
-﻿using CheckDrive.Mobile.Services;
+﻿using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Views;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -44,7 +44,7 @@ namespace CheckDrive.Mobile.ViewModels
 
             await Task.Run(() =>
             {
-                var _driver = DataService.GetAccount();
+                var _driver = LocalStorage.GetAccount();
                 FullName = $"{_driver.FirstName} {_driver.LastName}";
                 PhoneNumber = _driver.PhoneNumber;
                 Login = _driver.Login;
@@ -55,7 +55,7 @@ namespace CheckDrive.Mobile.ViewModels
 
         private void NavigationLoginPage()
         {
-            DataService.RemoveAllAcoountData();
+            LocalStorage.RemoveAllAcoountData();
             Application.Current.MainPage = new LoginPage();
         }
     }

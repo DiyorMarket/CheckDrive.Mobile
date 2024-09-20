@@ -3,7 +3,7 @@ using CheckDrive.Mobile.Responses;
 using System;
 using System.Threading.Tasks;
 
-namespace CheckDrive.Web.Stores.MechanicHandovers
+namespace CheckDrive.Mobile.Stores.MechanicHandovers
 {
     public interface IMechanicHandoverDataStore
     {

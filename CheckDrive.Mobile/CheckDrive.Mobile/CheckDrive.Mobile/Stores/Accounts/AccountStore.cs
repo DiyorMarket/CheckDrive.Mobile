@@ -1,8 +1,8 @@
 ﻿using CheckDrive.ApiContracts.Driver;
+using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Responses;
 using CheckDrive.Mobile.Services;
-using CheckDrive.Web.Stores.Accounts;
 using Newtonsoft.Json;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,14 +25,14 @@ namespace CheckDrive.Mobile.Stores.Accounts
         {
             var token = await AuthenticateUserAsync(login, password);
 
-            await DataService.SaveAsync(token, LocalStorageKey.Token);
+            await LocalStorage.SaveAsync(token, LocalStorageKey.Token);
             await ProcessLoginAsync(token, password);
         }
 
         public Task LogoutAsync()
         {
-            DataService.RemoveAsync(LocalStorageKey.Token);
-            DataService.RemoveAsync(LocalStorageKey.Account);
+            LocalStorage.RemoveAsync(LocalStorageKey.Token);
+            LocalStorage.RemoveAsync(LocalStorageKey.Account);
 
             return Task.CompletedTask;
         }
@@ -57,7 +57,7 @@ namespace CheckDrive.Mobile.Stores.Accounts
             if (driver != null)
             {
                 driver.Password = password;
-                await DataService.SaveAsync(driver, LocalStorageKey.Account);
+                await LocalStorage.SaveAsync(driver, LocalStorageKey.Account);
             }
         }
 

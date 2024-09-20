@@ -4,13 +4,14 @@ using CheckDrive.ApiContracts.Driver;
 using CheckDrive.ApiContracts.MechanicAcceptance;
 using CheckDrive.ApiContracts.MechanicHandover;
 using CheckDrive.ApiContracts.OperatorReview;
+using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Stores.DispatcherReviewDataStore;
+using CheckDrive.Mobile.Stores.DoctorReviews;
+using CheckDrive.Mobile.Stores.MechanicAcceptances;
+using CheckDrive.Mobile.Stores.MechanicHandovers;
+using CheckDrive.Mobile.Stores.OperatorReviews;
 using CheckDrive.Mobile.Views;
-using CheckDrive.Web.Stores.DoctorReviews;
-using CheckDrive.Web.Stores.MechanicAcceptances;
-using CheckDrive.Web.Stores.MechanicHandovers;
-using CheckDrive.Web.Stores.OperatorReviews;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Linq;
@@ -247,7 +248,7 @@ namespace CheckDrive.Mobile.ViewModels
             _operatorReviewDataStore = operatorReviewDataStore;
             _mechanicHandoverDataStore = mechanicHandoverDataStore;
             _dispatcherReviewDataStore = dispatcherReviewDataStore;
-            _driver = DataService.GetAccount();
+            _driver = LocalStorage.GetAccount();
             _signalRService = new SignalRService();
             AcceptButtonCommand = new Command(async () => await AcceptButton());
             RejectButtonCommand = new Command(async () => await RejectButton());
@@ -465,7 +466,7 @@ namespace CheckDrive.Mobile.ViewModels
             AcceptButtonColor = Color.Gray;
             RejectButtonColor = Color.Gray;
 
-            var statusNumber = DataService.GetSignalRData().statusNumber;
+            var statusNumber = LocalStorage.GetSignalRData().statusNumber;
 
             switch (statusNumber)
             {
@@ -493,7 +494,7 @@ namespace CheckDrive.Mobile.ViewModels
             AcceptButtonColor = Color.Gray;
             RejectButtonColor = Color.Gray;
 
-            var statusNumber = DataService.GetSignalRData().statusNumber;
+            var statusNumber = LocalStorage.GetSignalRData().statusNumber;
 
             switch (statusNumber)
             {

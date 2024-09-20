@@ -2,7 +2,7 @@
 using System.Globalization;
 using Xamarin.Forms;
 
-namespace CheckDrive.Mobile.Converters
+namespace CheckDrive.Mobile.Converter
 {
     public class BooleanToImageConverter : IValueConverter
     {
@@ -19,7 +19,7 @@ namespace CheckDrive.Mobile.Converters
             {
                 return booleanValue ? "icon_correct_for_history.png" : "icon_incorrect_for_history.png";
             }
-            return "icon_incorrect.png"; 
+            return "icon_incorrect.png";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

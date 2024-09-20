@@ -1,4 +1,4 @@
-﻿using CheckDrive.Mobile.Services;
+﻿using CheckDrive.Mobile.Helpers;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -16,7 +16,7 @@ namespace CheckDrive.Mobile.Views
 
         private async void OnRetryClicked(object sender, EventArgs e)
         {
-            await Task.Run(() => DataService.RemoveAllAcoountData());
+            await Task.Run(() => LocalStorage.RemoveAllAcoountData());
             Application.Current.MainPage = new LoginPage();
         }
     }

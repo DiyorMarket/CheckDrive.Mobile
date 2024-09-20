@@ -3,7 +3,7 @@ using CheckDrive.Mobile.Responses;
 using System;
 using System.Threading.Tasks;
 
-namespace CheckDrive.Web.Stores.DoctorReviews
+namespace CheckDrive.Mobile.Stores.DoctorReviews
 {
     public interface IDoctorReviewDataStore
     {
