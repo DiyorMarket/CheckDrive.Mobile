@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="CheckDrive.Mobile.Views.HistoryPage"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:converters="clr-namespace:CheckDrive.Mobile.Converters"
-    xmlns:md="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls">
+<ContentPage x:Class="CheckDrive.Mobile.Views.HistoryPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:CheckDrive.Mobile.Converter"
+             xmlns:md="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -13,43 +12,38 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <RefreshView
-            x:Name="HistoryPageRefresh"
-            RefreshColor="#2196F3"
-            Refreshing="HistoryRefresh_Refreshing">
+        <RefreshView x:Name="HistoryPageRefresh"
+                     RefreshColor="#2196F3"
+                     Refreshing="HistoryRefresh_Refreshing">
             <ScrollView>
                 <Grid>
                     <StackLayout Margin="5">
-                        <md:MaterialLabel
-                            Grid.Row="0"
-                            Margin="0,15,0,0"
-                            FontSize="Medium"
-                            HorizontalOptions="Center"
-                            Text="Tarix"
-                            TextColor="Black" />
+                        <md:MaterialLabel Grid.Row="0"
+                                          Margin="0,15,0,0"
+                                          FontSize="Medium"
+                                          HorizontalOptions="Center"
+                                          Text="Tarix"
+                                          TextColor="Black" />
 
-                        <CollectionView
-                            x:Name="HistoryList"
-                            ItemsSource="{Binding Reviews}"
-                            SelectionMode="None">
+                        <CollectionView x:Name="HistoryList"
+                                        ItemsSource="{Binding Reviews}"
+                                        SelectionMode="None">
                             <CollectionView.EmptyView>
                                 <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                                    <Label
-                                        Margin="0,0,0,250"
-                                        FontSize="Medium"
-                                        HorizontalOptions="Center"
-                                        Text="Tarix mavjud emas."
-                                        TextColor="DimGray"
-                                        VerticalOptions="CenterAndExpand" />
+                                    <Label Margin="0,0,0,250"
+                                           FontSize="Medium"
+                                           HorizontalOptions="Center"
+                                           Text="Tarix mavjud emas."
+                                           TextColor="DimGray"
+                                           VerticalOptions="CenterAndExpand" />
                                 </StackLayout>
                             </CollectionView.EmptyView>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <StackLayout Margin="10">
-                                        <Frame
-                                            Margin="15,3,15,3"
-                                            BackgroundColor="#D9D9D9"
-                                            CornerRadius="30">
+                                        <Frame Margin="15,3,15,3"
+                                               BackgroundColor="#D9D9D9"
+                                               CornerRadius="30">
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto" />
@@ -59,87 +53,77 @@
                                                     <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
 
-                                                <Label
-                                                    Margin="5,5,0,0"
-                                                    FontSize="Large"
-                                                    HorizontalOptions="Start"
-                                                    Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
-                                                    TextColor="Black"
-                                                    VerticalOptions="Center" />
+                                                <Label Margin="5,5,0,0"
+                                                       FontSize="Large"
+                                                       HorizontalOptions="Start"
+                                                       Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
+                                                       TextColor="Black"
+                                                       VerticalOptions="Center" />
 
-                                                <Image
-                                                    Grid.Row="0"
-                                                    HeightRequest="50"
-                                                    HorizontalOptions="End"
-                                                    Source="{Binding IsAllTrue, Converter={StaticResource BooleanToImageConverter}, ConverterParameter=IsAllTrue}"
-                                                    WidthRequest="50" />
-                                                <Label
-                                                    Grid.Row="1"
-                                                    Margin="5,5,0,0"
-                                                    FontSize="Medium"
-                                                    HorizontalOptions="Start"
-                                                    Text="Doktor"
-                                                    TextColor="Black"
-                                                    VerticalOptions="Center" />
+                                                <Image Grid.Row="0"
+                                                       HeightRequest="50"
+                                                       HorizontalOptions="End"
+                                                       Source="{Binding IsAllTrue, Converter={StaticResource BooleanToImageConverter}, ConverterParameter=IsAllTrue}"
+                                                       WidthRequest="50" />
+                                                <Label Grid.Row="1"
+                                                       Margin="5,5,0,0"
+                                                       FontSize="Medium"
+                                                       HorizontalOptions="Start"
+                                                       Text="Doktor"
+                                                       TextColor="Black"
+                                                       VerticalOptions="Center" />
 
-                                                <Image
-                                                    Grid.Row="1"
-                                                    Margin="0,0,10,0"
-                                                    HeightRequest="30"
-                                                    HorizontalOptions="End"
-                                                    Source="{Binding IsHealthy, Converter={StaticResource BooleanToImageConverter}}"
-                                                    WidthRequest="30" />
+                                                <Image Grid.Row="1"
+                                                       Margin="0,0,10,0"
+                                                       HeightRequest="30"
+                                                       HorizontalOptions="End"
+                                                       Source="{Binding IsHealthy, Converter={StaticResource BooleanToImageConverter}}"
+                                                       WidthRequest="30" />
 
-                                                <Label
-                                                    Grid.Row="2"
-                                                    Margin="5,5,0,0"
-                                                    FontSize="Medium"
-                                                    HorizontalOptions="Start"
-                                                    Text="Mexanik(Topshirish)"
-                                                    TextColor="Black"
-                                                    VerticalOptions="Center" />
+                                                <Label Grid.Row="2"
+                                                       Margin="5,5,0,0"
+                                                       FontSize="Medium"
+                                                       HorizontalOptions="Start"
+                                                       Text="Mexanik(Topshirish)"
+                                                       TextColor="Black"
+                                                       VerticalOptions="Center" />
 
-                                                <Image
-                                                    Grid.Row="2"
-                                                    Margin="0,0,10,0"
-                                                    HeightRequest="30"
-                                                    HorizontalOptions="End"
-                                                    Source="{Binding IsHanded, Converter={StaticResource BooleanToImageConverter}}"
-                                                    WidthRequest="30" />
+                                                <Image Grid.Row="2"
+                                                       Margin="0,0,10,0"
+                                                       HeightRequest="30"
+                                                       HorizontalOptions="End"
+                                                       Source="{Binding IsHanded, Converter={StaticResource BooleanToImageConverter}}"
+                                                       WidthRequest="30" />
 
-                                                <Label
-                                                    Grid.Row="3"
-                                                    Margin="5,5,0,0"
-                                                    FontSize="Medium"
-                                                    HorizontalOptions="Start"
-                                                    Text="Operator"
-                                                    TextColor="Black"
-                                                    VerticalOptions="Center" />
+                                                <Label Grid.Row="3"
+                                                       Margin="5,5,0,0"
+                                                       FontSize="Medium"
+                                                       HorizontalOptions="Start"
+                                                       Text="Operator"
+                                                       TextColor="Black"
+                                                       VerticalOptions="Center" />
 
-                                                <Image
-                                                    Grid.Row="3"
-                                                    Margin="0,0,10,0"
-                                                    HeightRequest="30"
-                                                    HorizontalOptions="End"
-                                                    Source="{Binding IsGiven, Converter={StaticResource BooleanToImageConverter}}"
-                                                    WidthRequest="30" />
+                                                <Image Grid.Row="3"
+                                                       Margin="0,0,10,0"
+                                                       HeightRequest="30"
+                                                       HorizontalOptions="End"
+                                                       Source="{Binding IsGiven, Converter={StaticResource BooleanToImageConverter}}"
+                                                       WidthRequest="30" />
 
-                                                <Label
-                                                    Grid.Row="4"
-                                                    Margin="5,5,0,0"
-                                                    FontSize="Medium"
-                                                    HorizontalOptions="Start"
-                                                    Text="Mexanik(Qabul qilish)"
-                                                    TextColor="Black"
-                                                    VerticalOptions="Center" />
+                                                <Label Grid.Row="4"
+                                                       Margin="5,5,0,0"
+                                                       FontSize="Medium"
+                                                       HorizontalOptions="Start"
+                                                       Text="Mexanik(Qabul qilish)"
+                                                       TextColor="Black"
+                                                       VerticalOptions="Center" />
 
-                                                <Image
-                                                    Grid.Row="4"
-                                                    Margin="0,0,10,0"
-                                                    HeightRequest="30"
-                                                    HorizontalOptions="End"
-                                                    Source="{Binding IsAccepted, Converter={StaticResource BooleanToImageConverter}}"
-                                                    WidthRequest="30" />
+                                                <Image Grid.Row="4"
+                                                       Margin="0,0,10,0"
+                                                       HeightRequest="30"
+                                                       HorizontalOptions="End"
+                                                       Source="{Binding IsAccepted, Converter={StaticResource BooleanToImageConverter}}"
+                                                       WidthRequest="30" />
                                             </Grid>
                                         </Frame>
                                     </StackLayout>
@@ -149,14 +133,13 @@
                     </StackLayout>
 
                     <!--  Spinner  -->
-                    <md:MaterialProgressIndicator
-                        AbsoluteLayout.LayoutBounds="0.5,0.5,0.2,0.2"
-                        AbsoluteLayout.LayoutFlags="All"
-                        HorizontalOptions="CenterAndExpand"
-                        IndicatorColor="#00A3FF"
-                        IsEnabled="{Binding IsBusy}"
-                        IsVisible="{Binding IsBusy}"
-                        VerticalOptions="CenterAndExpand" />
+                    <md:MaterialProgressIndicator AbsoluteLayout.LayoutBounds="0.5,0.5,0.2,0.2"
+                                                  AbsoluteLayout.LayoutFlags="All"
+                                                  HorizontalOptions="CenterAndExpand"
+                                                  IndicatorColor="#00A3FF"
+                                                  IsEnabled="{Binding IsBusy}"
+                                                  IsVisible="{Binding IsBusy}"
+                                                  VerticalOptions="CenterAndExpand" />
                 </Grid>
             </ScrollView>
         </RefreshView>

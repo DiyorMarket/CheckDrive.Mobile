@@ -1,7 +1,6 @@
 ﻿using CheckDrive.ApiContracts.Driver;
 using CheckDrive.Mobile.Responses;
 using CheckDrive.Mobile.Services;
-using CheckDrive.Web.Stores.Drivers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
