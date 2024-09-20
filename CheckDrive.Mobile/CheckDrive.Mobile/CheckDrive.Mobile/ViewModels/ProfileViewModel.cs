@@ -1,7 +1,7 @@
 ﻿using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Services.Navigation;
 using CheckDrive.Mobile.Stores.Accounts;
-using System;
+using CheckDrive.Mobile.Views;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -25,10 +25,10 @@ namespace CheckDrive.Mobile.ViewModels
         public ICommand EditProfileCommand { get; }
         public ICommand LogoutCommand { get; }
 
-        public ProfileViewModel(IAccountStore accountStore, INavigationService navigationService)
+        public ProfileViewModel()
         {
-            _accountService = accountStore ?? throw new ArgumentNullException(nameof(accountStore));
-            _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _accountService = DependencyService.Get<IAccountStore>();
+            _navigationService = DependencyService.Get<INavigationService>();
 
             EditProfileCommand = new Command(OnEditProfile);
             LogoutCommand = new Command(OnLogout);
@@ -73,7 +73,7 @@ namespace CheckDrive.Mobile.ViewModels
             if (confirmed)
             {
                 await _accountService.LogoutAsync();
-                await _navigationService.NavigateToAsync<LoginViewModel>();
+                await Shell.Current.GoToAsync(nameof(LoginPage));
             }
         }
     }

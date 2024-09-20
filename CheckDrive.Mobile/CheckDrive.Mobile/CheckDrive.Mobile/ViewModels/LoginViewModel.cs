@@ -1,5 +1,6 @@
 ﻿using CheckDrive.Mobile.Stores.Accounts;
 using CheckDrive.Mobile.Stores.Drivers;
+using CheckDrive.Mobile.Views;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -46,10 +47,10 @@ namespace CheckDrive.Mobile.ViewModels
             set => SetProperty(ref _isErrorVisible, value);
         }
 
-        public LoginViewModel(IAccountStore accountDataStore, IDriverDataStore driverDataStore)
+        public LoginViewModel()
         {
-            _accountDataStore = accountDataStore;
-            _driverDataStore = driverDataStore;
+            _accountDataStore = DependencyService.Get<IAccountStore>();
+            _driverDataStore = DependencyService.Get<IDriverDataStore>();
 
             LoginCommand = new Command(async () => await ExecuteLoginCommand());
             TogglePasswordVisibilityCommand = new Command(TogglePasswordVisibility);
@@ -70,7 +71,7 @@ namespace CheckDrive.Mobile.ViewModels
             {
                 await _accountDataStore.LoginAsync(Login, Password);
 
-                Application.Current.MainPage = new AppShell();
+                await Shell.Current.GoToAsync(nameof(ProfilePage), true);
             }
             catch (Exception ex)
             {

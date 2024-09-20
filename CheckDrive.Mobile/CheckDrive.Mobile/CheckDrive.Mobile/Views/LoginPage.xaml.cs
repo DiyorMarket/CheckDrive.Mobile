@@ -1,24 +1,19 @@
-﻿using CheckDrive.Mobile.Services;
-using CheckDrive.Mobile.Stores.Accounts;
-using CheckDrive.Mobile.Stores.Drivers;
-using CheckDrive.Mobile.ViewModels;
+﻿using CheckDrive.Mobile.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace CheckDrive.Mobile.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage
     {
+        private readonly LoginViewModel _viewModel;
+
         public LoginPage()
         {
             InitializeComponent();
 
-            var client = new ApiClient();
-            var accountDS = new AccountStore(client);
-            var driverDS = new DriverDataStore(client);
+            _viewModel = new LoginViewModel();
 
-            this.BindingContext = new LoginViewModel(accountDS, driverDS);
+            BindingContext = _viewModel;
         }
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.Stores.Drivers
 {
@@ -13,9 +14,9 @@ namespace CheckDrive.Mobile.Stores.Drivers
     {
         private readonly ApiClient _api;
 
-        public DriverDataStore(ApiClient apiClient)
+        public DriverDataStore()
         {
-            _api = apiClient;
+            _api = DependencyService.Get<ApiClient>();
         }
 
         public async Task<GetDriverResponse> GetDriversAsync(int accountId)

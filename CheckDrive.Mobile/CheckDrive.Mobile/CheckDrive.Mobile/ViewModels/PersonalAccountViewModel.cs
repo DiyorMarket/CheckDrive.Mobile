@@ -1,5 +1,4 @@
 ﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Views;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -32,13 +31,13 @@ namespace CheckDrive.Mobile.ViewModels
             set => SetProperty(ref _login, value);
         }
 
-        public PersonalAccountViewModel( )
+        public PersonalAccountViewModel()
         {
             LogOutProfile = new Command(NavigationLoginPage);
             GetDriverData();
         }
 
-        private async void  GetDriverData()
+        private async void GetDriverData()
         {
             IsBusy = true;
 
@@ -56,7 +55,7 @@ namespace CheckDrive.Mobile.ViewModels
         private void NavigationLoginPage()
         {
             LocalStorage.RemoveAllAcoountData();
-            Application.Current.MainPage = new LoginPage();
+            // Application.Current.MainPage = new LoginPage();
         }
     }
 }

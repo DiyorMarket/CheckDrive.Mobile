@@ -17,7 +17,7 @@ namespace CheckDrive.Mobile.Views
         private async void OnRetryClicked(object sender, EventArgs e)
         {
             await Task.Run(() => LocalStorage.RemoveAllAcoountData());
-            Application.Current.MainPage = new LoginPage();
+            // Application.Current.MainPage = new LoginPage();
         }
     }
 }

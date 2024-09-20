@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Models.Enums;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,15 +11,15 @@ namespace CheckDrive.Mobile.Services
 {
     public class ApiClient
     {
-        private const string BaseUrl = "http://miraziz-001-site1.ctempurl.com/api";
-
-
+        private const string BaseUrl = "https://4hq2t8p1-7111.euw.devtunnels.ms/api";
         private readonly HttpClient _client;
 
         public ApiClient()
         {
-            _client = new HttpClient();
-            _client.BaseAddress = new Uri(BaseUrl);
+            _client = new HttpClient
+            {
+                BaseAddress = new Uri(BaseUrl)
+            };
             _client.DefaultRequestHeaders.Add("Accept", "application/json");
         }
 
@@ -27,11 +29,11 @@ namespace CheckDrive.Mobile.Services
 
             try
             {
-                var token = await SecureStorage.GetAsync("tasty-cookies");
+                var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
 
                 if (string.IsNullOrEmpty(token))
                 {
-                    throw new Exception("Token is empty.");
+                    throw new InvalidOperationException("Token is empty.");
                 }
 
                 var request = new HttpRequestMessage(HttpMethod.Get, new Uri(_client.BaseAddress, url));
@@ -87,7 +89,7 @@ namespace CheckDrive.Mobile.Services
             }
         }
 
-        private void HandleException(Exception ex)
+        private static void HandleException(Exception ex)
         {
             Device.BeginInvokeOnMainThread(() =>
             {

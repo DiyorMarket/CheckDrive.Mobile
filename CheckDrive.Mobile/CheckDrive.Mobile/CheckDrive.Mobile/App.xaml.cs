@@ -1,6 +1,10 @@
 using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Services;
+using CheckDrive.Mobile.Services.Navigation;
+using CheckDrive.Mobile.Stores.Accounts;
+using CheckDrive.Mobile.Stores.Drivers;
 using CheckDrive.Mobile.Views;
+using CheckDrive.Mobile.Views.Errors;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Threading.Tasks;
@@ -11,15 +15,18 @@ namespace CheckDrive.Mobile
 {
     public partial class App : Application
     {
-
         public App()
         {
             InitializeComponent();
 
-            Initialize();
+            InitializeErrorHandlers();
+
+            ConfigureServices();
+
+            MainPage = new AppShell();
         }
 
-        private void Initialize()
+        private void InitializeErrorHandlers()
         {
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -38,21 +45,27 @@ namespace CheckDrive.Mobile
             }
         }
 
+        private static void ConfigureServices()
+        {
+            DependencyService.Register<ApiClient>();
+
+            DependencyService.Register<IAccountStore, AccountStore>();
+            DependencyService.Register<IDriverDataStore, DriverDataStore>();
+
+            DependencyService.Register<INavigationService, NavigationService>();
+        }
+
         private async Task InitializeAppAsync()
         {
-            if (!ConnectivityService.IsConnected())
-            {
-                Device.BeginInvokeOnMainThread(() => MainPage = new NoInternetPage());
-                return;
-            }
-
             if (!await IsLoggedInAsync())
             {
-                Device.BeginInvokeOnMainThread(() => MainPage = new LoginPage());
+                // Resolve the LoginPage from the DI container and navigate
+                await Shell.Current.GoToAsync(nameof(LoginPage));
             }
             else
             {
-                Device.BeginInvokeOnMainThread(() => MainPage = new AppShell());
+                // Resolve the DashboardPage from the DI container and navigate
+                await Shell.Current.GoToAsync(nameof(ProfilePage));
             }
         }
 
@@ -101,9 +114,10 @@ namespace CheckDrive.Mobile
 
         public void ShowExceptionPage(Exception ex)
         {
+            Console.WriteLine($"Unknown error occured: {ex.Message}.");
             Device.BeginInvokeOnMainThread(() =>
             {
-                MainPage = new ExceptionPage();
+                Current.MainPage = new UnknownErrorPage();
             });
         }
     }

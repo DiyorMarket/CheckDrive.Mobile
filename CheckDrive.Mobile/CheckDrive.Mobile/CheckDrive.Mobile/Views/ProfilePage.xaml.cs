@@ -1,23 +1,19 @@
-﻿using CheckDrive.Mobile.Services.Navigation;
-using CheckDrive.Mobile.Stores.Accounts;
-using CheckDrive.Mobile.ViewModels;
-
+﻿using CheckDrive.Mobile.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace CheckDrive.Mobile.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ProfilePage : ContentPage
     {
+        private readonly ProfileViewModel _viewModel;
+
         public ProfilePage()
         {
             InitializeComponent();
 
-            var accountStore = new AccountStore(new Services.ApiClient());
-            var navigationService = new NavigationService();
+            _viewModel = new ProfileViewModel();
 
-            BindingContext = new ProfileViewModel(accountStore, navigationService);
+            BindingContext = _viewModel;
         }
 
         protected override void OnAppearing()

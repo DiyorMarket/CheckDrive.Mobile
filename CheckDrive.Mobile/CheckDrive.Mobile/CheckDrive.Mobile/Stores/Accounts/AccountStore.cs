@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.Stores.Accounts
 {
@@ -16,9 +17,9 @@ namespace CheckDrive.Mobile.Stores.Accounts
     {
         private readonly ApiClient _client;
 
-        public AccountStore(ApiClient client)
+        public AccountStore()
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
+            _client = DependencyService.Get<ApiClient>();
         }
 
         public async Task LoginAsync(string login, string password)

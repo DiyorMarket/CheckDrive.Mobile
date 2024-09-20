@@ -68,12 +68,12 @@
     </Shell.Resources>
 
     <TabBar>
-        <ShellContent Title="Ishchi oynasi"
+        <!--<ShellContent Title="Ishchi oynasi"
                       ContentTemplate="{DataTemplate views:RoadMapPage}"
                       Icon="icon_roadMap.png" />
         <ShellContent Title="Tarix"
                       ContentTemplate="{DataTemplate views:HistoryPage}"
-                      Icon="icon_history.png" />
+                      Icon="icon_history.png" />-->
         <ShellContent Title="Profil"
                       ContentTemplate="{DataTemplate views:ProfilePage}"
                       Icon="icon_user.png" />
