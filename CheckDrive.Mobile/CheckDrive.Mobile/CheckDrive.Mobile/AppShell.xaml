@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="CheckDrive.Mobile.AppShell"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:CheckDrive.Mobile.Views"
-    Title="CheckDrive.Mobile"
-    NavBarIsVisible="False">
+<Shell x:Class="CheckDrive.Mobile.AppShell"
+       xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:CheckDrive.Mobile.Views"
+       Title="CheckDrive.Mobile"
+       NavBarIsVisible="False">
     <Shell.Resources>
         <ResourceDictionary>
             <Style x:Key="BaseStyle" TargetType="Element">
@@ -25,10 +24,9 @@
             <Style Class="FlyoutItemLabelStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="White" />
             </Style>
-            <Style
-                ApplyToDerivedTypes="True"
-                Class="FlyoutItemLabelStyle"
-                TargetType="Layout">
+            <Style ApplyToDerivedTypes="True"
+                   Class="FlyoutItemLabelStyle"
+                   TargetType="Layout">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -51,10 +49,9 @@
             <!--
                 Custom Style you can apply to any Flyout Item
             -->
-            <Style
-                ApplyToDerivedTypes="True"
-                Class="MenuItemLayoutStyle"
-                TargetType="Layout">
+            <Style ApplyToDerivedTypes="True"
+                   Class="MenuItemLayoutStyle"
+                   TargetType="Layout">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -71,22 +68,18 @@
     </Shell.Resources>
 
     <TabBar>
-        <ShellContent
-            Title="Ishchi oynasi"
-            ContentTemplate="{DataTemplate views:RoadMapPage}"
-            Icon="icon_roadMap.png" />
-        <ShellContent
-            Title="Tarix"
-            ContentTemplate="{DataTemplate views:HistoryPage}"
-            Icon="icon_history.png" />
-        <ShellContent
-            Title="Profil"
-            ContentTemplate="{DataTemplate views:PersonalAccountPage}"
-            Icon="icon_user.png" />
-        <ShellContent
-            ContentTemplate="{DataTemplate views:LoginPage}"
-            IsVisible="False"
-            Route="LoginPage" />
+        <ShellContent Title="Ishchi oynasi"
+                      ContentTemplate="{DataTemplate views:RoadMapPage}"
+                      Icon="icon_roadMap.png" />
+        <ShellContent Title="Tarix"
+                      ContentTemplate="{DataTemplate views:HistoryPage}"
+                      Icon="icon_history.png" />
+        <ShellContent Title="Profil"
+                      ContentTemplate="{DataTemplate views:ProfilePage}"
+                      Icon="icon_user.png" />
+        <ShellContent ContentTemplate="{DataTemplate views:LoginPage}"
+                      IsVisible="False"
+                      Route="LoginPage" />
     </TabBar>
 
 </Shell>
