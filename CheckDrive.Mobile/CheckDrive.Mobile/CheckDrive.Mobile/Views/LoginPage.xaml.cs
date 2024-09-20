@@ -15,7 +15,7 @@ namespace CheckDrive.Mobile.Views
             InitializeComponent();
 
             var client = new ApiClient();
-            var accountDS = new AccountDataStore(client);
+            var accountDS = new AccountStore(client);
             var driverDS = new DriverDataStore(client);
 
             this.BindingContext = new LoginViewModel(accountDS, driverDS);

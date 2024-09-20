@@ -1,6 +1,8 @@
 ﻿using CheckDrive.ApiContracts.Driver;
+using CheckDrive.Mobile.Models.Enums;
 using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 
 namespace CheckDrive.Mobile.Services
@@ -14,6 +16,35 @@ namespace CheckDrive.Mobile.Services
         private const string signalRKeyStatus = "signalRSatusdataurl";
         private const string signalRKeyReviewId = "signalRdataurl";
 
+        public static async Task SaveAsync<T>(T data, LocalStorageKey key)
+        {
+            var json = JsonConvert.SerializeObject(data);
+
+            await SecureStorage.SetAsync(key.ToString(), json);
+        }
+
+        public static async Task<T> GetAsync<T>(LocalStorageKey key)
+        {
+            var value = await SecureStorage.GetAsync(key.ToString());
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                return JsonConvert.DeserializeObject<T>(value);
+            }
+
+            return default;
+        }
+
+        public static void RemoveAsync(LocalStorageKey key)
+        {
+            SecureStorage.Remove(key.ToString());
+        }
+
+        public static void ClearAll()
+        {
+            SecureStorage.RemoveAll();
+        }
+
         public static void SaveAccount(DriverDto account)
         {
             try
@@ -22,7 +53,7 @@ namespace CheckDrive.Mobile.Services
                 var json = JsonConvert.SerializeObject(account);
 
                 SecureStorage.Remove(securetyKey);
-                
+
                 SecureStorage.SetAsync(securetyKey, json);
                 SecureStorage.SetAsync(securetyKeySavedDate, jsonDateTime);
             }
@@ -35,6 +66,7 @@ namespace CheckDrive.Mobile.Services
         public static void SaveToken(string token)
         {
             var jsonDateTime = JsonConvert.SerializeObject(DateTime.Now);
+
             try
             {
                 SecureStorage.Remove(securetyKeyToken);
@@ -47,6 +79,7 @@ namespace CheckDrive.Mobile.Services
                 Console.WriteLine($"Error saving token. {ex.Message}");
             }
         }
+
         public static DriverDto GetAccount()
         {
             try
@@ -78,6 +111,7 @@ namespace CheckDrive.Mobile.Services
             {
                 Console.WriteLine($"Error getting {securetyKeySavedDate}: {ex.Message}");
             }
+
             return new DateTime();
         }
 
@@ -102,7 +136,7 @@ namespace CheckDrive.Mobile.Services
         {
             try
             {
-                if (SecureStorage.GetAsync(securetyKey).GetAwaiter().GetResult() != null 
+                if (SecureStorage.GetAsync(securetyKey).GetAwaiter().GetResult() != null
                     && SecureStorage.GetAsync(securetyKeySavedDate).GetAwaiter().GetResult() != null)
                 {
                     SecureStorage.Remove(securetyKey);
@@ -114,7 +148,7 @@ namespace CheckDrive.Mobile.Services
                 }
 
                 Console.WriteLine("file with this name cannot fined");
-                
+
             }
             catch (Exception ex)
             {
@@ -172,7 +206,7 @@ namespace CheckDrive.Mobile.Services
                 Console.WriteLine($"Error getting {securetyKeySavedTokenDate}: {ex.Message}");
             }
             return (0, 0);
-        } 
+        }
 
         public static void RemoveSignalRData()
         {
