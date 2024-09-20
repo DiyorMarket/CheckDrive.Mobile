@@ -1,5 +1,4 @@
 ﻿using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.ViewModels;
 using CheckDrive.Mobile.Views;
 using System;
 using System.Collections.Generic;
@@ -18,13 +17,8 @@ namespace CheckDrive.Mobile.Services.Navigation
             {
                 { NavigationPageType.Login, nameof(LoginPage) },
                 { NavigationPageType.Profile, nameof(ProfilePage) },
+                { NavigationPageType.Home, nameof(HomePage) },
             };
-        }
-
-        public async Task NavigateToAsync<TViewModel>() where TViewModel : BaseViewModel
-        {
-            var page = Activator.CreateInstance(typeof(TViewModel)) as Page;
-            await Shell.Current.Navigation.PushAsync(page);
         }
 
         public async Task GoBackAsync()
@@ -39,7 +33,7 @@ namespace CheckDrive.Mobile.Services.Navigation
                 throw new InvalidOperationException($"Could not find navigation for page: {pageType}");
             }
 
-            await Shell.Current.GoToAsync(page);
+            await Shell.Current.GoToAsync($"//{page}");
         }
     }
 }

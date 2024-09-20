@@ -68,18 +68,21 @@
     </Shell.Resources>
 
     <TabBar>
-        <!--<ShellContent Title="Ishchi oynasi"
-                      ContentTemplate="{DataTemplate views:RoadMapPage}"
-                      Icon="icon_roadMap.png" />
-        <ShellContent Title="Tarix"
-                      ContentTemplate="{DataTemplate views:HistoryPage}"
-                      Icon="icon_history.png" />-->
-        <ShellContent Title="Profil"
-                      ContentTemplate="{DataTemplate views:ProfilePage}"
-                      Icon="icon_user.png" />
-        <ShellContent ContentTemplate="{DataTemplate views:LoginPage}"
-                      IsVisible="False"
-                      Route="LoginPage" />
+        <ShellContent ContentTemplate="{DataTemplate views:LoginPage}" Route="LoginPage" />
     </TabBar>
 
+    <TabBar>
+        <ShellContent Title="Ishchi oynasi"
+                      ContentTemplate="{DataTemplate views:HomePage}"
+                      Icon="icon_roadMap.png"
+                      Route="HomePage" />
+        <ShellContent Title="Tarix"
+                      ContentTemplate="{DataTemplate views:HistoryPage}"
+                      Icon="icon_history.png"
+                      Route="HistoryPage" />
+        <ShellContent Title="Profil"
+                      ContentTemplate="{DataTemplate views:ProfilePage}"
+                      Icon="icon_user.png"
+                      Route="ProfilePage" />
+    </TabBar>
 </Shell>

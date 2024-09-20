@@ -3,6 +3,7 @@
     public enum NavigationPageType
     {
         Login,
-        Profile
+        Profile,
+        Home
     }
 }

@@ -1,10 +1,9 @@
-﻿using CheckDrive.Mobile.Views;
-using System;
+﻿using System;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile
 {
-    public partial class AppShell : Xamarin.Forms.Shell
+    public partial class AppShell : Shell
     {
         public AppShell()
         {
@@ -20,8 +19,10 @@ namespace CheckDrive.Mobile
 
         private static void RegisterRoutes()
         {
-            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-            Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
+            // Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            //Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
+            //Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
+            //Routing.RegisterRoute(nameof(HistoryPage), typeof(HistoryPage));
         }
     }
 }

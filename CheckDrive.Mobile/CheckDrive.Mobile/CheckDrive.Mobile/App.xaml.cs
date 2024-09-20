@@ -1,3 +1,4 @@
+using CheckDrive.Mobile.Exceptions;
 using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Services.Navigation;
@@ -65,7 +66,7 @@ namespace CheckDrive.Mobile
             else
             {
                 // Resolve the DashboardPage from the DI container and navigate
-                await Shell.Current.GoToAsync(nameof(ProfilePage));
+                await Shell.Current.GoToAsync(nameof(HomePage));
             }
         }
 
@@ -114,10 +115,16 @@ namespace CheckDrive.Mobile
 
         public void ShowExceptionPage(Exception ex)
         {
-            Console.WriteLine($"Unknown error occured: {ex.Message}.");
-            Device.BeginInvokeOnMainThread(() =>
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                Current.MainPage = new UnknownErrorPage();
+                Console.WriteLine($"Unknown error occurred: {ex.Message}");
+
+                if (ex is InvalidTokenException)
+                {
+                    await Shell.Current.GoToAsync(nameof(LoginPage), true);
+                }
+
+                await Shell.Current.GoToAsync(nameof(UnknownErrorPage), true);
             });
         }
     }
