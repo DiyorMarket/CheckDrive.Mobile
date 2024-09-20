@@ -5,9 +5,9 @@ using System;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
-namespace CheckDrive.Mobile.Services
+namespace CheckDrive.Mobile.Helpers
 {
-    public static class DataService
+    public static class LocalStorage
     {
         private const string securetyKey = "accountData";
         private const string securetyKeySavedDate = "savedDate";
