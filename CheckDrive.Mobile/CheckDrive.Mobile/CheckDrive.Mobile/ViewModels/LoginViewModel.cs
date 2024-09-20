@@ -1,6 +1,6 @@
-﻿using CheckDrive.Mobile.Stores.Accounts;
+﻿using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.Stores.Accounts;
 using CheckDrive.Mobile.Stores.Drivers;
-using CheckDrive.Mobile.Views;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -71,7 +71,7 @@ namespace CheckDrive.Mobile.ViewModels
             {
                 await _accountDataStore.LoginAsync(Login, Password);
 
-                await Shell.Current.GoToAsync(nameof(ProfilePage), true);
+                await _navigationService.NavigateToAsync(NavigationPageType.Profile);
             }
             catch (Exception ex)
             {

@@ -1,12 +1,16 @@
-﻿using System;
+﻿using CheckDrive.Mobile.Services.Navigation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        protected readonly INavigationService _navigationService;
+
         private bool isBusy;
         public bool IsBusy
         {
@@ -21,6 +25,10 @@ namespace CheckDrive.Mobile.ViewModels
             }
         }
 
+        public BaseViewModel()
+        {
+            _navigationService = DependencyService.Get<INavigationService>();
+        }
 
         string title = string.Empty;
         public string Title

@@ -1,7 +1,7 @@
 ﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Services.Navigation;
 using CheckDrive.Mobile.Stores.Accounts;
-using CheckDrive.Mobile.Views;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -73,7 +73,8 @@ namespace CheckDrive.Mobile.ViewModels
             if (confirmed)
             {
                 await _accountService.LogoutAsync();
-                await Shell.Current.GoToAsync(nameof(LoginPage));
+
+                await _navigationService.NavigateToAsync(NavigationPageType.Login);
             }
         }
     }
