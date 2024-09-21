@@ -66,7 +66,7 @@ namespace CheckDrive.Mobile
             else
             {
                 // Resolve the DashboardPage from the DI container and navigate
-                await Shell.Current.GoToAsync(nameof(HomePage));
+                await Shell.Current.GoToAsync("//HomePage");
             }
         }
 
@@ -74,7 +74,7 @@ namespace CheckDrive.Mobile
         {
             var token = await LocalStorage.GetAsync<string>(Models.Enums.LocalStorageKey.Token);
 
-            if (string.IsNullOrEmpty(token) || JwtHelper.IsTokenExpired(token))
+            if (string.IsNullOrWhiteSpace(token) || JwtHelper.IsTokenExpired(token))
             {
                 return false;
             }
