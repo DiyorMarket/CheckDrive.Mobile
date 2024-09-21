@@ -1,4 +1,5 @@
-﻿using CheckDrive.ApiContracts.Driver;
+﻿using CheckDrive.ApiContracts.Account;
+using CheckDrive.ApiContracts.Driver;
 using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Responses;
@@ -43,6 +44,21 @@ namespace CheckDrive.Mobile.Stores.Accounts
             throw new NotImplementedException();
         }
 
+        public async Task<AccountDto> GetAccountAsync()
+        {
+            var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
+
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return null;
+            }
+
+            var accountId = ExtractAccountIdFromToken(token);
+            var account = await FetchAccountAsync(accountId);
+
+            return account;
+        }
+
         private async Task<string> AuthenticateUserAsync(string login, string password)
         {
             var request = new { login, password };
@@ -69,10 +85,26 @@ namespace CheckDrive.Mobile.Stores.Accounts
 
         private static int ExtractAccountIdFromToken(string token)
         {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new ArgumentException("Cannot extract id from empty string.");
+            }
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
 
             return int.Parse(jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        }
+
+        private async Task<AccountDto> FetchAccountAsync(int accountId)
+        {
+            var response = await _client.GetAsync($"accounts/{accountId}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<AccountDto>(json);
+
+            return result;
         }
 
         private async Task<DriverDto> FetchDriverDataAsync(int accountId)
