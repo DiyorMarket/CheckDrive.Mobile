@@ -3,7 +3,6 @@ using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Services.Navigation;
 using CheckDrive.Mobile.Stores.Accounts;
-using CheckDrive.Mobile.Stores.Drivers;
 using CheckDrive.Mobile.Views;
 using CheckDrive.Mobile.Views.Errors;
 using Rg.Plugins.Popup.Services;
@@ -50,22 +49,19 @@ namespace CheckDrive.Mobile
         {
             DependencyService.Register<ApiClient>();
 
-            DependencyService.Register<IAccountStore, AccountStore>();
-            DependencyService.Register<IDriverDataStore, DriverDataStore>();
+            DependencyService.Register<IAccountStore, MockAccountStore>();
 
             DependencyService.Register<INavigationService, NavigationService>();
         }
 
-        private async Task InitializeAppAsync()
+        private static async Task InitializeAppAsync()
         {
             if (!await IsLoggedInAsync())
             {
-                // Resolve the LoginPage from the DI container and navigate
                 await Shell.Current.GoToAsync(nameof(LoginPage));
             }
             else
             {
-                // Resolve the DashboardPage from the DI container and navigate
                 await Shell.Current.GoToAsync("//HomePage");
             }
         }
@@ -102,18 +98,18 @@ namespace CheckDrive.Mobile
             }
         }
 
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             ShowExceptionPage(e.ExceptionObject as Exception);
         }
 
-        private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
             e.SetObserved();
             ShowExceptionPage(e.Exception);
         }
 
-        public void ShowExceptionPage(Exception ex)
+        public static void ShowExceptionPage(Exception ex)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {

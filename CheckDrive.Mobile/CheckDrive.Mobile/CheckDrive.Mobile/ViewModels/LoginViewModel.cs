@@ -1,6 +1,5 @@
 ﻿using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Stores.Accounts;
-using CheckDrive.Mobile.Stores.Drivers;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,7 +10,6 @@ namespace CheckDrive.Mobile.ViewModels
     public class LoginViewModel : BaseViewModel
     {
         private readonly IAccountStore _accountDataStore;
-        private readonly IDriverDataStore _driverDataStore;
 
         public ICommand LoginCommand { get; }
         public ICommand TogglePasswordVisibilityCommand { get; }
@@ -50,7 +48,6 @@ namespace CheckDrive.Mobile.ViewModels
         public LoginViewModel()
         {
             _accountDataStore = DependencyService.Get<IAccountStore>();
-            _driverDataStore = DependencyService.Get<IDriverDataStore>();
 
             LoginCommand = new Command(async () => await ExecuteLoginCommand());
             TogglePasswordVisibilityCommand = new Command(TogglePasswordVisibility);
