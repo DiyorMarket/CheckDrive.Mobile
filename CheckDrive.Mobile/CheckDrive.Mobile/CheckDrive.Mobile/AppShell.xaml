@@ -16,7 +16,7 @@
                 <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
                 <Setter Property="Shell.TabBarForegroundColor" Value="#F2968F" />
                 <Setter Property="Shell.TabBarUnselectedColor" Value="#33363F" />
-                <Setter Property="Shell.TabBarTitleColor" Value="#00A3FF" />
+                <Setter Property="Shell.TabBarTitleColor" Value="#1C375C" />
             </Style>
             <Style BasedOn="{StaticResource BaseStyle}" TargetType="TabBar" />
             <Style BasedOn="{StaticResource BaseStyle}" TargetType="FlyoutItem" />
@@ -72,9 +72,9 @@
     </TabBar>
 
     <TabBar>
-        <ShellContent Title="Ishchi oynasi"
+        <ShellContent Title="Asosiy"
                       ContentTemplate="{DataTemplate views:HomePage}"
-                      Icon="icon_roadMap.png"
+                      Icon="icon_home.png"
                       Route="HomePage" />
         <ShellContent Title="Tarix"
                       ContentTemplate="{DataTemplate views:HistoryPage}"

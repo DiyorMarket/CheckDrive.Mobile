@@ -11,12 +11,12 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <StackLayout Grid.Row="0" Spacing="15">
-                    <Frame Padding="0"
+                    <Frame Padding="10"
                            CornerRadius="100"
-                           HeightRequest="200"
+                           HeightRequest="175"
                            HorizontalOptions="Center"
                            IsClippedToBounds="True"
-                           WidthRequest="200">
+                           WidthRequest="175">
                         <Image Aspect="AspectFill" Source="profile_image.png" />
                     </Frame>
 
