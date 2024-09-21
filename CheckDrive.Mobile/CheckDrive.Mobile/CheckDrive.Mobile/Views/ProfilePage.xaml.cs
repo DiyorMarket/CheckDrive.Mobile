@@ -16,10 +16,12 @@ namespace CheckDrive.Mobile.Views
             BindingContext = _viewModel;
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
-            var vm = BindingContext as ProfileViewModel;
-            vm?.LoadProfileData();
+            if (BindingContext is ProfileViewModel vm)
+            {
+                await vm.LoadProfileDataAsync();
+            }
 
             base.OnAppearing();
         }

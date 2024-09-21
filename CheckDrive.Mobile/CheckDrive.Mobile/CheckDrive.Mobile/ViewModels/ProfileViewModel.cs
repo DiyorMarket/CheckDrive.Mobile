@@ -2,6 +2,7 @@
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Services.Navigation;
 using CheckDrive.Mobile.Stores.Accounts;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -15,9 +16,9 @@ namespace CheckDrive.Mobile.ViewModels
 
         public string ProfileImage { get; set; }
         public string FullName { get; set; }
-        public string Email { get; set; }
         public string Phone { get; set; }
-        public string LicenseNumber { get; set; }
+        public DateTime Birthdate { get; set; }
+
         public string VehicleMake { get; set; }
         public string VehicleModel { get; set; }
         public string VehicleYear { get; set; }
@@ -34,29 +35,28 @@ namespace CheckDrive.Mobile.ViewModels
             LogoutCommand = new Command(OnLogout);
         }
 
-        public async Task LoadProfileData()
+        public async Task LoadProfileDataAsync()
         {
-            //var driver = await _accountService.GetCurrentDriverAsync();
-            //if (driver != null)
-            //{
-            //    ProfileImage = driver.ProfileImageUrl;
-            //    FullName = $"{driver.FirstName} {driver.LastName}";
-            //    Email = driver.Email;
-            //    Phone = driver.PhoneNumber;
-            //    LicenseNumber = driver.LicenseNumber;
-            //    VehicleMake = driver.Vehicle?.Make;
-            //    VehicleModel = driver.Vehicle?.Model;
-            //    VehicleYear = driver.Vehicle?.Year.ToString();
+            var account = await _accountService.GetAccountAsync();
 
-            //    OnPropertyChanged(nameof(ProfileImage));
-            //    OnPropertyChanged(nameof(FullName));
-            //    OnPropertyChanged(nameof(Email));
-            //    OnPropertyChanged(nameof(Phone));
-            //    OnPropertyChanged(nameof(LicenseNumber));
-            //    OnPropertyChanged(nameof(VehicleMake));
-            //    OnPropertyChanged(nameof(VehicleModel));
-            //    OnPropertyChanged(nameof(VehicleYear));
-            //}
+            if (account is null)
+            {
+                return;
+            }
+
+            FullName = $"{account.FirstName} {account.LastName}";
+            Phone = account.PhoneNumber;
+            Birthdate = account.Bithdate;
+
+            OnPropertyChanged(nameof(ProfileImage));
+
+            OnPropertyChanged(nameof(FullName));
+            OnPropertyChanged(nameof(Phone));
+            OnPropertyChanged(nameof(Birthdate));
+
+            OnPropertyChanged(nameof(VehicleMake));
+            OnPropertyChanged(nameof(VehicleModel));
+            OnPropertyChanged(nameof(VehicleYear));
         }
 
         private async void OnEditProfile()

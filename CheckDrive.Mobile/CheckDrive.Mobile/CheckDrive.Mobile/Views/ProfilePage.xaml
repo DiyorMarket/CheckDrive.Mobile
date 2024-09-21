@@ -4,91 +4,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout Padding="20" Spacing="20">
-                <Frame Padding="0"
-                       CornerRadius="100"
-                       HeightRequest="200"
-                       HorizontalOptions="Center"
-                       IsClippedToBounds="True"
-                       WidthRequest="200">
-                    <Image Aspect="AspectFill" Source="{Binding ProfileImage}" />
-                </Frame>
+            <Grid Padding="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackLayout Grid.Row="0" Spacing="15">
+                    <Frame Padding="0"
+                           CornerRadius="100"
+                           HeightRequest="200"
+                           HorizontalOptions="Center"
+                           IsClippedToBounds="True"
+                           WidthRequest="200">
+                        <Image Aspect="AspectFill" Source="profile_image.png" />
+                    </Frame>
 
-                <Label FontAttributes="Bold"
-                       FontSize="24"
-                       HorizontalOptions="Center"
-                       Text="{Binding FullName}" />
+                    <Label FontAttributes="Bold"
+                           FontSize="24"
+                           HorizontalOptions="Center"
+                           Text="{Binding FullName}" />
+                </StackLayout>
 
-                <Frame Padding="10"
+                <Frame Grid.Row="1"
+                       Padding="10"
                        BorderColor="LightGray"
                        CornerRadius="5">
                     <StackLayout Spacing="10">
                         <Label FontAttributes="Bold"
                                FontSize="18"
-                               Text="Personal Information" />
+                               Text="Shaxsiy ma'lumot" />
                         <BoxView HeightRequest="1" Color="LightGray" />
                         <StackLayout Orientation="Horizontal">
                             <Label FontAttributes="Bold"
-                                   Text="Email:"
+                                   Text="Login:"
                                    WidthRequest="100" />
-                            <Label Text="{Binding Email}" />
+                            <Label Text="{Binding Login}" />
                         </StackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Label FontAttributes="Bold"
-                                   Text="Phone:"
+                                   Text="Telefon raqam:"
                                    WidthRequest="100" />
                             <Label Text="{Binding Phone}" />
                         </StackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Label FontAttributes="Bold"
-                                   Text="License:"
+                                   Text="Tug'ilgan yil:"
                                    WidthRequest="100" />
-                            <Label Text="{Binding LicenseNumber}" />
+                            <Label Text="{Binding Birthdate}" />
                         </StackLayout>
                     </StackLayout>
                 </Frame>
 
-                <Frame Padding="10"
-                       BorderColor="LightGray"
-                       CornerRadius="5">
-                    <StackLayout Spacing="10">
-                        <Label FontAttributes="Bold"
-                               FontSize="18"
-                               Text="Vehicle Information" />
-                        <BoxView HeightRequest="1" Color="LightGray" />
-                        <StackLayout Orientation="Horizontal">
-                            <Label FontAttributes="Bold"
-                                   Text="Make:"
-                                   WidthRequest="100" />
-                            <Label Text="{Binding VehicleMake}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Horizontal">
-                            <Label FontAttributes="Bold"
-                                   Text="Model:"
-                                   WidthRequest="100" />
-                            <Label Text="{Binding VehicleModel}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Horizontal">
-                            <Label FontAttributes="Bold"
-                                   Text="Year:"
-                                   WidthRequest="100" />
-                            <Label Text="{Binding VehicleYear}" />
-                        </StackLayout>
-                    </StackLayout>
-                </Frame>
+                <StackLayout Grid.Row="2"
+                             Spacing="10"
+                             VerticalOptions="EndAndExpand">
+                    <Button BackgroundColor="#1C375C"
+                            Command="{Binding EditProfileCommand}"
+                            CornerRadius="5"
+                            Text="O'zgartirish"
+                            TextColor="White" />
 
-                <Button BackgroundColor="#1C375C"
-                        Command="{Binding EditProfileCommand}"
-                        CornerRadius="5"
-                        Text="Edit Profile"
-                        TextColor="White" />
-
-                <Button BackgroundColor="#FF4136"
-                        Command="{Binding LogoutCommand}"
-                        CornerRadius="5"
-                        Text="Log Out"
-                        TextColor="White" />
-            </StackLayout>
+                    <Button BackgroundColor="#FF4136"
+                            Command="{Binding LogoutCommand}"
+                            CornerRadius="5"
+                            Text="Tizimdan chiqish"
+                            TextColor="White" />
+                </StackLayout>
+            </Grid>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>
