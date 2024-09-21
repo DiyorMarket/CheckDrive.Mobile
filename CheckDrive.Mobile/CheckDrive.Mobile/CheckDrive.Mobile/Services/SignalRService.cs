@@ -1,7 +1,5 @@
 ﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Views;
 using Microsoft.AspNetCore.SignalR.Client;
-using Rg.Plugins.Popup.Services;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -27,7 +25,7 @@ namespace CheckDrive.Mobile.Services
             _hubConnection.On<int, int, string>("ReceiveMessage", async (status, reviewId, message) =>
             {
                 LocalStorage.SaveSignalRDataFOrStatus(status);
-                    LocalStorage.SaveSignalRDataForReviewID(reviewId);
+                LocalStorage.SaveSignalRDataForReviewID(reviewId);
                 await ShowPopupAsync(message);
             });
         }
@@ -40,10 +38,10 @@ namespace CheckDrive.Mobile.Services
             try
             {
                 await Task.Delay(2000);
-                await _hubConnection.SendAsync("ReceivePrivateResponse",status, reviewId, isAccepted);
+                await _hubConnection.SendAsync("ReceivePrivateResponse", status, reviewId, isAccepted);
                 LocalStorage.RemoveSignalRData();
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
@@ -82,8 +80,7 @@ namespace CheckDrive.Mobile.Services
                 await SecureStorage.SetAsync("popup_message", message);
                 await SecureStorage.SetAsync("popup_visible", "true");
 
-                var popup = new CheckControlPopup(message);
-                await PopupNavigation.Instance.PushAsync(popup);
+
                 Console.WriteLine("Popup ochildi.");
             }
             catch (Exception ex)

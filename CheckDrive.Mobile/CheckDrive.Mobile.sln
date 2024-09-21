@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDrive.Mobile.Android",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDrive.Mobile.iOS", "CheckDrive.Mobile\CheckDrive.Mobile.iOS\CheckDrive.Mobile.iOS.csproj", "{24D554C4-0DD7-4EFA-81EC-024262E25166}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckDrive.Mobile", "CheckDrive.Mobile\CheckDrive.Mobile\CheckDrive.Mobile.csproj", "{DBA4E651-666F-463E-BC71-3A301BBCD99B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckDrive.Mobile", "CheckDrive.Mobile\CheckDrive.Mobile\CheckDrive.Mobile.csproj", "{DBA4E651-666F-463E-BC71-3A301BBCD99B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

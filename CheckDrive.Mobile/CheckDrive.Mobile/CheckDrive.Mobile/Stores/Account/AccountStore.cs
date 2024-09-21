@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace CheckDrive.Mobile.Stores.Accounts
+namespace CheckDrive.Mobile.Stores.Account
 {
     public class AccountStore : IAccountStore
     {
@@ -37,7 +37,7 @@ namespace CheckDrive.Mobile.Stores.Accounts
             return Task.CompletedTask;
         }
 
-        public async Task<Account> GetAccountAsync()
+        public async Task<AccountDto> GetAccountAsync()
         {
             var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
 
@@ -88,25 +88,25 @@ namespace CheckDrive.Mobile.Stores.Accounts
             return int.Parse(jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
         }
 
-        private async Task<Account> FetchAccountAsync(int accountId)
+        private async Task<AccountDto> FetchAccountAsync(int accountId)
         {
             var response = await _client.GetAsync($"accounts/{accountId}");
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<Account>(json);
+            var result = JsonConvert.DeserializeObject<AccountDto>(json);
 
             return result;
         }
 
-        private async Task<Account> FetchDriverDataAsync(int accountId)
+        private async Task<AccountDto> FetchDriverDataAsync(int accountId)
         {
             var query = $"drivers?accountId={accountId}";
             var response = await _client.GetAsync(query);
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<Account>(json);
+            var result = JsonConvert.DeserializeObject<AccountDto>(json);
 
             return result;
         }

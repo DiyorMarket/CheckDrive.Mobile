@@ -2,7 +2,7 @@
 
 namespace CheckDrive.Mobile.Models
 {
-    public class Account
+    public class AccountDto
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

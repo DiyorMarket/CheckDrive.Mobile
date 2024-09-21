@@ -45,7 +45,7 @@ namespace CheckDrive.Mobile.Helpers
             SecureStorage.RemoveAll();
         }
 
-        public static void SaveAccount(Account account)
+        public static void SaveAccount(AccountDto account)
         {
             try
             {
@@ -80,14 +80,14 @@ namespace CheckDrive.Mobile.Helpers
             }
         }
 
-        public static Account GetAccount()
+        public static AccountDto GetAccount()
         {
             try
             {
                 if (SecureStorage.GetAsync(securetyKey).GetAwaiter().GetResult() != null)
                 {
                     var json = SecureStorage.GetAsync(securetyKey).GetAwaiter().GetResult();
-                    return JsonConvert.DeserializeObject<Account>(json);
+                    return JsonConvert.DeserializeObject<AccountDto>(json);
                 }
             }
             catch (Exception ex)

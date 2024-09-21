@@ -2,13 +2,13 @@
 using System;
 using System.Threading.Tasks;
 
-namespace CheckDrive.Mobile.Stores.Accounts
+namespace CheckDrive.Mobile.Stores.Account
 {
     internal class MockAccountStore : IAccountStore
     {
-        public Task<Account> GetAccountAsync()
+        public Task<AccountDto> GetAccountAsync()
         {
-            var account = new Account
+            var account = new AccountDto
             {
                 Id = Guid.NewGuid(),
                 FirstName = "John",

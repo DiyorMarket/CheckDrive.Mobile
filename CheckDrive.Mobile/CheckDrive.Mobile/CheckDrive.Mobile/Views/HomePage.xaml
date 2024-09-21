@@ -1,12 +1,81 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage x:Class="CheckDrive.Mobile.Views.HomePage"
              xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:progressBar="clr-namespace:Syncfusion.XForms.ProgressBar;assembly=Syncfusion.SfProgressBar.XForms">
     <ContentPage.Content>
-        <StackLayout>
-            <Label HorizontalOptions="CenterAndExpand"
-                   Text="Welcome to Xamarin.Forms!"
-                   VerticalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout>
+                <Label FontAttributes="Bold"
+                       FontSize="Title"
+                       HorizontalTextAlignment="Center"
+                       Text="{Binding Date}"
+                       TextColor="DarkSlateGray"
+                       VerticalTextAlignment="Center" />
+
+                <progressBar:SfStepProgressBar x:Name="stepProgress"
+                                               Margin="0,25,0,0"
+                                               BackgroundColor="Transparent"
+                                               BindableLayout.ItemsSource="{Binding Reviews}"
+                                               HorizontalOptions="CenterAndExpand"
+                                               Orientation="Vertical"
+                                               TitleAlignment="Start"
+                                               TitleSpace="10">
+                    <progressBar:SfStepProgressBar.InProgressStepStyle>
+                        <progressBar:StepStyle x:TypeArguments="progressBar:InProgressStepState"
+                                               MarkerContentFillColor="White"
+                                               MarkerContentType="Dot"
+                                               MarkerFillColor="#04AA6D"
+                                               MarkerShapeType="Circle"
+                                               MarkerStrokeColor="#04AA6D"
+                                               ProgressLineColor="#04AA6D" />
+                    </progressBar:SfStepProgressBar.InProgressStepStyle>
+
+                    <progressBar:SfStepProgressBar.CompletedStepStyle>
+                        <progressBar:StepStyle x:TypeArguments="progressBar:CompletedStepState"
+                                               MarkerContentFillColor="White"
+                                               MarkerContentType="Tick"
+                                               MarkerFillColor="#04AA6D"
+                                               MarkerShapeType="Circle"
+                                               MarkerStrokeColor="#04AA6D"
+                                               ProgressLineColor="#04AA6D" />
+                    </progressBar:SfStepProgressBar.CompletedStepStyle>
+
+                    <progressBar:SfStepProgressBar.NotStartedStepStyle>
+                        <progressBar:StepStyle x:TypeArguments="progressBar:NotStartedStepState"
+                                               MarkerContentType="None"
+                                               MarkerFillColor="Transparent"
+                                               MarkerShapeType="Circle"
+                                               MarkerStrokeColor="DarkGray"
+                                               ProgressLineColor="DarkGray" />
+                    </progressBar:SfStepProgressBar.NotStartedStepStyle>
+
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <progressBar:StepView x:Name="stepView"
+                                                  ProgressValue="{Binding ProgressValue}"
+                                                  Status="{Binding StepStatus}">
+                                <progressBar:StepView.PrimaryFormattedText>
+                                    <FormattedString>
+                                        <Span FontAttributes="Bold"
+                                              FontSize="Medium"
+                                              Text="{Binding Title}" />
+                                        <Span Text="&#10;&#10;" />
+                                        <Span FontSize="Small" Text="{Binding Notes}" />
+                                    </FormattedString>
+                                </progressBar:StepView.PrimaryFormattedText>
+                                <progressBar:StepView.SecondaryFormattedText>
+                                    <FormattedString>
+                                        <Span FontAttributes="Bold"
+                                              FontSize="Medium"
+                                              Text="{Binding Time}" />
+                                    </FormattedString>
+                                </progressBar:StepView.SecondaryFormattedText>
+                            </progressBar:StepView>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </progressBar:SfStepProgressBar>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

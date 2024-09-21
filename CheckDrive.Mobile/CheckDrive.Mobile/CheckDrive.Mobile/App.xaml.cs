@@ -2,7 +2,8 @@ using CheckDrive.Mobile.Exceptions;
 using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Services.Navigation;
-using CheckDrive.Mobile.Stores.Accounts;
+using CheckDrive.Mobile.Stores.Account;
+using CheckDrive.Mobile.Stores.Review;
 using CheckDrive.Mobile.Views;
 using CheckDrive.Mobile.Views.Errors;
 using Rg.Plugins.Popup.Services;
@@ -47,9 +48,12 @@ namespace CheckDrive.Mobile
 
         private static void ConfigureServices()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzQ4NzEyNUAzMjM1MmUzMDJlMzBKTkNydWx1REpPMnYrMDJ3RnhmaFNOU1JIWEw5d2Z5by9OQXhvQThrRnFjPQ==");
+
             DependencyService.Register<ApiClient>();
 
             DependencyService.Register<IAccountStore, MockAccountStore>();
+            DependencyService.Register<IReviewStore, MockReviewStore>();
 
             DependencyService.Register<INavigationService, NavigationService>();
         }
@@ -72,7 +76,7 @@ namespace CheckDrive.Mobile
 
             if (string.IsNullOrWhiteSpace(token) || JwtHelper.IsTokenExpired(token))
             {
-                return false;
+                return true;
             }
 
             return true;

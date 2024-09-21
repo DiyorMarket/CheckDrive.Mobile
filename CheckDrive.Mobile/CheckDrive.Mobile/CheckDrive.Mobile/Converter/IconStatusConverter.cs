@@ -1,5 +1,4 @@
-﻿using CheckDrive.ApiContracts;
-using System;
+﻿using System;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.Converter
@@ -10,10 +9,10 @@ namespace CheckDrive.Mobile.Converter
         {
             switch ((Enum)value)
             {
-                case StatusForDto.Completed : return "icon_check.png";
-                case StatusForDto.Pending : return "icon_circle.png";
-                case StatusForDto.Rejected : return "icon_faild.png";
-                case StatusForDto.Unassigned : return "icon_circle.png";
+                //case StatusForDto.Completed: return "icon_check.png";
+                //case StatusForDto.Pending: return "icon_circle.png";
+                //case StatusForDto.Rejected: return "icon_faild.png";
+                //case StatusForDto.Unassigned: return "icon_circle.png";
                 default: return "icon_circle.png";
             }
         }
