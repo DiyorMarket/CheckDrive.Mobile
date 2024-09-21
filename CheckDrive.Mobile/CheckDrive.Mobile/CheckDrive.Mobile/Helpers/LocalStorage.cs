@@ -1,4 +1,4 @@
-﻿using CheckDrive.ApiContracts.Driver;
+﻿using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Enums;
 using Newtonsoft.Json;
 using System;
@@ -45,7 +45,7 @@ namespace CheckDrive.Mobile.Helpers
             SecureStorage.RemoveAll();
         }
 
-        public static void SaveAccount(DriverDto account)
+        public static void SaveAccount(Account account)
         {
             try
             {
@@ -80,14 +80,14 @@ namespace CheckDrive.Mobile.Helpers
             }
         }
 
-        public static DriverDto GetAccount()
+        public static Account GetAccount()
         {
             try
             {
                 if (SecureStorage.GetAsync(securetyKey).GetAwaiter().GetResult() != null)
                 {
                     var json = SecureStorage.GetAsync(securetyKey).GetAwaiter().GetResult();
-                    return JsonConvert.DeserializeObject<DriverDto>(json);
+                    return JsonConvert.DeserializeObject<Account>(json);
                 }
             }
             catch (Exception ex)

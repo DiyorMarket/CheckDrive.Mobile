@@ -1,6 +1,5 @@
 ﻿using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.Services.Navigation;
 using CheckDrive.Mobile.Stores.Accounts;
 using System;
 using System.Threading.Tasks;
@@ -12,11 +11,13 @@ namespace CheckDrive.Mobile.ViewModels
     public class ProfileViewModel : BaseViewModel
     {
         private readonly IAccountStore _accountService;
-        private readonly INavigationService _navigationService;
 
         public string ProfileImage { get; set; }
         public string FullName { get; set; }
-        public string Phone { get; set; }
+        public string Passport { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
         public DateTime Birthdate { get; set; }
 
         public string VehicleMake { get; set; }
@@ -29,10 +30,9 @@ namespace CheckDrive.Mobile.ViewModels
         public ProfileViewModel()
         {
             _accountService = DependencyService.Get<IAccountStore>();
-            _navigationService = DependencyService.Get<INavigationService>();
 
-            EditProfileCommand = new Command(OnEditProfile);
-            LogoutCommand = new Command(OnLogout);
+            EditProfileCommand = new Command(async () => await OnEditProfileAsync());
+            LogoutCommand = new Command(async () => await OnLogoutAsync());
         }
 
         public async Task LoadProfileDataAsync()
@@ -45,13 +45,19 @@ namespace CheckDrive.Mobile.ViewModels
             }
 
             FullName = $"{account.FirstName} {account.LastName}";
-            Phone = account.PhoneNumber;
-            Birthdate = account.Bithdate;
+            Passport = account.Passport;
+            PhoneNumber = account.PhoneNumber;
+            Email = account.Email;
+            Address = account.Address;
+            Birthdate = account.Birthdate;
 
             OnPropertyChanged(nameof(ProfileImage));
 
             OnPropertyChanged(nameof(FullName));
-            OnPropertyChanged(nameof(Phone));
+            OnPropertyChanged(nameof(Passport));
+            OnPropertyChanged(nameof(PhoneNumber));
+            OnPropertyChanged(nameof(Email));
+            OnPropertyChanged(nameof(Address));
             OnPropertyChanged(nameof(Birthdate));
 
             OnPropertyChanged(nameof(VehicleMake));
@@ -59,12 +65,12 @@ namespace CheckDrive.Mobile.ViewModels
             OnPropertyChanged(nameof(VehicleYear));
         }
 
-        private async void OnEditProfile()
+        private async Task OnEditProfileAsync()
         {
-            // await _navigationService.NavigateToAsync<EditProfilePage>();
+            await _navigationService.NavigateToAsync(NavigationPageType.EditProfile);
         }
 
-        private async void OnLogout()
+        private async Task OnLogoutAsync()
         {
             var confirmed = await Application.Current.MainPage.DisplayAlert("Logout", "Are you sure you want to log out?", "Yes", "No");
 

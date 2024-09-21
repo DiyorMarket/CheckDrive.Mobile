@@ -80,7 +80,7 @@ namespace CheckDrive.Mobile
 
         private async void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
-            if (e.NetworkAccess != NetworkAccess.Internet && !(MainPage is NoInternetPage))
+            if (e.NetworkAccess != NetworkAccess.Internet && !(MainPage is NoInternetErrorPage))
             {
                 var signalRService = new SignalRService();
                 await signalRService.StopConnectionAsync();
@@ -90,7 +90,7 @@ namespace CheckDrive.Mobile
                     await PopupNavigation.Instance.PopAllAsync();
                 }
 
-                MainPage = new NoInternetPage();
+                MainPage = new NoInternetErrorPage();
             }
             else if (e.NetworkAccess == NetworkAccess.Internet && !(MainPage is AppShell))
             {

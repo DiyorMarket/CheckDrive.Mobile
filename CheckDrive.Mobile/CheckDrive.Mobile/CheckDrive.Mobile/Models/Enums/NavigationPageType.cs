@@ -4,6 +4,7 @@
     {
         Login,
         Profile,
+        EditProfile,
         Home
     }
 }

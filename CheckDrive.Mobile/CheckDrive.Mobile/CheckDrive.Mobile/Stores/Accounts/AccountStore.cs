@@ -1,8 +1,6 @@
-﻿using CheckDrive.ApiContracts.Account;
-using CheckDrive.ApiContracts.Driver;
-using CheckDrive.Mobile.Helpers;
+﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.Responses;
 using CheckDrive.Mobile.Services;
 using Newtonsoft.Json;
 using System;
@@ -28,7 +26,7 @@ namespace CheckDrive.Mobile.Stores.Accounts
             var token = await AuthenticateUserAsync(login, password);
 
             await LocalStorage.SaveAsync(token, LocalStorageKey.Token);
-            await ProcessLoginAsync(token, password);
+            await ProcessLoginAsync(token);
         }
 
         public Task LogoutAsync()
@@ -39,12 +37,7 @@ namespace CheckDrive.Mobile.Stores.Accounts
             return Task.CompletedTask;
         }
 
-        public Task<DriverDto> GetCurrentDriverAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<AccountDto> GetAccountAsync()
+        public async Task<Account> GetAccountAsync()
         {
             var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
 
@@ -71,14 +64,13 @@ namespace CheckDrive.Mobile.Stores.Accounts
             return JsonConvert.DeserializeObject<string>(responseBody);
         }
 
-        private async Task ProcessLoginAsync(string token, string password)
+        private async Task ProcessLoginAsync(string token)
         {
             var accountId = ExtractAccountIdFromToken(token);
             var driver = await FetchDriverDataAsync(accountId);
 
             if (driver != null)
             {
-                driver.Password = password;
                 await LocalStorage.SaveAsync(driver, LocalStorageKey.Account);
             }
         }
@@ -96,27 +88,27 @@ namespace CheckDrive.Mobile.Stores.Accounts
             return int.Parse(jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
         }
 
-        private async Task<AccountDto> FetchAccountAsync(int accountId)
+        private async Task<Account> FetchAccountAsync(int accountId)
         {
             var response = await _client.GetAsync($"accounts/{accountId}");
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<AccountDto>(json);
+            var result = JsonConvert.DeserializeObject<Account>(json);
 
             return result;
         }
 
-        private async Task<DriverDto> FetchDriverDataAsync(int accountId)
+        private async Task<Account> FetchDriverDataAsync(int accountId)
         {
             var query = $"drivers?accountId={accountId}";
             var response = await _client.GetAsync(query);
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<GetDriverResponse>(json);
+            var result = JsonConvert.DeserializeObject<Account>(json);
 
-            return result.Data.FirstOrDefault();
+            return result;
         }
     }
 }
