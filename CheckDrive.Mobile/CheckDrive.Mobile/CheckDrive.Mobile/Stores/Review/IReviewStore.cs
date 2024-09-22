@@ -7,6 +7,6 @@ namespace CheckDrive.Mobile.Stores.Review
     public interface IReviewStore
     {
         Task<List<ReviewDto>> GetReviews();
-        Task<CheckPointDto> GetCheckPointAsync();
+        Task<CheckPointDto> GetCheckPointAsync(bool forceRefresh = false);
     }
 }

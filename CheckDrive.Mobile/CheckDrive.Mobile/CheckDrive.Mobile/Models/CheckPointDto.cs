@@ -7,6 +7,7 @@ namespace CheckDrive.Mobile.Models
     {
         public CheckPointStage Stage { get; set; }
         public CheckPointStatus Status { get; set; }
+        public CarDto Car { get; set; }
 
         public List<ReviewDto> Reviews { get; set; }
     }

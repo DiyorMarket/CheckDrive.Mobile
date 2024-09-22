@@ -8,17 +8,22 @@ namespace CheckDrive.Mobile.Stores.Review
 {
     public class MockReviewStore : IReviewStore
     {
-        public Task<CheckPointDto> GetCheckPointAsync()
+        public async Task<CheckPointDto> GetCheckPointAsync(bool forceRefresh = false)
         {
+            var loadTime = forceRefresh ? TimeSpan.FromSeconds(1.5) : TimeSpan.FromSeconds(0.5);
+            await Task.Delay(loadTime);
+
             var reviews = GetMockReviews();
+            var car = GetMockCar();
             var checkPoint = new CheckPointDto
             {
                 Status = CheckPointStatus.InProcess,
                 Stage = CheckPointStage.DoctorReview,
+                Car = car,
                 Reviews = reviews,
             };
 
-            return Task.FromResult(checkPoint);
+            return checkPoint;
         }
 
         public Task<List<ReviewDto>> GetReviews()
@@ -71,6 +76,27 @@ namespace CheckDrive.Mobile.Stores.Review
             });
 
             return reviews;
+        }
+
+        private static CarDto GetMockCar()
+        {
+            var car = new CarDto
+            {
+                Model = "Spark",
+                Color = "Yashil",
+                Number = "AD523C",
+                ManufacturedYear = 2016,
+                Mileage = 500,
+                YearlyDistanceLimit = 2500,
+                MonthlyDistanceLimit = 750,
+                CurrentMonthMileage = 500,
+                AverageFuelConsumption = 50,
+                FuelCapacity = 70,
+                RemainingFuel = 20,
+                Status = CarStatus.Free
+            };
+
+            return car;
         }
     }
 }

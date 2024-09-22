@@ -13,7 +13,7 @@
 
     <ContentPage.Content>
         <RefreshView x:Name="HistoryPageRefresh"
-                     RefreshColor="#2196F3"
+                     RefreshColor="#1C375C"
                      Refreshing="HistoryRefresh_Refreshing">
             <ScrollView>
                 <Grid>

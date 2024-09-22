@@ -83,7 +83,6 @@
                            HorizontalOptions="CenterAndExpand"
                            Text="Parol yoki foydalanuvchi nomini unutdingizmi?" />
 
-                    <!--  Loader  -->
                     <ActivityIndicator Grid.Row="4"
                                        IsRunning="{Binding IsBusy}"
                                        IsVisible="{Binding IsBusy}"
