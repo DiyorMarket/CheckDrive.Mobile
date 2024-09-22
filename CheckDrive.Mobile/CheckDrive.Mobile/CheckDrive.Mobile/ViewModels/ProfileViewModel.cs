@@ -1,7 +1,6 @@
 ﻿using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Stores.Account;
-using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -13,12 +12,13 @@ namespace CheckDrive.Mobile.ViewModels
         private readonly IAccountStore _accountService;
 
         public string ProfileImage { get; set; }
+        public string Login { get; set; }
         public string FullName { get; set; }
         public string Passport { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
-        public DateTime Birthdate { get; set; }
+        public string Birthdate { get; set; }
 
         public string VehicleMake { get; set; }
         public string VehicleModel { get; set; }
@@ -44,15 +44,17 @@ namespace CheckDrive.Mobile.ViewModels
                 return;
             }
 
+            Login = account.Login;
             FullName = $"{account.FirstName} {account.LastName}";
             Passport = account.Passport;
             PhoneNumber = account.PhoneNumber;
             Email = account.Email;
             Address = account.Address;
-            Birthdate = account.Birthdate;
+            Birthdate = account.Birthdate.ToString("dd MMMM, yyyy");
 
             OnPropertyChanged(nameof(ProfileImage));
 
+            OnPropertyChanged(nameof(Login));
             OnPropertyChanged(nameof(FullName));
             OnPropertyChanged(nameof(Passport));
             OnPropertyChanged(nameof(PhoneNumber));
