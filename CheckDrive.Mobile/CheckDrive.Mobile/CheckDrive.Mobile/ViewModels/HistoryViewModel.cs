@@ -3,6 +3,7 @@ using CheckDrive.Mobile.Stores.History;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.ViewModels
@@ -10,6 +11,8 @@ namespace CheckDrive.Mobile.ViewModels
     public class HistoryViewModel : BaseViewModel
     {
         private readonly IHistoryStore _historyStore;
+
+        public ICommand RefreshCommand { get; }
 
         private string _search;
         public string Search
@@ -24,11 +27,18 @@ namespace CheckDrive.Mobile.ViewModels
         {
             _historyStore = DependencyService.Get<IHistoryStore>();
 
+            RefreshCommand = new Command(async () => await LoadHistories());
+
             Histories = new ObservableCollection<CheckPointHistoryDto>();
         }
 
         public async Task LoadHistories()
         {
+            if (IsBusy)
+            {
+                return;
+            }
+
             IsBusy = true;
             Histories.Clear();
 
