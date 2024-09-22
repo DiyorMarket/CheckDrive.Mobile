@@ -17,7 +17,7 @@ namespace CheckDrive.Mobile.Stores.Review
             var car = GetMockCar();
             var checkPoint = new CheckPointDto
             {
-                Status = CheckPointStatus.InProcess,
+                Status = CheckPointStatus.InProgress,
                 Stage = CheckPointStage.DoctorReview,
                 Car = car,
                 Reviews = reviews,
@@ -37,7 +37,7 @@ namespace CheckDrive.Mobile.Stores.Review
             reviews.Add(new ReviewDto
             {
                 Id = 1,
-                StartDate = DateTime.Now,
+                Date = DateTime.Now,
                 Notes = "Doctor Review.",
                 Status = ReviewStatus.Approved,
                 Type = ReviewType.DoctorReview
@@ -45,7 +45,7 @@ namespace CheckDrive.Mobile.Stores.Review
             reviews.Add(new ReviewDto
             {
                 Id = 1,
-                StartDate = DateTime.Now,
+                Date = DateTime.Now,
                 Notes = "Mechanic Handover.",
                 Status = ReviewStatus.Approved,
                 Type = ReviewType.MechanicHandover
@@ -53,7 +53,7 @@ namespace CheckDrive.Mobile.Stores.Review
             reviews.Add(new ReviewDto
             {
                 Id = 1,
-                StartDate = DateTime.Now,
+                Date = DateTime.Now,
                 Notes = "Operator Review.",
                 Status = ReviewStatus.InProgress,
                 Type = ReviewType.OperatorReview
@@ -61,7 +61,7 @@ namespace CheckDrive.Mobile.Stores.Review
             reviews.Add(new ReviewDto
             {
                 Id = 1,
-                StartDate = DateTime.Now,
+                Date = DateTime.Now,
                 Notes = "Mechanic Review.",
                 Status = ReviewStatus.NotStarted,
                 Type = ReviewType.MechanicAcceptance
@@ -69,7 +69,7 @@ namespace CheckDrive.Mobile.Stores.Review
             reviews.Add(new ReviewDto
             {
                 Id = 1,
-                StartDate = DateTime.Now,
+                Date = DateTime.Now,
                 Notes = "Dispatcher Review.",
                 Status = ReviewStatus.NotStarted,
                 Type = ReviewType.DispatcherReview

@@ -6,6 +6,6 @@ namespace CheckDrive.Mobile.Stores.History
 {
     public interface IHistoryStore
     {
-        Task<List<HistoryDto>> GetHistoriesAsync();
+        Task<List<CheckPointHistoryDto>> GetHistoriesAsync();
     }
 }

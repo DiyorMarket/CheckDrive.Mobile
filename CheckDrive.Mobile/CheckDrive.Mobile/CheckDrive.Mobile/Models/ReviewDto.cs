@@ -9,8 +9,9 @@ namespace CheckDrive.Mobile.Models
         public int Id { get; set; }
         public string Title => GetTitle(Type);
         public string Notes { get; set; }
-        public DateTime StartDate { get; set; }
-        public string Time => StartDate.ToString("HH:mm");
+        public string ReviewerName { get; set; }
+        public DateTime Date { get; set; }
+        public string Time => Date.ToString("HH:mm");
         public StepStatus StepStatus => GetStepStatus(Status);
         public int ProgressValue => GetProgressValue(Status);
         public ReviewType Type { get; set; }
