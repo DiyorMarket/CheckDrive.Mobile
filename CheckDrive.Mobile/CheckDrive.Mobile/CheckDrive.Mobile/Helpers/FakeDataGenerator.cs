@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Bogus.Extensions.Poland;
 using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Enums;
 using System;
@@ -8,7 +9,7 @@ namespace CheckDrive.Mobile.Helpers
 {
     public static class FakeDataGenerator
     {
-        private static Faker faker = new Faker();
+        private static readonly Faker faker = new Faker();
 
         public static CarDto GetCar() => new Faker<CarDto>()
             .RuleFor(x => x.Model, f => f.Vehicle.Model())
@@ -30,15 +31,6 @@ namespace CheckDrive.Mobile.Helpers
             .RuleFor(x => x.DistanceTravelledAdjustment, f => f.Random.Number(0, 500))
             .RuleFor(x => x.FuelConsumption, f => f.Random.Number(10, 150))
             .RuleFor(x => x.FuelConsumptionAdjustment, f => f.Random.Number(0, 300))
-            .Generate();
-
-        public static ReviewDto GetReview(ReviewType type, ReviewStatus? status = null) => new Faker<ReviewDto>()
-            .RuleFor(x => x.Id, f => f.Random.Number(1, 10000))
-            .RuleFor(x => x.Notes, f => f.Lorem.Sentence())
-            .RuleFor(x => x.ReviewerName, f => f.Person.FullName)
-            .RuleFor(x => x.Date, f => f.Date.Between(DateTime.Now.AddDays(-20), DateTime.Now))
-            .RuleFor(x => x.Status, f => status == null ? f.Random.Enum<ReviewStatus>() : status)
-            .RuleFor(x => x.Type, type)
             .Generate();
 
         public static CheckPointDto GetCheckPoint()
@@ -113,6 +105,16 @@ namespace CheckDrive.Mobile.Helpers
             return history;
         }
 
+        public static AccountDto GetAccount() => new Faker<AccountDto>()
+            .RuleFor(x => x.Login, f => f.Internet.UserName())
+            .RuleFor(x => x.FirstName, f => f.Person.FirstName)
+            .RuleFor(x => x.LastName, f => f.Person.LastName)
+            .RuleFor(x => x.Passport, f => f.Person.Pesel())
+            .RuleFor(x => x.PhoneNumber, f => f.Phone.PhoneNumber("+998 9# ###-##-##"))
+            .RuleFor(x => x.Email, f => f.Person.Email)
+            .RuleFor(x => x.Address, f => f.Address.FullAddress())
+            .RuleFor(x => x.Birthdate, f => f.Person.DateOfBirth);
+
         private static CheckPointStage GetStage(ReviewType type)
         {
             switch (type)
@@ -131,5 +133,14 @@ namespace CheckDrive.Mobile.Helpers
                     return CheckPointStage.DoctorReview;
             }
         }
+
+        private static ReviewDto GetReview(ReviewType type, ReviewStatus? status = null) => new Faker<ReviewDto>()
+            .RuleFor(x => x.Id, f => f.Random.Number(1, 10000))
+            .RuleFor(x => x.Notes, f => f.Lorem.Sentence())
+            .RuleFor(x => x.ReviewerName, f => f.Person.FullName)
+            .RuleFor(x => x.Date, f => f.Date.Between(DateTime.Now.AddDays(-20), DateTime.Now))
+            .RuleFor(x => x.Status, f => status == null ? f.Random.Enum<ReviewStatus>() : status)
+            .RuleFor(x => x.Type, type)
+            .Generate();
     }
 }

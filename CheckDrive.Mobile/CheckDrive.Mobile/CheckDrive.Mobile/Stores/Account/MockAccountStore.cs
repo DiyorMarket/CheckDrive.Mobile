@@ -1,5 +1,5 @@
-﻿using CheckDrive.Mobile.Models;
-using System;
+﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Models;
 using System.Threading.Tasks;
 
 namespace CheckDrive.Mobile.Stores.Account
@@ -8,15 +8,7 @@ namespace CheckDrive.Mobile.Stores.Account
     {
         public Task<AccountDto> GetAccountAsync()
         {
-            var account = new AccountDto
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "John",
-                LastName = "Doe",
-                Address = "Tashkent, Uzbekistan",
-                Birthdate = DateTime.Now.AddYears(-40),
-                Passport = "FS231 23B"
-            };
+            var account = FakeDataGenerator.GetAccount();
 
             return Task.FromResult(account);
         }
