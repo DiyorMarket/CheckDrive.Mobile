@@ -1,11 +1,11 @@
-﻿using CheckDrive.Mobile.Helpers;
+﻿using CheckDrive.Mobile.Exceptions;
+using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Models.Enums;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.Services
 {
@@ -33,7 +33,7 @@ namespace CheckDrive.Mobile.Services
 
                 if (string.IsNullOrEmpty(token))
                 {
-                    throw new InvalidOperationException("Token is empty.");
+                    throw new InvalidTokenException("Token is empty.");
                 }
 
                 var request = new HttpRequestMessage(HttpMethod.Get, new Uri(_client.BaseAddress, url));
@@ -47,16 +47,9 @@ namespace CheckDrive.Mobile.Services
 
                 return response;
             }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"HTTP request failed: {ex.Message}");
-                HandleException(ex);
-                throw;
-            }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
-                HandleException(ex);
+                Console.WriteLine($"Error making api request: {ex.Message}.");
                 throw;
             }
         }
@@ -78,23 +71,13 @@ namespace CheckDrive.Mobile.Services
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"{ex.Message}");
-                HandleException(ex);
                 throw;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                HandleException(ex);
                 throw;
             }
-        }
-
-        private static void HandleException(Exception ex)
-        {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                ((App)Application.Current).ShowExceptionPage(ex);
-            });
         }
     }
 }
