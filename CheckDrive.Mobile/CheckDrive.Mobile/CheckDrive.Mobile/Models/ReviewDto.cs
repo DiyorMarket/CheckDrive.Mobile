@@ -7,34 +7,18 @@ namespace CheckDrive.Mobile.Models
     public class ReviewDto
     {
         public int Id { get; set; }
-        public string Title => GetTitle(Type);
         public string Notes { get; set; }
+        public string ReviewName => GetReviewName(Type);
         public string ReviewerName { get; set; }
+        public string FormattedReviewerName => string.IsNullOrWhiteSpace(ReviewerName)
+            ? string.Empty
+            : $"({ReviewerName})";
         public DateTime Date { get; set; }
         public string Time => Date.ToString("HH:mm");
         public StepStatus StepStatus => GetStepStatus(Status);
         public int ProgressValue => GetProgressValue(Status);
         public ReviewType Type { get; set; }
         public ReviewStatus Status { get; set; }
-
-        public static string GetTitle(ReviewType type)
-        {
-            switch (type)
-            {
-                case ReviewType.DoctorReview:
-                    return "Shifokor tekshiruvi";
-                case ReviewType.MechanicHandover:
-                    return "Qabul qilish";
-                case ReviewType.OperatorReview:
-                    return "Yoqilg'i quyish";
-                case ReviewType.MechanicAcceptance:
-                    return "Topshirish";
-                case ReviewType.DispatcherReview:
-                    return "Dispetcher tekshiruvi";
-                default:
-                    return "Noma'lum";
-            }
-        }
 
         public static StepStatus GetStepStatus(ReviewStatus status)
         {
@@ -59,6 +43,25 @@ namespace CheckDrive.Mobile.Models
                     return 50;
                 default:
                     return 0;
+            }
+        }
+
+        public static string GetReviewName(ReviewType type)
+        {
+            switch (type)
+            {
+                case ReviewType.DoctorReview:
+                    return "Shifokor ko'rigi";
+                case ReviewType.MechanicHandover:
+                    return "Avtomobil qabul qilish";
+                case ReviewType.OperatorReview:
+                    return "Yoqilg'i quyish";
+                case ReviewType.MechanicAcceptance:
+                    return "Avtomobil topshirish";
+                case ReviewType.DispatcherReview:
+                    return "Dispetcher tekshiruvi";
+                default:
+                    return "";
             }
         }
     }

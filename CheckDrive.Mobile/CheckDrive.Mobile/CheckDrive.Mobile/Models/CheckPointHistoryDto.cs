@@ -17,6 +17,16 @@ namespace CheckDrive.Mobile.Models
         public string IconSource => GetIconSource(Status);
         public string CarDetails => GetCarDetails(CarDetail);
         public string RideDetails => GetRideDetails(RideDetail);
+        public string HistoryDate => Date.ToString("dd/MM");
+        public string Summary => GetSummary(Status);
+        public string FormattedDistanceTravelled => $"{RideDetail.DistanceTravelled:N0} KM";
+        public string FormattedDistanceTravelledAdjustment => RideDetail.DistanceTravelledAdjustment.HasValue
+            ? $"({RideDetail.DistanceTravelledAdjustment.Value:N0} KM)"
+            : string.Empty;
+        public string FormattedFuelConsumption => $"{RideDetail.FuelConsumption:N0} L";
+        public string FormattedFuelConsumptionAdjustment => RideDetail.FuelConsumptionAdjustment.HasValue
+            ? $"({RideDetail.FuelConsumptionAdjustment.Value:N0} L)"
+            : string.Empty;
 
         private static string GetIconSource(CheckPointStatus status)
         {
@@ -44,7 +54,7 @@ namespace CheckDrive.Mobile.Models
                 return "";
             }
 
-            return $"{car.Color} {car.Model}, {car.ManufacturedYear}";
+            return $"{car.Color} {car.Model} {car.Number}";
         }
 
         private static string GetRideDetails(RideDetailDto rideDetail)
@@ -75,6 +85,25 @@ namespace CheckDrive.Mobile.Models
             }
 
             return $"{rideDetail.FuelConsumptionAdjustment} litr";
+        }
+
+        private static string GetSummary(CheckPointStatus status)
+        {
+            switch (status)
+            {
+                case CheckPointStatus.InProgress:
+                    return "Yakunlanmagan";
+                case CheckPointStatus.Completed:
+                    return "Yakunlangan";
+                case CheckPointStatus.PendingManagerReview:
+                    return "Menejer tekshiruvida";
+                case CheckPointStatus.InterruptedWithRejection:
+                    return "Muammo bilan to'xtatilgan";
+                case CheckPointStatus.AutomaticallyClosed:
+                    return "Sistema tomonidan yopilgan";
+                default:
+                    return "Noaniq xolatda";
+            }
         }
     }
 }

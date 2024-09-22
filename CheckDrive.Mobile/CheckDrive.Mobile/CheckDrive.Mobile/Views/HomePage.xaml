@@ -16,6 +16,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="25" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="4*" />
                     </Grid.RowDefinitions>
 
@@ -77,13 +78,16 @@
                                           Type="TitleMedium" />
                     </StackLayout>
 
-                    <StackLayout Grid.Row="3" Margin="0,75,0,0">
-                        <md:MaterialLabel HorizontalTextAlignment="Center"
-                                          Text="{Binding Date}"
-                                          TextColor="#878787"
-                                          Type="TitleLarge"
-                                          VerticalTextAlignment="Center" />
-
+                    <md:MaterialLabel Grid.Row="3"
+                                      Margin="0,50,0,0"
+                                      HorizontalTextAlignment="Center"
+                                      Text="{Binding Date}"
+                                      TextColor="#878787"
+                                      Type="TitleLarge"
+                                      VerticalTextAlignment="Center" />
+                    <StackLayout Grid.Row="4"
+                                 Margin="25,10,25,10"
+                                 HorizontalOptions="StartAndExpand">
                         <progressBar:SfStepProgressBar x:Name="stepProgress"
                                                        Margin="0,25,0,0"
                                                        BackgroundColor="Transparent"
@@ -129,8 +133,8 @@
                                         <progressBar:StepView.PrimaryFormattedText>
                                             <FormattedString>
                                                 <Span FontAttributes="Bold"
-                                                      FontSize="Medium"
-                                                      Text="{Binding Title}" />
+                                                      FontSize="16"
+                                                      Text="{Binding ReviewName}" />
                                                 <Span Text="&#10;&#10;" />
                                                 <Span FontSize="Small" Text="{Binding Notes}" />
                                             </FormattedString>

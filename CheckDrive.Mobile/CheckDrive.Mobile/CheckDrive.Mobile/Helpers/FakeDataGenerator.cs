@@ -41,7 +41,16 @@ namespace CheckDrive.Mobile.Helpers
 
             foreach (ReviewType type in (ReviewType[])Enum.GetValues(typeof(ReviewType)))
             {
-                if (previousReview?.Status != ReviewStatus.Approved)
+                if (previousReview == null)
+                {
+                    var review = GetReview(type);
+                    reviews.Add(review);
+                    previousReview = review;
+
+                    continue;
+                }
+
+                if (previousReview.Status != ReviewStatus.Approved)
                 {
                     var review = GetReview(type, ReviewStatus.NotStarted);
                     reviews.Add(review);
@@ -136,11 +145,33 @@ namespace CheckDrive.Mobile.Helpers
 
         private static ReviewDto GetReview(ReviewType type, ReviewStatus? status = null) => new Faker<ReviewDto>()
             .RuleFor(x => x.Id, f => f.Random.Number(1, 10000))
-            .RuleFor(x => x.Notes, f => f.Lorem.Sentence())
+            .RuleFor(x => x.Notes, f => f.Lorem.Sentence(4))
             .RuleFor(x => x.ReviewerName, f => f.Person.FullName)
             .RuleFor(x => x.Date, f => f.Date.Between(DateTime.Now.AddDays(-20), DateTime.Now))
-            .RuleFor(x => x.Status, f => status == null ? f.Random.Enum<ReviewStatus>() : status)
+            .RuleFor(x => x.Status, f => status == null ? GetStatus() : status)
             .RuleFor(x => x.Type, type)
             .Generate();
+
+        private static ReviewStatus GetStatus()
+        {
+            var statusRandom = faker.Random.Int(0, 100);
+
+            if (statusRandom < 85)
+            {
+                return ReviewStatus.Approved;
+            }
+
+            if (statusRandom < 90)
+            {
+                return ReviewStatus.RejectedByReviewer;
+            }
+
+            if (statusRandom < 95)
+            {
+                return ReviewStatus.RejectedByDriver;
+            }
+
+            return ReviewStatus.InProgress;
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace CheckDrive.Mobile.ViewModels
             _reviewStore = DependencyService.Get<IReviewStore>();
             RefreshCommand = new Command(async () => await LoadData(true));
 
-            Date = DateTime.Now.ToLocalTime().ToString("dd-MMM-yyyy");
+            Date = DateTime.Now.ToLocalTime().ToString("dddd, dd MMMM");
             Reviews = new ObservableCollection<ReviewDto>();
         }
 

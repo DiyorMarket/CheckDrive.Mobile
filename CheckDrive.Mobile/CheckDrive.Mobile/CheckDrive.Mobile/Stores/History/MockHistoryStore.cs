@@ -10,8 +10,9 @@ namespace CheckDrive.Mobile.Stores.History
     {
         private static Random _random = new Random();
 
-        public Task<List<CheckPointHistoryDto>> GetHistoriesAsync()
+        public async Task<List<CheckPointHistoryDto>> GetHistoriesAsync()
         {
+            await Task.Delay(1000);
             List<CheckPointHistoryDto> histories = new List<CheckPointHistoryDto>();
 
             for (int i = 0; i < _random.Next(4, 20); i++)
@@ -20,7 +21,7 @@ namespace CheckDrive.Mobile.Stores.History
                 histories.Add(history);
             }
 
-            return Task.FromResult(histories);
+            return histories;
         }
     }
 }
