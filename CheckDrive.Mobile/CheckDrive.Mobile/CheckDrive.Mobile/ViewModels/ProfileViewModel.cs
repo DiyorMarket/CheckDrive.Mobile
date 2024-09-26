@@ -26,6 +26,7 @@ namespace CheckDrive.Mobile.ViewModels
 
         public ICommand EditProfileCommand { get; }
         public ICommand LogoutCommand { get; }
+        public ICommand BackCommand { get; }
 
         public ProfileViewModel()
         {
@@ -33,6 +34,7 @@ namespace CheckDrive.Mobile.ViewModels
 
             EditProfileCommand = new Command(async () => await OnEditProfileAsync());
             LogoutCommand = new Command(async () => await OnLogoutAsync());
+            BackCommand = new Command(async () => await OnBack());
         }
 
         public async Task LoadProfileDataAsync()
@@ -84,6 +86,10 @@ namespace CheckDrive.Mobile.ViewModels
 
                 await _navigationService.NavigateToAsync(NavigationPageType.Login);
             }
+        }
+        private async Task OnBack()
+        {
+            await _navigationService.NavigateToAsync(NavigationPageType.Profile);
         }
     }
 }

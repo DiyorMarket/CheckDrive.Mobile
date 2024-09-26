@@ -1,12 +1,155 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CheckDrive.Mobile.Views.EditProfile">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+<ContentPage
+    x:Class="CheckDrive.Mobile.Views.EditProfile"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ImageButton
+            Margin="10,10,0,0"
+            BackgroundColor="Transparent"
+            Command="{Binding BackCommand}"
+            HeightRequest="23"
+            HorizontalOptions="Start"
+            Source="back_icon.png"
+            WidthRequest="23" />
+
+        <Label
+            Margin="0,10,0,0"
+            FontAttributes="Bold"
+            FontSize="Large"
+            HorizontalOptions="Center"
+            Text="Profilni Tahrirlash"
+            TextColor="Black" />
+        <StackLayout Grid.Row="1" Padding="20">
+
+            <StackLayout
+                HorizontalOptions="CenterAndExpand"
+                Spacing="10"
+                VerticalOptions="CenterAndExpand">
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Large"
+                    HorizontalOptions="Center"
+                    Text="{Binding FullName}" />
+
+                <Label
+                    FontSize="Medium"
+                    HorizontalOptions="Center"
+                    Text="{Binding Login}"
+                    TextColor="Gray" />
+            </StackLayout>
+
+            <StackLayout Padding="0,0,0,0" Spacing="20">
+
+                <Frame
+                    Padding="10"
+                    BorderColor="LightGray"
+                    CornerRadius="10"
+                    HasShadow="False">
+                    <StackLayout>
+                        <Label FontAttributes="Bold" Text="Full name" />
+                        <Entry
+                            FontSize="Medium"
+                            Placeholder="Enter full name"
+                            Text="{Binding FullName}" />
+                    </StackLayout>
+                </Frame>
+
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Frame
+                        Padding="10"
+                        BorderColor="LightGray"
+                        CornerRadius="10"
+                        HasShadow="False"
+                        WidthRequest="160">
+                        <StackLayout>
+                            <Label FontAttributes="Bold" Text="Gender" />
+                            <Picker Title="Select Gender" SelectedItem="{Binding Gender}">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Male</x:String>
+                                        <x:String>Female</x:String>
+                                        <x:String>Other</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </StackLayout>
+                    </Frame>
+
+                    <Frame
+                        Padding="10"
+                        BorderColor="LightGray"
+                        CornerRadius="10"
+                        HasShadow="False"
+                        WidthRequest="160">
+                        <StackLayout>
+                            <Label FontAttributes="Bold" Text="Birthday" />
+                            <DatePicker Date="{Binding Birthdate}" Format="dd MMMM, yyyy" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+
+                <Frame
+                    Padding="10"
+                    BorderColor="LightGray"
+                    CornerRadius="10"
+                    HasShadow="False">
+                    <StackLayout>
+                        <Label FontAttributes="Bold" Text="Phone number" />
+                        <Entry
+                            FontSize="Medium"
+                            Keyboard="Telephone"
+                            Placeholder="Enter phone number"
+                            Text="{Binding PhoneNumber}" />
+                    </StackLayout>
+                </Frame>
+
+                <Frame
+                    Padding="10"
+                    BorderColor="LightGray"
+                    CornerRadius="10"
+                    HasShadow="False">
+                    <StackLayout>
+                        <Label FontAttributes="Bold" Text="Email" />
+                        <Entry
+                            FontSize="Medium"
+                            Keyboard="Email"
+                            Placeholder="Enter email"
+                            Text="{Binding Email}" />
+                    </StackLayout>
+                </Frame>
+
+                <Frame
+                    Padding="10"
+                    BorderColor="LightGray"
+                    CornerRadius="10"
+                    HasShadow="False">
+                    <StackLayout>
+                        <Label FontAttributes="Bold" Text="User name" />
+                        <Entry
+                            FontSize="Medium"
+                            Placeholder="Enter username"
+                            Text="{Binding Login}" />
+                    </StackLayout>
+                </Frame>
+
+            </StackLayout>
+
+            <Button
+                BackgroundColor="#1C375C"
+                Command="{Binding SaveCommand}"
+                CornerRadius="20"
+                HorizontalOptions="FillAndExpand"
+                Text="Saqlash"
+                TextColor="White"
+                VerticalOptions="EndAndExpand" />
         </StackLayout>
-    </ContentPage.Content>
+
+    </Grid>
 </ContentPage>
