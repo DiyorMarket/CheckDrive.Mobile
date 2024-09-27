@@ -1,5 +1,7 @@
 ﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Views;
 using Microsoft.AspNetCore.SignalR.Client;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,6 +17,8 @@ namespace CheckDrive.Mobile.Services
 
         public SignalRService()
         {
+            ShowPopupAsync("Siz shu Gentra moshinani shu 15:00 vaqtta oldingizmi");
+
             _hubConnection = new HubConnectionBuilder()
                 .WithUrl("http://miraziz-001-site1.ctempurl.com/api/chat", options =>
                 {
@@ -80,7 +84,8 @@ namespace CheckDrive.Mobile.Services
                 await SecureStorage.SetAsync("popup_message", message);
                 await SecureStorage.SetAsync("popup_visible", "true");
 
-
+                var popup = new NotificationPopupPage(message);
+                await PopupNavigation.Instance.PushAsync(popup);
                 Console.WriteLine("Popup ochildi.");
             }
             catch (Exception ex)

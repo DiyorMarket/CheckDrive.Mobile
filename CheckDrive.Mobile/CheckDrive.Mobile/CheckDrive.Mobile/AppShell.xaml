@@ -81,11 +81,6 @@
             Icon="icon_home.png"
             Route="HomePage" />
         <ShellContent
-            Title="Habarlar"
-            ContentTemplate="{DataTemplate views:ChatPage}"
-            Icon="icon_chat.png"
-            Route="ChatPage" />
-        <ShellContent
             Title="Tarix"
             ContentTemplate="{DataTemplate views:HistoryPage}"
             Icon="icon_history.png"

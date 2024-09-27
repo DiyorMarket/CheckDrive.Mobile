@@ -25,7 +25,11 @@ namespace CheckDrive.Mobile
 
             ConfigureServices();
 
+            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+
             MainPage = new AppShell();
+
+            //var signalRService = new SignalRService();
         }
 
         private void InitializeErrorHandlers()
