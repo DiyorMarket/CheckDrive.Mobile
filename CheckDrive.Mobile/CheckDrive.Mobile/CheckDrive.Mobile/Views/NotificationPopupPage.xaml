@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" 
+                  xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:md="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  x:Class="CheckDrive.Mobile.Views.NotificationPopupPage">
+
+    <StackLayout Margin="15">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="2" Margin="0,30,0,0">
+                <md:MaterialDialog
+                    AcceptCommand="{Binding AcceptCommand}"
+                    AcceptText="Ha"
+                    AcceptBackgroundColor="#1C375C"
+                    CancelCommand="{Binding CancelCommand}"
+                    CancelText="Yoq"
+                    CancelTextColor="Black"
+                    HeadlineText="Avtomobil qabul qilish"
+                    SupportingText="{Binding Message}"
+                    SupportingTextFontSize="18"
+                    BackgroundColor="White"
+                    />
+            </StackLayout>
+        </Grid>
+    </StackLayout>
+    
+</popup:PopupPage>
