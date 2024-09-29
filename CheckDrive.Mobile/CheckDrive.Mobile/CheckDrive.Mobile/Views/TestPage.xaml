@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="CheckDrive.Mobile.Views.TestPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <ContentPage.Resources>
+        <!--  Define common styles here  -->
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="Black" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout Padding="20" Spacing="0">
+
+            <!--  Progress Title  -->
+            <Label FontAttributes="Bold"
+                   FontSize="Large"
+                   HorizontalOptions="Center"
+                   Text="This is a Test Page" />
+
+            <!--  Step Progress Bar (Vertical Alignment)  -->
+            <CollectionView Margin="0,20,0,0"
+                            HorizontalScrollBarVisibility="Never"
+                            ItemsSource="{Binding Steps}"
+                            SelectionMode="None"
+                            VerticalScrollBarVisibility="Never">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0"
+                              Padding="0"
+                              ColumnDefinitions="*, *, 3*"
+                              ColumnSpacing="0"
+                              RowDefinitions="Auto, Auto"
+                              RowSpacing="0">
+
+                            <!--  Time on the left side of the circle  -->
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   FontAttributes="Bold"
+                                   FontSize="Medium"
+                                   HorizontalOptions="End"
+                                   Text="{Binding Time}"
+                                   VerticalOptions="Start" />
+
+                            <StackLayout Grid.Row="1"
+                                         Grid.Column="1"
+                                         Spacing="0">
+                                <!--  Step Circle with Icon (Status Indicator)  -->
+                                <Image HeightRequest="30"
+                                       HorizontalOptions="Center"
+                                       Source="{Binding Icon}"
+                                       VerticalOptions="Center"
+                                       WidthRequest="30" />
+
+                                <!--  Vertical Line Below Step (only visible if not last step)  -->
+                                <BoxView BackgroundColor="{Binding LineColor}"
+                                         HeightRequest="75"
+                                         HorizontalOptions="Center"
+                                         IsVisible="{Binding ShowLineBelow}"
+                                         VerticalOptions="Fill"
+                                         WidthRequest="2" />
+                            </StackLayout>
+
+
+                            <!--  Title and Notes on the right side of the circle  -->
+                            <StackLayout Grid.Row="1"
+                                         Grid.Column="2"
+                                         Margin="0,0,0,0"
+                                         VerticalOptions="Start">
+                                <Label FontAttributes="Bold"
+                                       FontSize="Medium"
+                                       Text="{Binding Title}" />
+                                <Label FontAttributes="Bold"
+                                       FontSize="Small"
+                                       Text="{Binding ReviewerName}" />
+                                <Label FontSize="Small"
+                                       Text="{Binding Notes}"
+                                       TextColor="Gray" />
+                            </StackLayout>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
