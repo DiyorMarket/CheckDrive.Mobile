@@ -6,6 +6,9 @@
     <Application.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#F2F2F2</Color>
+            <Color x:Key="Success">#04aa6d</Color>
+            <Color x:Key="Danger">#bd3e3e</Color>
+
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="VisualStateManager.VisualStateGroups">
