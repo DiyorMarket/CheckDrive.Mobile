@@ -74,6 +74,7 @@ namespace CheckDrive.Mobile.ViewModels
 
                 foreach (var review in checkPoint.Reviews)
                 {
+                    await Task.Delay(250);
                     Reviews.Add(review);
                 }
             }

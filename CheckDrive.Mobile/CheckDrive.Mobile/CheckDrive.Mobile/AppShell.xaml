@@ -68,7 +68,9 @@
     </Shell.Resources>
 
     <TabBar>
-        <ShellContent ContentTemplate="{DataTemplate views:LoginPage}" Route="LoginPage" />
+        <ShellContent ContentTemplate="{DataTemplate views:LoginPage}"
+                      IsVisible="False"
+                      Route="LoginPage" />
     </TabBar>
 
     <TabBar>
@@ -84,5 +86,9 @@
                       ContentTemplate="{DataTemplate views:ProfilePage}"
                       Icon="icon_user.png"
                       Route="ProfilePage" />
+        <ShellContent Title="Test"
+                      ContentTemplate="{DataTemplate views:TestPage}"
+                      Icon="icon_warning.png"
+                      Route="TestPage" />
     </TabBar>
 </Shell>
