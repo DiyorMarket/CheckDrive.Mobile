@@ -79,5 +79,41 @@ namespace CheckDrive.Mobile.Services
                 throw;
             }
         }
+        public async Task<HttpResponseMessage> PutAsync(string resource, string body)
+        {
+            try
+            {
+                string token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    throw new InvalidTokenException("Token is empty.");
+                }
+
+                var request = new HttpRequestMessage(HttpMethod.Put, $"{BaseUrl}/{resource}");
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
+
+                var response = await _client.SendAsync(request).ConfigureAwait(false);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Failed to update data at {resource}. Status code: {response.StatusCode}");
+                }
+
+                return response;
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+        }
+
     }
 }

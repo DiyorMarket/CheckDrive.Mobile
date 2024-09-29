@@ -6,11 +6,33 @@ namespace CheckDrive.Mobile.Stores.Account
 {
     internal class MockAccountStore : IAccountStore
     {
+        private AccountDto _account;
+
+        public MockAccountStore()
+        {
+            _account = new AccountDto
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john.doe@example.com",
+                Passport = "1234567891987654",
+                PhoneNumber = "+123456789",
+                Login = "johndoe",
+                Address = "123 Main St, Cityville",
+                Birthdate = new System.DateTime(1990, 1, 1),
+            };
+        }
+
         public Task<AccountDto> GetAccountAsync()
         {
-            var account = FakeDataGenerator.GetAccount();
+            return Task.FromResult(_account);
+        }
 
-            return Task.FromResult(account);
+        public Task<AccountDto> UpdateAccountAsync(AccountDto account)
+        {
+            _account = account;
+
+            return Task.FromResult(_account);
         }
 
         public Task LoginAsync(string login, string password)

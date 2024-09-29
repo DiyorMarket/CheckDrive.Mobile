@@ -110,5 +110,26 @@ namespace CheckDrive.Mobile.Stores.Account
 
             return result;
         }
+
+        public async Task<AccountDto> UpdateAccountAsync(AccountDto account)
+        {
+            if (account == null)
+            {
+                throw new ArgumentNullException(nameof(account), "Account cannot be null.");
+            }
+
+            var json = JsonConvert.SerializeObject(account);
+            var response = await _client.PutAsync($"accounts/{account.Id}", json);
+
+            response.EnsureSuccessStatusCode();
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var updatedAccount = JsonConvert.DeserializeObject<AccountDto>(responseBody);
+
+            await LocalStorage.SaveAsync(updatedAccount, LocalStorageKey.Account);
+
+            return updatedAccount;
+        }
     }
 }

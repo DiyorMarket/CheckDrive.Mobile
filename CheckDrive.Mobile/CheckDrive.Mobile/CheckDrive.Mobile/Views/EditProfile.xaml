@@ -69,16 +69,12 @@
                         HasShadow="False"
                         WidthRequest="160">
                         <StackLayout>
-                            <Label FontAttributes="Bold" Text="Gender" />
-                            <Picker Title="Select Gender" SelectedItem="{Binding Gender}">
-                                <Picker.ItemsSource>
-                                    <x:Array Type="{x:Type x:String}">
-                                        <x:String>Male</x:String>
-                                        <x:String>Female</x:String>
-                                        <x:String>Other</x:String>
-                                    </x:Array>
-                                </Picker.ItemsSource>
-                            </Picker>
+                            <Label FontAttributes="Bold" Text="Phone number" />
+                            <Entry
+                                FontSize="Medium"
+                                Keyboard="Telephone"
+                                Placeholder="Enter phone number"
+                                Text="{Binding PhoneNumber}" />
                         </StackLayout>
                     </Frame>
 
@@ -101,12 +97,11 @@
                     CornerRadius="10"
                     HasShadow="False">
                     <StackLayout>
-                        <Label FontAttributes="Bold" Text="Phone number" />
+                        <Label FontAttributes="Bold" Text="Passport" />
                         <Entry
                             FontSize="Medium"
-                            Keyboard="Telephone"
-                            Placeholder="Enter phone number"
-                            Text="{Binding PhoneNumber}" />
+                            Placeholder="Iltimos passportingizni kiriting"
+                            Text="{Binding Passport}" />
                     </StackLayout>
                 </Frame>
 

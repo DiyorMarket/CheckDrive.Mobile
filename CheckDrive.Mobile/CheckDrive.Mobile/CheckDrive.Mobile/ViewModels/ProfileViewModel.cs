@@ -1,9 +1,12 @@
 ﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Stores.Account;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using static Bogus.DataSets.Name;
 
 namespace CheckDrive.Mobile.ViewModels
 {
@@ -27,6 +30,7 @@ namespace CheckDrive.Mobile.ViewModels
         public ICommand EditProfileCommand { get; }
         public ICommand LogoutCommand { get; }
         public ICommand BackCommand { get; }
+        public ICommand SaveCommand { get; }
 
         public ProfileViewModel()
         {
@@ -35,6 +39,7 @@ namespace CheckDrive.Mobile.ViewModels
             EditProfileCommand = new Command(async () => await OnEditProfileAsync());
             LogoutCommand = new Command(async () => await OnLogoutAsync());
             BackCommand = new Command(async () => await OnBack());
+            SaveCommand = new Command(async () => await SaveEditsAsync());
         }
 
         public async Task LoadProfileDataAsync()
@@ -72,6 +77,33 @@ namespace CheckDrive.Mobile.ViewModels
         private async Task OnEditProfileAsync()
         {
             await _navigationService.NavigateToAsync(NavigationPageType.EditProfile);
+        }
+        private async Task SaveEditsAsync()
+        {
+            var updatedAccount = new AccountDto
+            {
+                Login = Login,
+                FirstName = FullName.Split(' ')[0],
+                LastName = FullName.Split(' ').Length > 1 ? FullName.Split(' ')[1] : "",
+                Passport = Passport,
+                PhoneNumber = PhoneNumber,
+                Email = Email,
+                Address = Address,
+                Birthdate = DateTime.Parse(Birthdate),
+            };
+
+            var success = await _accountService.UpdateAccountAsync(updatedAccount);
+
+            if (success != null)
+            {
+                await _navigationService.NavigateToAsync(NavigationPageType.Profile);
+                await Application.Current.MainPage.DisplayAlert("Success", "Profil muvafaqiyatli tarzda o'zgartirildi.", "OK");
+            }
+            else
+            {
+                await _navigationService.NavigateToAsync(NavigationPageType.Profile);
+                await Application.Current.MainPage.DisplayAlert("Error", "Profil o'zgartirishda muammo aniqlandi. Iltimos qaytadan urinib ko'ring.", "OK");
+            }            
         }
 
         private async Task OnLogoutAsync()
