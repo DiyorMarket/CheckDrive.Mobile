@@ -5,6 +5,7 @@
         Login,
         Profile,
         EditProfile,
-        Home
+        Home,
+        NotificationPopup
     }
 }

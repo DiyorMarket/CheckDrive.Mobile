@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<popup:PopupPage  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" 
-                  xmlns="http://xamarin.com/schemas/2014/forms"
-                  xmlns:md="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                  x:Class="CheckDrive.Mobile.Views.NotificationPopupPage">
+<popup:PopupPage
+    x:Class="CheckDrive.Mobile.Views.NotificationPopupPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:md="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+    xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
 
     <StackLayout Margin="15">
         <Grid>
@@ -13,19 +14,18 @@
 
             <StackLayout Grid.Row="2" Margin="0,30,0,0">
                 <md:MaterialDialog
+                    AcceptBackgroundColor="#1C375C"
                     AcceptCommand="{Binding AcceptCommand}"
                     AcceptText="Ha"
-                    AcceptBackgroundColor="#1C375C"
+                    BackgroundColor="White"
                     CancelCommand="{Binding CancelCommand}"
                     CancelText="Yoq"
-                    CancelTextColor="Black"
+                    CancelTextColor="Red"
                     HeadlineText="Avtomobil qabul qilish"
                     SupportingText="{Binding Message}"
-                    SupportingTextFontSize="18"
-                    BackgroundColor="White"
-                    />
+                    SupportingTextFontSize="18" />
             </StackLayout>
         </Grid>
     </StackLayout>
-    
+
 </popup:PopupPage>

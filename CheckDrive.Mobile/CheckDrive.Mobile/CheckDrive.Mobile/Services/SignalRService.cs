@@ -1,4 +1,6 @@
 ﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.Services.Navigation;
 using CheckDrive.Mobile.Views;
 using Microsoft.AspNetCore.SignalR.Client;
 using Rg.Plugins.Popup.Services;
@@ -6,17 +8,21 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.Services
 {
     public class SignalRService
     {
+        protected readonly INavigationService _navigationService;
         public ICommand SendResponseCommand { get; set; }
 
         private HubConnection _hubConnection;
 
         public SignalRService()
         {
+            _navigationService = DependencyService.Get<INavigationService>();
+
             ShowPopupAsync("Siz shu Gentra moshinani shu 15:00 vaqtta oldingizmi");
 
             _hubConnection = new HubConnectionBuilder()
@@ -81,11 +87,8 @@ namespace CheckDrive.Mobile.Services
         {
             try
             {
-                await SecureStorage.SetAsync("popup_message", message);
-                await SecureStorage.SetAsync("popup_visible", "true");
+                await _navigationService.NavigateToAsync(NavigationPageType.NotificationPopup);
 
-                var popup = new NotificationPopupPage(message);
-                await PopupNavigation.Instance.PushAsync(popup);
                 Console.WriteLine("Popup ochildi.");
             }
             catch (Exception ex)

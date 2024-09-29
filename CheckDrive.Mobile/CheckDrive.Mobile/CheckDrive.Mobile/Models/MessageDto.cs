@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CheckDrive.Mobile.Models
 {
-    public class ChatDto
+    public class MessageDto
     {
         public string HeadlineText { get; set; }
         public string Title { get; set; }

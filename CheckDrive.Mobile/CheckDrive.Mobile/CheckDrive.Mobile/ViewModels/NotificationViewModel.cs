@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.ViewModels
 {
-    public class ChatViewModel : BaseViewModel
+    public class NotificationViewModel : BaseViewModel
     {
         private string message;
         public string Message
@@ -19,13 +19,15 @@ namespace CheckDrive.Mobile.ViewModels
                 OnPropertyChanged();
             }
         }
+
         public ICommand AcceptCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
-        public ObservableCollection<ChatDto> Chats { get; set; }
+        public ObservableCollection<MessageDto> Chats { get; set; }
 
-        public ChatViewModel()
+        public NotificationViewModel(string message)
         {
+            Message = message;
             AcceptCommand = new Command(async () => await OnAccept());
             CancelCommand = new Command(async () => await OnCancel());
         }

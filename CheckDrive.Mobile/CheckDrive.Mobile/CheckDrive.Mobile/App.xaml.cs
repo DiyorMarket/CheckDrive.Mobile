@@ -29,7 +29,7 @@ namespace CheckDrive.Mobile
 
             MainPage = new AppShell();
 
-            //var signalRService = new SignalRService();
+            var signalRService = new SignalRService();
         }
 
         private void InitializeErrorHandlers()
