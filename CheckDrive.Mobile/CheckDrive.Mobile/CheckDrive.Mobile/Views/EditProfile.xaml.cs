@@ -14,6 +14,7 @@ namespace CheckDrive.Mobile.Views
     public partial class EditProfile : ContentPage
     {
         private readonly ProfileViewModel _viewModel;
+
         public EditProfile()
         {
             InitializeComponent();
@@ -22,13 +23,10 @@ namespace CheckDrive.Mobile.Views
 
             BindingContext = _viewModel;
         }
+
         protected override async void OnAppearing()
         {
-            if (BindingContext is ProfileViewModel vm)
-            {
-                await vm.LoadProfileDataAsync();
-            }
-
+            await _viewModel.LoadProfileDataAsync();
             base.OnAppearing();
         }
     }

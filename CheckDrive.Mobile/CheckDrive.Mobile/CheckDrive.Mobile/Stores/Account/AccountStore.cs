@@ -118,14 +118,7 @@ namespace CheckDrive.Mobile.Stores.Account
                 throw new ArgumentNullException(nameof(account), "Account cannot be null.");
             }
 
-            var json = JsonConvert.SerializeObject(account);
-            var response = await _client.PutAsync($"accounts/{account.Id}", json);
-
-            response.EnsureSuccessStatusCode();
-
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            var updatedAccount = JsonConvert.DeserializeObject<AccountDto>(responseBody);
+            var updatedAccount = await _client.PutAsync<AccountDto, AccountDto>($"accounts/{account.Id}", account);
 
             await LocalStorage.SaveAsync(updatedAccount, LocalStorageKey.Account);
 

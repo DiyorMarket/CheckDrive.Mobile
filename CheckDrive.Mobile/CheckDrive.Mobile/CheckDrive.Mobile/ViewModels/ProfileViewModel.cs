@@ -78,32 +78,28 @@ namespace CheckDrive.Mobile.ViewModels
         {
             await _navigationService.NavigateToAsync(NavigationPageType.EditProfile);
         }
+
         private async Task SaveEditsAsync()
         {
-            var updatedAccount = new AccountDto
-            {
-                Login = Login,
-                FirstName = FullName.Split(' ')[0],
-                LastName = FullName.Split(' ').Length > 1 ? FullName.Split(' ')[1] : "",
-                Passport = Passport,
-                PhoneNumber = PhoneNumber,
-                Email = Email,
-                Address = Address,
-                Birthdate = DateTime.Parse(Birthdate),
-            };
+            var updatedAccount = GetAccount();
 
-            var success = await _accountService.UpdateAccountAsync(updatedAccount);
-
-            if (success != null)
+            try
             {
+                var result = await _accountService.UpdateAccountAsync(updatedAccount);
+
+                if (result == null)
+                {
+                    throw new Exception("Account update result is null.");
+                }
+
                 await _navigationService.NavigateToAsync(NavigationPageType.Profile);
                 await Application.Current.MainPage.DisplayAlert("Success", "Profil muvafaqiyatli tarzda o'zgartirildi.", "OK");
             }
-            else
+            catch (Exception ex)
             {
                 await _navigationService.NavigateToAsync(NavigationPageType.Profile);
-                await Application.Current.MainPage.DisplayAlert("Error", "Profil o'zgartirishda muammo aniqlandi. Iltimos qaytadan urinib ko'ring.", "OK");
-            }            
+                await Application.Current.MainPage.DisplayAlert("Error", $"Profil o'zgartirishda muammo aniqlandi. Iltimos qaytadan urinib ko'ring. Xato: {ex.Message}", "OK");
+            }
         }
 
         private async Task OnLogoutAsync()
@@ -119,9 +115,25 @@ namespace CheckDrive.Mobile.ViewModels
                 await _navigationService.NavigateToAsync(NavigationPageType.Login);
             }
         }
+
         private async Task OnBack()
         {
             await _navigationService.NavigateToAsync(NavigationPageType.Profile);
+        }
+
+        private AccountDto GetAccount()
+        {
+            return new AccountDto
+            {
+                Login = Login,
+                FirstName = FullName.Split(' ')[0],
+                LastName = FullName.Split(' ').Length > 1 ? FullName.Split(' ')[1] : "",
+                Passport = Passport,
+                PhoneNumber = PhoneNumber,
+                Email = Email,
+                Address = Address,
+                Birthdate = DateTime.Parse(Birthdate),
+            };
         }
     }
 }

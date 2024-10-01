@@ -1,6 +1,7 @@
 ﻿using CheckDrive.Mobile.Exceptions;
 using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Models.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -79,7 +80,8 @@ namespace CheckDrive.Mobile.Services
                 throw;
             }
         }
-        public async Task<HttpResponseMessage> PutAsync(string resource, string body)
+
+        public async Task<TResponse> PutAsync<TRequest, TResponse>(string resource, TRequest body)
         {
             try
             {
@@ -92,16 +94,18 @@ namespace CheckDrive.Mobile.Services
 
                 var request = new HttpRequestMessage(HttpMethod.Put, $"{BaseUrl}/{resource}");
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
+
+                var json = JsonConvert.SerializeObject(body);
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 var response = await _client.SendAsync(request).ConfigureAwait(false);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new HttpRequestException($"Failed to update data at {resource}. Status code: {response.StatusCode}");
-                }
+                response.EnsureSuccessStatusCode();
 
-                return response;
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<TResponse>(responseBody);
+
+                return result;
             }
             catch (HttpRequestException ex)
             {
@@ -114,6 +118,5 @@ namespace CheckDrive.Mobile.Services
                 throw;
             }
         }
-
     }
 }

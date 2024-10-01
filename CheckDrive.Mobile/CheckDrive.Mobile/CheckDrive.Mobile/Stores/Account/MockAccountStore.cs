@@ -16,7 +16,7 @@ namespace CheckDrive.Mobile.Stores.Account
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 Passport = "1234567891987654",
-                PhoneNumber = "+123456789",
+                PhoneNumber = "+998 88 345 67 89",
                 Login = "johndoe",
                 Address = "123 Main St, Cityville",
                 Birthdate = new System.DateTime(1990, 1, 1),
