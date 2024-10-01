@@ -110,5 +110,19 @@ namespace CheckDrive.Mobile.Stores.Account
 
             return result;
         }
+
+        public async Task<AccountDto> UpdateAccountAsync(AccountDto account)
+        {
+            if (account == null)
+            {
+                throw new ArgumentNullException(nameof(account), "Account cannot be null.");
+            }
+
+            var updatedAccount = await _client.PutAsync<AccountDto, AccountDto>($"accounts/{account.Id}", account);
+
+            await LocalStorage.SaveAsync(updatedAccount, LocalStorageKey.Account);
+
+            return updatedAccount;
+        }
     }
 }
