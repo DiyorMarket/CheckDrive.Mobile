@@ -1,23 +1,24 @@
 ﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Views;
+using CheckDrive.Mobile.Services.Navigation;
 using Microsoft.AspNetCore.SignalR.Client;
-using Rg.Plugins.Popup.Services;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.Services
 {
     public class SignalRService
     {
+        private readonly INavigationService _navigationService; 
         public ICommand SendResponseCommand { get; set; }
 
         private HubConnection _hubConnection;
 
         public SignalRService()
         {
-            ShowPopupAsync("Siz shu Gentra moshinani shu 15:00 vaqtta oldingizmi");
+            _navigationService = DependencyService.Get<INavigationService>();
 
             _hubConnection = new HubConnectionBuilder()
                 .WithUrl("http://miraziz-001-site1.ctempurl.com/api/chat", options =>
@@ -81,8 +82,7 @@ namespace CheckDrive.Mobile.Services
         {
             try
             {
-                var popup = new NotificationPopupPage(message);
-                await PopupNavigation.Instance.PushAsync(popup);
+                await _navigationService.NavigateToAsync(Models.Enums.NavigationPageType.NotificationPopup, message);
 
                 Console.WriteLine("Popup ochildi.");
             }
@@ -104,6 +104,5 @@ namespace CheckDrive.Mobile.Services
                 return string.Empty;
             }
         }
-
     }
 }
