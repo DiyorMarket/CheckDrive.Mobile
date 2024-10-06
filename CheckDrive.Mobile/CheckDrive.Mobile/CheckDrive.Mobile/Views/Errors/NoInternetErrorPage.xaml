@@ -1,42 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="CheckDrive.Mobile.Views.Errors.NoInternetErrorPage"
-             xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             BackgroundColor="White">
+<ContentPage
+    x:Class="CheckDrive.Mobile.Views.Errors.NoInternetErrorPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="White">
     <ContentPage.Content>
-        <StackLayout Padding="20"
-                     HorizontalOptions="Center"
-                     VerticalOptions="Center">
+        <StackLayout
+            Padding="20"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
 
             <!--  Icon or Image  -->
-            <Image Aspect="AspectFit"
-                   HeightRequest="150"
-                   Source="no_internet.png"
-                   WidthRequest="150" />
+            <Image
+                Aspect="AspectFit"
+                HeightRequest="150"
+                Source="no_internet.png"
+                WidthRequest="150" />
 
             <!--  Message  -->
-            <Label FontAttributes="Bold"
-                   FontSize="Medium"
-                   HorizontalOptions="Center"
-                   Text="Oops!"
-                   TextColor="Black" />
+            <Label
+                FontAttributes="Bold"
+                FontSize="Medium"
+                HorizontalOptions="Center"
+                Text="Oops!"
+                TextColor="Black" />
 
-            <Label FontSize="18"
-                   HorizontalOptions="Center"
-                   Text="Siz internetga ulanmagansizga o‘xshaysiz."
-                   TextColor="Gray"
-                   VerticalOptions="Center" />
+            <Label
+                FontSize="18"
+                HorizontalOptions="Center"
+                Text="Siz internetga ulanmagansizga o‘xshaysiz."
+                TextColor="Gray"
+                VerticalOptions="Center" />
 
-            <Button Margin="0,15,0,0"
-                    Padding="10"
-                    BackgroundColor="#1C375C"
-                    CornerRadius="20"
-                    FontSize="16"
-                    HorizontalOptions="Center"
-                    Text="Qayta ulanish"
-                    TextColor="White"
-                    VerticalOptions="Center"
-                    WidthRequest="150" />
+            <Button
+                Margin="0,15,0,0"
+                Padding="10"
+                BackgroundColor="#1C375C"
+                CornerRadius="20"
+                FontSize="16"
+                HorizontalOptions="Center"
+                Text="Qayta ulanish"
+                TextColor="White"
+                VerticalOptions="Center"
+                WidthRequest="150" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
