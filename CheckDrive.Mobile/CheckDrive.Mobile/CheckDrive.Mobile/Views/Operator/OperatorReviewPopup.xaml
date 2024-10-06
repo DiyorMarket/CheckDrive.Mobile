@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Operator.OperatorReviewPopup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
+    <mdc:MaterialCard BackgroundColor="White"
+                      CornerRadius="15"
+                      HasShadow="True"
+                      HeightRequest="500"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center"
+                      WidthRequest="350">
+        <StackLayout Padding="20">
+            <mdc:MaterialLabel FontAttributes="Bold"
+                               FontSize="Medium"
+                               HorizontalOptions="Center"
+                               Text="{Binding FullName}"
+                               TextColor="{StaticResource Main}" />
+
+            <!--  Oil Mark Picker  -->
+            <mdc:MaterialPicker Margin="0,25,0,0"
+                                BackgroundColor="White"
+                                BorderColor="{StaticResource DarkGray}"
+                                CornerRadius="10"
+                                FocusedBackgroundColor="White"
+                                FocusedBorderColor="{StaticResource Main}"
+                                FocusedLabelTextColor="{StaticResource Main}"
+                                FocusedTextColor="{StaticResource Main}"
+                                HasBorder="True"
+                                ItemsSource="{Binding OilMarks}"
+                                LabelText="Yoqilg'i markalari"
+                                LabelTextColor="{StaticResource DarkGray}"
+                                SelectedItem="{Binding SelectedOilMark}"
+                                TextColor="{StaticResource DarkGray}" />
+
+            <!--  Oil Amount Entries  -->
+            <StackLayout Margin="0,15,0,0"
+                         Orientation="Horizontal"
+                         Spacing="10">
+                <mdc:MaterialEntry BackgroundColor="White"
+                                   BorderColor="{StaticResource DarkGray}"
+                                   CornerRadius="10"
+                                   FocusedBackgroundColor="White"
+                                   FocusedBorderColor="{StaticResource Main}"
+                                   FocusedLabelTextColor="{StaticResource Main}"
+                                   FocusedTextColor="{StaticResource Main}"
+                                   HasBorder="True"
+                                   HorizontalOptions="StartAndExpand"
+                                   Keyboard="Numeric"
+                                   LabelText="Boshlang'ich qiymati"
+                                   LabelTextColor="{StaticResource DarkGray}"
+                                   Text="{Binding InitialOilAmount}"
+                                   TextColor="{StaticResource DarkGray}"
+                                   WidthRequest="145" />
+                <mdc:MaterialEntry BackgroundColor="White"
+                                   BorderColor="{StaticResource DarkGray}"
+                                   CornerRadius="10"
+                                   FocusedBackgroundColor="White"
+                                   FocusedBorderColor="{StaticResource Main}"
+                                   FocusedLabelTextColor="{StaticResource Main}"
+                                   FocusedTextColor="{StaticResource Main}"
+                                   HasBorder="True"
+                                   HorizontalOptions="EndAndExpand"
+                                   Keyboard="Numeric"
+                                   LabelText="To'ldirish qiymati"
+                                   LabelTextColor="{StaticResource DarkGray}"
+                                   Text="{Binding OilRefilAmount}"
+                                   TextColor="{StaticResource DarkGray}"
+                                   WidthRequest="145" />
+            </StackLayout>
+
+            <!--  Comments Editor with Border  -->
+            <Frame Margin="0,15,0,0"
+                   BackgroundColor="Transparent"
+                   BorderColor="Gray"
+                   CornerRadius="10"
+                   HasShadow="False">
+                <StackLayout>
+                    <Editor BackgroundColor="Transparent"
+                            HeightRequest="100"
+                            Placeholder="Izox qoldirish..."
+                            Text="{Binding Comments}"
+                            TextColor="{StaticResource Main}"
+                            Visual="Material" />
+                </StackLayout>
+            </Frame>
+
+            <!--  Approve and Reject Buttons  -->
+            <StackLayout Margin="0,35,0,0"
+                         Orientation="Horizontal"
+                         Spacing="20">
+                <Button BackgroundColor="{StaticResource Danger}"
+                        Command="{Binding RejectCommand}"
+                        CornerRadius="20"
+                        HeightRequest="45"
+                        HorizontalOptions="FillAndExpand"
+                        Text="Rad qilish"
+                        TextColor="White" />
+                <Button BackgroundColor="{StaticResource Success1}"
+                        Command="{Binding ApproveCommand}"
+                        CornerRadius="20"
+                        HeightRequest="45"
+                        HorizontalOptions="FillAndExpand"
+                        Text="Tasdiqlash"
+                        TextColor="White" />
+            </StackLayout>
+        </StackLayout>
+    </mdc:MaterialCard>
+</pages:PopupPage>
