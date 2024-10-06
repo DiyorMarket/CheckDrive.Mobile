@@ -1,12 +1,10 @@
-﻿using CheckDrive.Mobile.Helpers;
+﻿using CheckDrive.Mobile.Exceptions;
+using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Services;
 using Newtonsoft.Json;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -25,7 +23,6 @@ namespace CheckDrive.Mobile.Stores.Account
         {
             var token = await AuthenticateUserAsync(login, password);
 
-            await LocalStorage.SaveAsync(token, LocalStorageKey.Token);
             await ProcessLoginAsync(token);
         }
 
@@ -46,7 +43,7 @@ namespace CheckDrive.Mobile.Stores.Account
                 return null;
             }
 
-            var accountId = ExtractAccountIdFromToken(token);
+            var accountId = JwtHelper.ExtractAccountIdFromToken(token);
             var account = await FetchAccountAsync(accountId);
 
             return account;
@@ -66,8 +63,12 @@ namespace CheckDrive.Mobile.Stores.Account
 
         private async Task ProcessLoginAsync(string token)
         {
-            var accountId = ExtractAccountIdFromToken(token);
-            var driver = await FetchDriverDataAsync(accountId);
+            VerifyAccountRole(token);
+
+            await LocalStorage.SaveAsync(token, LocalStorageKey.Token);
+
+            var accountId = JwtHelper.ExtractAccountIdFromToken(token);
+            var driver = await FetchAccountAsync(accountId);
 
             if (driver != null)
             {
@@ -75,34 +76,19 @@ namespace CheckDrive.Mobile.Stores.Account
             }
         }
 
-        private static int ExtractAccountIdFromToken(string token)
+        private static void VerifyAccountRole(string token)
         {
-            if (string.IsNullOrWhiteSpace(token))
+            var role = JwtHelper.ExtractRoleFromToken(token);
+
+            if (!role.Equals("driver", StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new ArgumentException("Cannot extract id from empty string.");
+                throw new InvalidAccountException("User account must driver.");
             }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
-
-            return int.Parse(jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
         }
 
-        private async Task<AccountDto> FetchAccountAsync(int accountId)
+        private async Task<AccountDto> FetchAccountAsync(string accountId)
         {
             var response = await _client.GetAsync($"accounts/{accountId}");
-            response.EnsureSuccessStatusCode();
-
-            var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<AccountDto>(json);
-
-            return result;
-        }
-
-        private async Task<AccountDto> FetchDriverDataAsync(int accountId)
-        {
-            var query = $"drivers?accountId={accountId}";
-            var response = await _client.GetAsync(query);
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();

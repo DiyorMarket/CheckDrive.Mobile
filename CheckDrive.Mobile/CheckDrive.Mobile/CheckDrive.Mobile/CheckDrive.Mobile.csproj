@@ -13,6 +13,8 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+    <PackageReference Include="MonkeyCache" Version="1.6.3" />
+    <PackageReference Include="MonkeyCache.FileStore" Version="1.6.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Plugin.MaterialDesignControls" Version="3.1.7" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />

@@ -1,4 +1,5 @@
-﻿using CheckDrive.Mobile.Models.Enums;
+﻿using CheckDrive.Mobile.Exceptions;
+using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Stores.Account;
 using System;
 using System.Threading.Tasks;
@@ -69,6 +70,11 @@ namespace CheckDrive.Mobile.ViewModels
                 await _accountDataStore.LoginAsync(Login, Password);
 
                 await _navigationService.NavigateToAsync(NavigationPageType.Home);
+            }
+            catch (InvalidAccountException ex)
+            {
+                Console.WriteLine(ex.Message);
+                ShowError("Only drivers can access the application.");
             }
             catch (Exception ex)
             {
