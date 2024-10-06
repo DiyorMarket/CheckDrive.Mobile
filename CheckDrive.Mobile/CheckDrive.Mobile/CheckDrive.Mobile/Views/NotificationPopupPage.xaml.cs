@@ -8,14 +8,14 @@ namespace CheckDrive.Mobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NotificationPopupPage : PopupPage
     {
-        private readonly NotificationViewModel _chatViewModel;
+        private readonly NotificationViewModel _notificationViewModel;
         public NotificationPopupPage(string massage)
         {
             InitializeComponent();
 
-            _chatViewModel = new NotificationViewModel(massage);
+            _notificationViewModel = new NotificationViewModel(massage);
             
-            BindingContext = _chatViewModel;
+            BindingContext = _notificationViewModel;
         }
 
         private async void PopupPage_BackgroundClicked(object sender, EventArgs e)

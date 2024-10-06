@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.ViewModels
@@ -40,18 +39,14 @@ namespace CheckDrive.Mobile.ViewModels
         {
             await ClosePopup();
             await _navigationService.GoBackAsync();
-
-            Console.WriteLine("Accept button clicked");
         }
 
         public async Task OnCancel()
         {
             await ClosePopup();
             await _navigationService.GoBackAsync();
-
-            Console.WriteLine("Cancel button clicked");
         }
-
+          
         private async Task ClosePopup()
         {
             try
@@ -59,7 +54,6 @@ namespace CheckDrive.Mobile.ViewModels
                 if (PopupNavigation.Instance.PopupStack.Any())
                 {
                     await PopupNavigation.Instance.PopAsync(true);
-                    Console.WriteLine("Popup yopildi.");
                 }
             }
             catch (Exception ex)

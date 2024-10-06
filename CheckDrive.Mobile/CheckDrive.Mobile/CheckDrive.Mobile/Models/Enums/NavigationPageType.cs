@@ -6,6 +6,6 @@
         Profile,
         EditProfile,
         Home,
-        NotificationPopup
+        NotificationPopup,
     }
 }

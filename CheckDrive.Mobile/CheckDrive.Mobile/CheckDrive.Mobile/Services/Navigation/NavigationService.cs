@@ -1,5 +1,6 @@
 ﻿using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Views;
+using CheckDrive.Mobile.Views.Errors;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using System;
@@ -48,8 +49,7 @@ namespace CheckDrive.Mobile.Services.Navigation
         {
             if (_popups.TryGetValue(pageType, out var createPopup))
             {
-                var popupPage = createPopup(message);
-                await PopupNavigation.Instance.PushAsync(popupPage);
+                await ShowPopupAsync(createPopup(message));
             }
             else if (_pages.TryGetValue(pageType, out var page))
             {
@@ -59,6 +59,15 @@ namespace CheckDrive.Mobile.Services.Navigation
             {
                 throw new InvalidOperationException($"Could not find navigation for page: {pageType}");
             }
+        }
+
+        private async Task ShowPopupAsync(PopupPage popupPage)
+        {
+            if (popupPage == null)
+            {
+                throw new ArgumentNullException(nameof(popupPage), "Popup cannot be null.");
+            }
+            await PopupNavigation.Instance.PushAsync(popupPage);
         }
     }
 }
