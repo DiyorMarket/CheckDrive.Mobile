@@ -18,5 +18,12 @@ namespace CheckDrive.Mobile.Views.Doctor
 
             BindingContext = _viewModel;
         }
+
+        protected override async void OnAppearing()
+        {
+            await _viewModel.LoadDriversAsync();
+
+            base.OnAppearing();
+        }
     }
 }

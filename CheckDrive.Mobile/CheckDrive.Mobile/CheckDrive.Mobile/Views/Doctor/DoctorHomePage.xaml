@@ -6,17 +6,21 @@
     <ContentPage.Resources>
         <Style x:Key="ListItemStyle" TargetType="StackLayout">
             <Setter Property="BackgroundColor" Value="White" />
-            <Setter Property="Margin" Value="10,5" />
-            <Setter Property="Padding" Value="15" />
+            <Setter Property="Padding" Value="0, 20" />
         </Style>
+        <ResourceDictionary>
+            <Color x:Key="Main">#1C375C</Color>
+            <Color x:Key="Primary">#F2F2F2</Color>
+            <Color x:Key="Success">#04aa6d</Color>
+            <Color x:Key="Danger">#bd3e3e</Color>
+        </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <RefreshView IsRefreshing="{Binding IsBusy}">
-            <StackLayout Padding="20" Spacing="15">
+        <Grid>
+            <StackLayout Margin="20" Spacing="15">
 
-                <Label Margin="0,10,0,20"
-                       FontAttributes="Bold"
+                <Label FontAttributes="Bold"
                        FontSize="Large"
                        HorizontalOptions="Center"
                        Text="{Binding CurrentDate, StringFormat='{0:MMMM dd, yyyy}'}"
@@ -25,43 +29,46 @@
                 <mdc:MaterialSearch BackgroundColor="White"
                                     BorderColor="{StaticResource Main}"
                                     FocusedBackgroundColor="White"
-                                    Placeholder="Search Drivers"
+                                    LeadingIcon="icon_search.png"
+                                    Placeholder="Haydovchilarni izlash..."
                                     PlaceholderColor="{StaticResource Main}"
                                     SearchCommand="{Binding SearchCommand}"
+                                    SearchOnEveryTextChange="True"
                                     Text="{Binding SearchText}"
                                     TextColor="{StaticResource Main}" />
 
-                <CollectionView Margin="0"
-                                BackgroundColor="White"
-                                EmptyView="Tekshiruv uchun xaydovichlar topilmadi"
-                                ItemsSource="{Binding Drivers}"
-                                SelectionMode="None">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Style="{StaticResource ListItemStyle}">
-                                <StackLayout Orientation="Horizontal">
-                                    <Label FontSize="Medium"
-                                           Text="{Binding FirstName}"
-                                           TextColor="{StaticResource Main}"
-                                           VerticalOptions="Center" />
+                <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+                    <CollectionView Margin="0"
+                                    EmptyView="Tekshiruv uchun xaydovichlar topilmadi"
+                                    ItemsSource="{Binding Drivers}"
+                                    SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Style="{StaticResource ListItemStyle}">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Margin="0"
+                                               FontSize="Medium"
+                                               Text="{Binding FullName}"
+                                               TextColor="{StaticResource Main}"
+                                               VerticalOptions="StartAndExpand" />
 
-                                    <Label Margin="10,0,0,0"
-                                           FontSize="Medium"
-                                           Text="{Binding LastName}"
-                                           TextColor="{StaticResource Main}"
-                                           VerticalOptions="Center" />
-
-                                    <mdc:MaterialButton BackgroundColor="{StaticResource Main}"
-                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"
-                                                        CommandParameter="{Binding .}"
-                                                        HorizontalOptions="EndAndExpand"
-                                                        Text="Tekshirish" />
+                                        <mdc:MaterialButton BackgroundColor="{StaticResource Main}"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"
+                                                            CommandParameter="{Binding .}"
+                                                            HorizontalOptions="EndAndExpand"
+                                                            Text="Tekshirish" />
+                                    </StackLayout>
                                 </StackLayout>
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </RefreshView>
             </StackLayout>
-        </RefreshView>
+            <mdc:MaterialProgressIndicator IndicatorColor="{StaticResource Main}"
+                                           IsVisible="{Binding IsBusy}"
+                                           TrackColor="DarkGray"
+                                           Type="Circular"
+                                           VerticalOptions="CenterAndExpand" />
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
