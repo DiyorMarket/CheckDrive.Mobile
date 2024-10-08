@@ -1,8 +1,10 @@
 ﻿using CheckDrive.Mobile.Services.Navigation;
+using CheckDrive.Mobile.Views.Popup;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.ViewModels
@@ -11,15 +13,29 @@ namespace CheckDrive.Mobile.ViewModels
     {
         protected readonly INavigationService _navigationService;
 
-        private bool isBusy;
+        private bool _isBusy;
         public bool IsBusy
         {
-            get => isBusy;
+            get => _isBusy;
             set
             {
-                if (isBusy != value)
+                if (_isBusy != value)
                 {
-                    isBusy = value;
+                    _isBusy = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _isRefreshing;
+        public bool IsRefreshing
+        {
+            get => _isRefreshing;
+            set
+            {
+                if (_isRefreshing != value)
+                {
+                    _isRefreshing = value;
                     OnPropertyChanged();
                 }
             }
@@ -35,6 +51,20 @@ namespace CheckDrive.Mobile.ViewModels
         protected BaseViewModel()
         {
             _navigationService = DependencyService.Get<INavigationService>();
+        }
+
+        protected static async Task DisplayErrorAsync(string message, string details)
+        {
+            var popup = new ErrorPopup(message, details);
+
+            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
+        }
+
+        protected async Task DisplaySuccessAsync(string message)
+        {
+            var popup = new SuccessPopup(message);
+
+            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
         }
 
         protected bool SetProperty<T>(ref T backingStore, T value,
