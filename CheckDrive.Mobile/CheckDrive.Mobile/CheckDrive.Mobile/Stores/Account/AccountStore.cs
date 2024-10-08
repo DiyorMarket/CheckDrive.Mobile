@@ -52,6 +52,12 @@ namespace CheckDrive.Mobile.Stores.Account
             return account;
         }
 
+        public Task<int> GetEmployeeIdAsync()
+        {
+            var id = new Random().Next(100);
+            return Task.FromResult(id);
+        }
+
         private async Task<string> AuthenticateUserAsync(string login, string password)
         {
             var request = new { login, password };
