@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Bogus.Extensions.Poland;
 using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Doctor;
 using CheckDrive.Mobile.Models.Enums;
 using System;
 using System.Collections.Generic;
@@ -123,6 +124,16 @@ namespace CheckDrive.Mobile.Helpers
             .RuleFor(x => x.Email, f => f.Person.Email)
             .RuleFor(x => x.Address, f => f.Address.FullAddress())
             .RuleFor(x => x.Birthdate, f => f.Person.DateOfBirth);
+
+        public static Faker<DriverDto> GetDrivers() => new Faker<DriverDto>()
+            .RuleFor(x => x.Id, f => f.Random.Number())
+            .RuleFor(x => x.FullName, f => f.Person.FullName);
+
+        public static Faker<DoctorHistory> GetDoctorHistory() => new Faker<DoctorHistory>()
+            .RuleFor(x => x.Id, f => f.Random.Number())
+            .RuleFor(x => x.DriverName, f => f.Person.FullName)
+            .RuleFor(x => x.Date, f => f.Date.Between(DateTime.Now, DateTime.Now.AddDays(-4)))
+            .RuleFor(x => x.IsApproved, f => f.Random.Bool());
 
         private static CheckPointStage GetStage(ReviewType type)
         {
