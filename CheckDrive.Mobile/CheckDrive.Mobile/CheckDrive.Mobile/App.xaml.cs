@@ -3,6 +3,7 @@ using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Services.Navigation;
 using CheckDrive.Mobile.Stores.Account;
+using CheckDrive.Mobile.Stores.Doctor;
 using CheckDrive.Mobile.Stores.History;
 using CheckDrive.Mobile.Stores.Review;
 using CheckDrive.Mobile.Views;
@@ -56,6 +57,7 @@ namespace CheckDrive.Mobile
             DependencyService.Register<IAccountStore, MockAccountStore>();
             DependencyService.Register<IReviewStore, MockReviewStore>();
             DependencyService.Register<IHistoryStore, MockHistoryStore>();
+            DependencyService.Register<IDoctorStore, MockDoctorStore>();
 
             DependencyService.Register<INavigationService, NavigationService>();
         }

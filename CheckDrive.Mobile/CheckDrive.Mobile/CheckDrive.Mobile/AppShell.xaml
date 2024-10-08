@@ -72,12 +72,12 @@
     </TabBar>
 
     <TabBar>
-        <ShellContent Title="Asosiy"
-                      ContentTemplate="{DataTemplate views:HomePage}"
+        <ShellContent x:Name="HomePage"
+                      Title="Asosiy"
                       Icon="icon_home.png"
                       Route="HomePage" />
-        <ShellContent Title="Tarix"
-                      ContentTemplate="{DataTemplate views:HistoryPage}"
+        <ShellContent x:Name="HistoryPage"
+                      Title="Tarix"
                       Icon="icon_history.png"
                       Route="HistoryPage" />
         <ShellContent Title="Profil"

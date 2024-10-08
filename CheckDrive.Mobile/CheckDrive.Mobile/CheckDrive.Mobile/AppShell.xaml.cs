@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CheckDrive.Mobile.Views;
+using CheckDrive.Mobile.Views.Doctor;
+using System;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile
@@ -17,8 +19,23 @@ namespace CheckDrive.Mobile
             // await Shell.Current.GoToAsync("//LoginPage");
         }
 
-        private static void RegisterRoutes()
+        private void RegisterRoutes()
         {
+            var role = "doctor";
+
+            switch (role)
+            {
+                case "doctor":
+                    HomePage.Content = new DoctorHomePage();
+                    HistoryPage.Content = new DoctorHistoryPage();
+                    break;
+                case "driver":
+                    HomePage.ContentTemplate = new DataTemplate(typeof(HomePage));
+                    HistoryPage.ContentTemplate = new DataTemplate(typeof(HistoryPage));
+                    break;
+                default:
+                    return;
+            }
             // Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             //Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
             //Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
