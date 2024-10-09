@@ -5,10 +5,12 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="Main">#1C375C</Color>
+            <Color x:Key="Main">#1C375C</Color> 
             <Color x:Key="Primary">#F2F2F2</Color>
             <Color x:Key="Success">#04aa6d</Color>
             <Color x:Key="Danger">#bd3e3e</Color>
+            <Color x:Key="DarkGray">#A9A9A9</Color>
+            <Color x:Key="Success1">#28a745</Color>
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="VisualStateManager.VisualStateGroups">

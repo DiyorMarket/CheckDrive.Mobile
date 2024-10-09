@@ -40,16 +40,11 @@
                         <DataTemplate>
                             <StackLayout Style="{StaticResource ListItemStyle}">
                                 <StackLayout Orientation="Horizontal">
-                                    <Label FontSize="Medium"
-                                           Text="{Binding FirstName}"
-                                           TextColor="{StaticResource Main}"
-                                           VerticalOptions="Center" />
-
-                                    <Label Margin="10,0,0,0"
+                                    <Label Margin="0"
                                            FontSize="Medium"
-                                           Text="{Binding LastName}"
+                                           Text="{Binding FullName}"
                                            TextColor="{StaticResource Main}"
-                                           VerticalOptions="Center" />
+                                           VerticalOptions="StartAndExpand" />
 
                                     <mdc:MaterialButton BackgroundColor="{StaticResource Main}"
                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"

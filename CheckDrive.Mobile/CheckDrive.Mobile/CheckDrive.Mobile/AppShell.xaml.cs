@@ -1,5 +1,6 @@
 ﻿using CheckDrive.Mobile.Views;
 using CheckDrive.Mobile.Views.Doctor;
+using CheckDrive.Mobile.Views.Operator;
 using System;
 using Xamarin.Forms;
 
@@ -21,7 +22,7 @@ namespace CheckDrive.Mobile
 
         private void RegisterRoutes()
         {
-            var role = "doctor";
+            var role = "operator";
 
             switch (role)
             {
@@ -32,6 +33,10 @@ namespace CheckDrive.Mobile
                 case "driver":
                     HomePage.ContentTemplate = new DataTemplate(typeof(HomePage));
                     HistoryPage.ContentTemplate = new DataTemplate(typeof(HistoryPage));
+                    break;
+                case "operator":
+                    HomePage.ContentTemplate = new DataTemplate(typeof(OperatorHomePage));
+                    HistoryPage.ContentTemplate = new DataTemplate(typeof(OperatorHistoryPage));
                     break;
                 default:
                     return;

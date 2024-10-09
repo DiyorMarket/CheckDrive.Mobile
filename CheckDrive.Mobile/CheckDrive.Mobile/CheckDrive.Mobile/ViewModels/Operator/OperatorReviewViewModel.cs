@@ -9,9 +9,9 @@ namespace CheckDrive.Mobile.ViewModels.Operator
         public List<OilMark> OilMarks { get; set; }
         public string Comments { get; set; }
 
-        public OperatorReviewViewModel(AccountDto account, List<OilMark> oilMarks)
+        public OperatorReviewViewModel(DriverDto driver, List<OilMark> oilMarks)
         {
-            FullName = account.FirstName + " " + account.LastName;
+            FullName = driver.FullName;
             OilMarks = oilMarks;
         }
     }
