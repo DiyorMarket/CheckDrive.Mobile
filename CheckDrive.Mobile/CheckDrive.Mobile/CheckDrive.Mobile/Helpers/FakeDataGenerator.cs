@@ -131,6 +131,7 @@ namespace CheckDrive.Mobile.Helpers
 
         public static Faker<DoctorHistory> GetDoctorHistory() => new Faker<DoctorHistory>()
             .RuleFor(x => x.Id, f => f.Random.Number())
+            .RuleFor(x => x.DriverId, f => f.Random.Number())
             .RuleFor(x => x.DriverName, f => f.Person.FullName)
             .RuleFor(x => x.Date, f => f.Date.Between(DateTime.Now, DateTime.Now.AddDays(-4)))
             .RuleFor(x => x.IsApproved, f => f.Random.Bool());
