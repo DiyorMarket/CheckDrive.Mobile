@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System.Threading.Tasks;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace CheckDrive.Mobile.Views.Mechanic
@@ -14,6 +15,8 @@ namespace CheckDrive.Mobile.Views.Mechanic
         protected override async void OnAppearing()
         {
             await HandoverView.LoadViewModelData();
+            Task.Run(() => AcceptanceView.LoadCheckPointsAsync());
+
             base.OnAppearing();
         }
     }

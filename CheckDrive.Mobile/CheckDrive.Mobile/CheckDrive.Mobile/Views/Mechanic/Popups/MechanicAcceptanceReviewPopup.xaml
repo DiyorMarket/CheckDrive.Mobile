@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Mechanic.Popups.MechanicHandoverReviewPopup"
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Mechanic.Popups.MechanicAcceptanceReviewPopup"
                  xmlns="http://xamarin.com/schemas/2014/forms"
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
@@ -16,20 +16,11 @@
                                HorizontalOptions="Center"
                                Text="{Binding DriverName}" />
 
-            <mdc:MaterialPicker Margin="0,25,0,0"
-                                BackgroundColor="White"
-                                BorderColor="DarkGray"
-                                CornerRadius="10"
-                                FocusedBackgroundColor="White"
-                                FocusedBorderColor="{StaticResource Main}"
-                                FocusedLabelTextColor="{StaticResource Main}"
-                                FocusedTextColor="{StaticResource Main}"
-                                HasBorder="True"
-                                ItemsSource="{Binding Cars}"
-                                LabelText="Yoqilg'i markalari"
-                                LabelTextColor="DarkGray"
-                                SelectedItem="{Binding SelectedCar}"
-                                TextColor="DarkGray" />
+            <mdc:MaterialLabel Margin="0,25,0,0"
+                               FontAttributes="Bold"
+                               FontSize="Large"
+                               HorizontalOptions="Center"
+                               Text="{Binding Car}" />
 
             <mdc:MaterialEntry Margin="0,15,0,0"
                                BackgroundColor="White"
@@ -41,12 +32,23 @@
                                HasBorder="True"
                                HorizontalOptions="FillAndExpand"
                                Keyboard="Numeric"
-                               LabelText="Avtomobilning dastlabki kilometri"
+                               LabelText="Avtomobilning yakuniy kilometri"
                                LabelTextColor="DarkGray"
-                               Text="{Binding InitialMileage}"
+                               Text="{Binding FinalMileage}"
                                TextColor="DarkGray"
                                WidthRequest="145" />
 
+            <!--<mdc:MaterialSwitch AnimateError="False"
+                                BackgroundOnSelectedColor="#00897B"
+                                BackgroundOnUnselectedColor="#bd3e3e"
+                                BorderOnSelectedColor="#00897B"
+                                BorderOnUnselectedColor="#bd3e3e"
+                                HeightRequest="30"
+                                IsToggled="{Binding IsApproved}"
+                                Text="Topshirish"
+                                TextSide="Right"
+                                ThumbSelectedColor="#fafafa"
+                                ThumbUnselectedColor="#fafafa" />-->
             <mdc:MaterialSwitch Margin="0,15,0,0"
                                 AnimateError="False"
                                 BackgroundOnSelectedColor="#00897B"
@@ -55,7 +57,7 @@
                                 BorderOnUnselectedColor="#bd3e3e"
                                 HeightRequest="40"
                                 IsToggled="{Binding IsApproved}"
-                                Text="Topshirish"
+                                Text="Qabul qilish"
                                 TextColor="#0d1a26"
                                 ThumbSelectedColor="#fafafa"
                                 ThumbUnselectedColor="#fafafa" />

@@ -1,10 +1,70 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView x:Class="CheckDrive.Mobile.Views.Mechanic.MechanicAcceptanceView"
+             xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CheckDrive.Mobile.Views.Mechanic.MechanicAcceptanceView">
-  <ContentView.Content>
-      <StackLayout>
-          <Label Text="Hello Xamarin.Forms!" />
-      </StackLayout>
-  </ContentView.Content>
+             xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls">
+    <ContentView.Resources>
+        <Style x:Key="ListItemStyle" TargetType="StackLayout">
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="Padding" Value="0, 20" />
+        </Style>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Grid>
+            <StackLayout Margin="20" Spacing="15">
+
+                <Label FontAttributes="Bold"
+                       FontSize="Large"
+                       HorizontalOptions="Center"
+                       Text="{Binding CurrentDate, StringFormat='{0:MMMM dd, yyyy}'}"
+                       TextColor="{StaticResource Main}" />
+
+                <mdc:MaterialSearch BackgroundColor="White"
+                                    BorderColor="{StaticResource Main}"
+                                    FocusedBackgroundColor="White"
+                                    FocusedBorderColor="{StaticResource Main}"
+                                    LeadingIcon="icon_search.png"
+                                    Placeholder="Haydovchilarni izlash..."
+                                    PlaceholderColor="{StaticResource Main}"
+                                    SearchCommand="{Binding SearchCommand}"
+                                    SearchOnEveryTextChange="True"
+                                    Text="{Binding SearchText}"
+                                    TextColor="{StaticResource Main}" />
+
+                <RefreshView Command="{Binding RefreshCommand}"
+                             IsRefreshing="{Binding IsRefreshing}"
+                             RefreshColor="{StaticResource Main}">
+                    <CollectionView Margin="0"
+                                    EmptyView="Tekshiruv uchun xaydovichlar topilmadi"
+                                    ItemsSource="{Binding FilteredCheckPoints}"
+                                    SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Style="{StaticResource ListItemStyle}">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Margin="0"
+                                               FontSize="Medium"
+                                               Text="{Binding DriverName}"
+                                               TextColor="{StaticResource Main}"
+                                               VerticalOptions="StartAndExpand" />
+
+                                        <mdc:MaterialButton BackgroundColor="{StaticResource Main}"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"
+                                                            CommandParameter="{Binding .}"
+                                                            HorizontalOptions="EndAndExpand"
+                                                            Text="Tekshirish" />
+                                    </StackLayout>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </RefreshView>
+            </StackLayout>
+            <mdc:MaterialProgressIndicator IndicatorColor="{StaticResource Main}"
+                                           IsVisible="{Binding IsBusy}"
+                                           TrackColor="DarkGray"
+                                           Type="Circular"
+                                           VerticalOptions="CenterAndExpand" />
+        </Grid>
+    </ContentView.Content>
 </ContentView>
