@@ -18,6 +18,16 @@ namespace CheckDrive.Mobile.Stores.Mechanic
             await Task.Delay(1500);
         }
 
+        public async Task CreateReviewAsync(MechanicAcceptanceReview review)
+        {
+            if (new Random().Next(0, 100) % 2 == 0)
+            {
+                throw new Exception("Random exception");
+            }
+
+            await Task.Delay(1500);
+        }
+
         public Task<List<DriverDto>> GetDriversForReviewAsync()
         {
             throw new NotImplementedException();
