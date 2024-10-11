@@ -10,17 +10,7 @@ namespace CheckDrive.Mobile.Stores.Account
 
         public MockAccountStore()
         {
-            _account = new AccountDto
-            {
-                FirstName = "John",
-                LastName = "Doe",
-                Email = "john.doe@example.com",
-                Passport = "1234567891987654",
-                PhoneNumber = "+998 88 345 67 89",
-                Login = "johndoe",
-                Address = "123 Main St, Cityville",
-                Birthdate = new System.DateTime(1990, 1, 1),
-            };
+            _account = FakeDataGenerator.GetAccount();
         }
 
         public Task<AccountDto> GetAccountAsync()

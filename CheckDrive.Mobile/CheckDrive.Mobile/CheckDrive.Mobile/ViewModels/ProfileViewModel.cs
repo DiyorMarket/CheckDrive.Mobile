@@ -97,14 +97,13 @@ namespace CheckDrive.Mobile.ViewModels
             }
             catch (Exception ex)
             {
-                await _navigationService.NavigateToAsync(NavigationPageType.Profile);
-                await Application.Current.MainPage.DisplayAlert("Error", $"Profil o'zgartirishda muammo aniqlandi. Iltimos qaytadan urinib ko'ring. Xato: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", $"Shaxsiy ma'lumotni yangilashda kutilmagan muammo yuzaga keldi. Iltimos, qayta urunib ko'ring yoki texnik yordam bilan bog'laning.", "OK");
             }
         }
 
         private async Task OnLogoutAsync()
         {
-            var confirmed = await Application.Current.MainPage.DisplayAlert("Logout", "Are you sure you want to log out?", "Yes", "No");
+            var confirmed = await Application.Current.MainPage.DisplayAlert("Logout", "Profildan chiqishni xohlaysizmi?", "Ha", "Yo'q");
 
             LocalStorage.ClearAll();
 
