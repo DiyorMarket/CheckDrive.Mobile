@@ -2,8 +2,10 @@
 <pages:PopupPage x:Class="CheckDrive.Mobile.Views.Doctor.DoctorFiltersPopup"
                  xmlns="http://xamarin.com/schemas/2014/forms"
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:doctor="clr-namespace:CheckDrive.Mobile.ViewModels.Doctor"
                  xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
-                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 x:DataType="doctor:DoctorFiltersViewModel">
     <mdc:MaterialCard Padding="25"
                       BackgroundColor="#FFFFFF"
                       CornerRadius="15"
@@ -12,122 +14,79 @@
                       ShadowColor="#000000"
                       VerticalOptions="Center"
                       WidthRequest="320">
-        <StackLayout Spacing="20">
+        <StackLayout>
             <!--  Header  -->
-            <Label FontAttributes="Bold"
-                   FontSize="24"
-                   HorizontalOptions="Center"
-                   Text="Tarixni saralash"
-                   TextColor="#4a4a4a" />
+            <mdc:MaterialLabel FontSize="Large"
+                               Style="{StaticResource Title}"
+                               Text="Tarixni saralash" />
 
             <!--  Filter by Driver  -->
-            <mdc:MaterialLabel FontAttributes="Bold"
+            <mdc:MaterialLabel Margin="5,0,0,0"
+                               FontAttributes="Bold"
+                               FontSize="Medium"
                                Text="Saralash"
                                TextColor="#4a4a4a" />
-            <mdc:MaterialPicker BackgroundColor="White"
-                                BorderColor="#242424"
-                                BorderWidth="1.5"
-                                CornerRadius="8"
-                                FocusedBackgroundColor="White"
-                                FocusedBorderColor="#242424"
-                                HasBorder="True"
-                                ItemsSource="{Binding Drivers}"
+            <mdc:MaterialPicker ItemsSource="{Binding Drivers}"
                                 LabelText="Haydovchi bo'yicha saralash"
-                                LabelTextColor="#242424"
                                 SelectedItem="{Binding SelectedDriver}"
-                                TextColor="{StaticResource PrimaryColor}" />
+                                Style="{StaticResource Picker}" />
 
             <!--  Filter by Status  -->
-            <mdc:MaterialPicker BackgroundColor="White"
-                                BorderColor="#242424"
-                                BorderWidth="1.5"
-                                CornerRadius="8"
-                                FocusedBackgroundColor="White"
-                                FocusedBorderColor="#242424"
-                                HasBorder="True"
+            <mdc:MaterialPicker Margin="0,20,0,0"
                                 ItemsSource="{Binding Statuses}"
                                 LabelText="Status bo'yicha saralash"
                                 LabelTextColor="#242424"
                                 SelectedItem="{Binding SelectedStatus}"
-                                TextColor="{StaticResource PrimaryColor}" />
+                                Style="{StaticResource Picker}" />
 
-            <!--  Date Range Filters  -->
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="0.1*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <mdc:MaterialDatePicker Grid.Column="0"
-                                        BackgroundColor="White"
-                                        BorderColor="#242424"
-                                        BorderWidth="1.5"
-                                        CornerRadius="10"
-                                        Date="{Binding StartDate}"
-                                        FocusedBackgroundColor="White"
-                                        FocusedBorderColor="#242424"
-                                        HasBorder="True"
-                                        LabelText="Boshlanish sanasi"
-                                        MaximumDate="{Binding MaxDate}"
-                                        MinimumDate="{Binding MinDate}" />
-                <mdc:MaterialDatePicker Grid.Column="2"
-                                        BackgroundColor="White"
-                                        BorderColor="#242424"
-                                        BorderWidth="1.5"
-                                        CornerRadius="10"
-                                        Date="{Binding EndDate}"
-                                        FocusedBackgroundColor="White"
-                                        FocusedBorderColor="#242424"
-                                        HasBorder="True"
-                                        LabelText="Tugash sanasi"
-                                        MaximumDate="{Binding MaxDate}"
-                                        MinimumDate="{Binding MinDate}" />
-            </Grid>
-
-            <!--  Sorting Options  -->
-            <mdc:MaterialLabel FontAttributes="Bold"
-                               Text="Tartiblash"
-                               TextColor="#4a4a4a" />
-            <mdc:MaterialPicker BackgroundColor="White"
-                                BorderColor="#242424"
-                                BorderWidth="1.5"
-                                CornerRadius="8"
-                                FocusedBackgroundColor="White"
-                                FocusedBorderColor="#242424"
-                                HasBorder="True"
-                                ItemsSource="{Binding SortOptions}"
-                                LabelText="Tartiblash uslubini tanlang"
-                                LabelTextColor="#242424"
-                                SelectedItem="{Binding SelectedSort}"
-                                TextColor="#242424" />
-
-            <!--  Buttons  -->
+            <!--  Date Filters  -->
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="0.1*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <mdc:MaterialDatePicker Grid.Column="0"
+                                        Date="{Binding StartDate}"
+                                        LabelText="Boshlanish sanasi"
+                                        MaximumDate="{Binding MaxDate}"
+                                        MinimumDate="{Binding MinDate}"
+                                        Style="{StaticResource DatePicker}" />
+                <mdc:MaterialDatePicker Grid.Column="2"
+                                        Date="{Binding EndDate}"
+                                        LabelText="Tugash sanasi"
+                                        MaximumDate="{Binding MaxDate}"
+                                        MinimumDate="{Binding MinDate}"
+                                        Style="{StaticResource DatePicker}" />
+            </Grid>
+
+            <!--  Sorting Options  -->
+            <mdc:MaterialLabel Margin="5,20,0,0"
+                               FontAttributes="Bold"
+                               FontSize="Medium"
+                               Text="Tartiblash"
+                               TextColor="#4a4a4a"
+                               VerticalTextAlignment="End" />
+            <mdc:MaterialPicker ItemsSource="{Binding SortOptions}"
+                                LabelText="Tartiblash uslubini tanlang"
+                                SelectedItem="{Binding SelectedSort}"
+                                Style="{StaticResource Picker}" />
+
+            <!--  Buttons  -->
+            <Grid Margin="0,30,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.1*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
                 <mdc:MaterialButton Grid.Column="0"
-                                    BackgroundColor="White"
-                                    BorderColor="{StaticResource PrimaryColor}"
-                                    ButtonType="Outlined"
                                     Command="{Binding ResetCommand}"
-                                    CornerRadius="20"
-                                    HeightRequest="45"
-                                    HorizontalOptions="FillAndExpand"
-                                    Text="Bekor qilish"
-                                    TextColor="{StaticResource PrimaryColor}" />
+                                    Style="{StaticResource CancelButton}"
+                                    Text="Asl holatni tiklash" />
                 <mdc:MaterialButton Grid.Column="2"
-                                    BackgroundColor="{StaticResource PrimaryColor}"
-                                    BorderColor="{StaticResource PrimaryColor}"
-                                    ButtonType="Outlined"
                                     Command="{Binding ApplyCommand}"
-                                    CornerRadius="20"
-                                    HeightRequest="45"
-                                    HorizontalOptions="FillAndExpand"
-                                    Text="Qo'llash"
-                                    TextColor="White" />
+                                    Style="{StaticResource AcceptButton}"
+                                    Text="Qo'llash" />
             </Grid>
         </StackLayout>
     </mdc:MaterialCard>

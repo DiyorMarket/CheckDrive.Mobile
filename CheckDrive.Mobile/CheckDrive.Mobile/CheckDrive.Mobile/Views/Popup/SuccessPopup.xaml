@@ -38,7 +38,7 @@
                            TextColor="#8c8c8c" />
 
                     <mdc:MaterialButton Margin="0,25,0,0"
-                                        BackgroundColor="{StaticResource Main}"
+                                        BackgroundColor="{StaticResource PrimaryLight}"
                                         Clicked="Close_Clicked"
                                         CornerRadius="25"
                                         HeightRequest="45"

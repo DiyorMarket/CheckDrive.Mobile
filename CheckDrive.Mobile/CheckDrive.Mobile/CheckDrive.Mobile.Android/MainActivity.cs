@@ -2,7 +2,6 @@
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
-using CheckDrive.Mobile.ViewModels;
 
 namespace CheckDrive.Mobile.Droid
 {
@@ -13,8 +12,8 @@ namespace CheckDrive.Mobile.Droid
         {
             base.OnCreate(savedInstanceState);
 
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Rg.Plugins.Popup.Popup.Init(this);
             LoadApplication(new App());
         }

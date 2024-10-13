@@ -2,40 +2,20 @@
 <ContentPage x:Class="CheckDrive.Mobile.Views.Doctor.DoctorHomePage"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls">
-    <ContentPage.Resources>
-        <Style x:Key="ListItemStyle" TargetType="StackLayout">
-            <Setter Property="BackgroundColor" Value="White" />
-            <Setter Property="Padding" Value="0, 20" />
-        </Style>
-        <ResourceDictionary>
-            <Color x:Key="Main">#1C375C</Color>
-            <Color x:Key="Primary">#F2F2F2</Color>
-            <Color x:Key="Success">#04aa6d</Color>
-            <Color x:Key="Danger">#bd3e3e</Color>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
+             xmlns:doctor="clr-namespace:CheckDrive.Mobile.ViewModels.Doctor"
+             xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+             xmlns:models="clr-namespace:CheckDrive.Mobile.Models"
+             x:DataType="doctor:DoctorHomeViewModel">
     <ContentPage.Content>
         <Grid>
             <StackLayout Margin="20" Spacing="15">
+                <mdc:MaterialLabel FontSize="Large"
+                                   Style="{StaticResource Title}"
+                                   Text="{Binding CurrentDate, StringFormat='{0:MMMM dd, yyyy}'}" />
 
-                <Label FontAttributes="Bold"
-                       FontSize="Large"
-                       HorizontalOptions="Center"
-                       Text="{Binding CurrentDate, StringFormat='{0:MMMM dd, yyyy}'}"
-                       TextColor="{StaticResource Main}" />
-
-                <mdc:MaterialSearch BackgroundColor="White"
-                                    BorderColor="{StaticResource Main}"
-                                    FocusedBackgroundColor="White"
-                                    LeadingIcon="icon_search.png"
-                                    Placeholder="Haydovchilarni izlash..."
-                                    PlaceholderColor="{StaticResource Main}"
+                <mdc:MaterialSearch Placeholder="Haydovchilarni izlash..."
                                     SearchCommand="{Binding SearchCommand}"
-                                    SearchOnEveryTextChange="True"
-                                    Text="{Binding SearchText}"
-                                    TextColor="{StaticResource Main}" />
+                                    Style="{StaticResource Search}" />
 
                 <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
                     <CollectionView Margin="0"
@@ -43,16 +23,16 @@
                                     ItemsSource="{Binding Drivers}"
                                     SelectionMode="None">
                         <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout Style="{StaticResource ListItemStyle}">
+                            <DataTemplate x:DataType="models:DriverDto">
+                                <StackLayout Padding="0,20" BackgroundColor="White">
                                     <StackLayout Orientation="Horizontal">
                                         <Label Margin="0"
                                                FontSize="Medium"
                                                Text="{Binding FullName}"
-                                               TextColor="{StaticResource Main}"
+                                               TextColor="{StaticResource Primary}"
                                                VerticalOptions="StartAndExpand" />
 
-                                        <mdc:MaterialButton BackgroundColor="{StaticResource Main}"
+                                        <mdc:MaterialButton BackgroundColor="{StaticResource Primary}"
                                                             Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"
                                                             CommandParameter="{Binding .}"
                                                             HorizontalOptions="EndAndExpand"
@@ -64,11 +44,8 @@
                     </CollectionView>
                 </RefreshView>
             </StackLayout>
-            <mdc:MaterialProgressIndicator IndicatorColor="{StaticResource Main}"
-                                           IsVisible="{Binding IsBusy}"
-                                           TrackColor="DarkGray"
-                                           Type="Circular"
-                                           VerticalOptions="CenterAndExpand" />
+
+            <mdc:MaterialProgressIndicator IsVisible="{Binding IsBusy}" Style="{StaticResource ProgressIndicator}" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -2,8 +2,10 @@
 <pages:PopupPage x:Class="CheckDrive.Mobile.Views.Doctor.DoctorReviewPopup"
                  xmlns="http://xamarin.com/schemas/2014/forms"
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:doctor="clr-namespace:CheckDrive.Mobile.ViewModels.Doctor"
                  xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
                  xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 x:DataType="doctor:DoctorReviewViewModel"
                  CloseWhenBackgroundIsClicked="False">
     <mdc:MaterialCard BackgroundColor="White"
                       CornerRadius="10"
@@ -11,65 +13,58 @@
                       HorizontalOptions="Center"
                       VerticalOptions="Center"
                       WidthRequest="300">
-        <StackLayout Padding="20">
-            <mdc:MaterialLabel FontAttributes="Bold"
+        <Grid Padding="20" RowDefinitions="Auto, Auto, *, Auto">
+            <mdc:MaterialLabel Grid.Row="0"
                                FontSize="Large"
-                               HorizontalOptions="Center"
+                               Style="{StaticResource Title}"
                                Text="{Binding FullName}" />
 
-            <mdc:MaterialSwitch Margin="0"
-                                BackgroundOnSelectedColor="#00897B"
-                                BackgroundOnUnselectedColor="#bd3e3e"
-                                BorderOnSelectedColor="#00897B"
-                                BorderOnUnselectedColor="#bd3e3e"
-                                FontSize="18"
+            <mdc:MaterialSwitch Grid.Row="1"
+                                Margin="0,15,0,0"
                                 IsToggled="{Binding IsHealthy}"
-                                SwitchHorizontalOptions="EndAndExpand"
-                                Text="Sog'lom"
-                                TextSide="Left"
-                                ThumbSelectedColor="#fafafa"
-                                ThumbUnselectedColor="#fafafa"
-                                VerticalOptions="EndAndExpand" />
+                                Style="{StaticResource Switch}"
+                                Text="Sog'lom" />
 
-            <Frame Margin="0"
-                   Padding="0"
-                   BorderColor="Gray"
-                   CornerRadius="10"
-                   HasShadow="False">
-                <StackLayout>
-                    <Editor Margin="0,10,0,0"
-                            BackgroundColor="Transparent"
-                            HeightRequest="100"
-                            Placeholder="Izoh qoldirish..."
-                            Text="{Binding Comments}"
-                            TextColor="{StaticResource Main}"
-                            Visual="Material" />
-                </StackLayout>
-            </Frame>
+            <!--<mdc:MaterialEditor Grid.Row="2"
+                                BackgroundColor="White"
+                                BorderColor="{StaticResource BorderDarkGray}"
+                                BorderWidth="2"
+                                CornerRadius="10"
+                                CursorColor="{StaticResource PrimaryLight}"
+                                FocusedBackgroundColor="White"
+                                FocusedBorderColor="{StaticResource BorderCharcoal}"
+                                FocusedLabelTextColor="{StaticResource TextPrimary}"
+                                HasBorder="True"
+                                HeightRequest="100"
+                                Keyboard="Text"
+                                LabelText="Izoh"
+                                Placeholder="Izoh qoldirish..."
+                                PlaceholderColor="{StaticResource TextSecondary}"
+                                TextColor="{StaticResource TextPrimary}"
+                                VerticalOptions="Fill" />-->
+            <mdc:MaterialEditor Grid.Row="2"
+                                LabelText="Izoh"
+                                Placeholder="Izoh qoldirish..."
+                                Style="{StaticResource Editor}"
+                                Text="{Binding Notes}" />
 
-            <Grid Margin="0,30,0,0">
+            <Grid Grid.Row="3" Margin="0,30,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <mdc:MaterialButton Grid.Column="0"
-                                    BackgroundColor="Transparent"
-                                    BorderColor="#1C375C"
-                                    ButtonType="Outlined"
                                     Command="{Binding CancelCommand}"
-                                    CornerRadius="20"
                                     HorizontalOptions="FillAndExpand"
-                                    Text="Yopish"
-                                    TextColor="#1C375C" />
+                                    Style="{StaticResource CancelButton}"
+                                    Text="Yopish" />
                 <mdc:MaterialButton Grid.Column="1"
                                     Margin="5,0,0,0"
-                                    BackgroundColor="#1C375C"
                                     Command="{Binding ApproveCommand}"
-                                    CornerRadius="20"
                                     HorizontalOptions="FillAndExpand"
-                                    Text="Tasdiqlash"
-                                    TextColor="White" />
+                                    Style="{StaticResource AcceptButton}"
+                                    Text="Tasdiqlash" />
             </Grid>
-        </StackLayout>
+        </Grid>
     </mdc:MaterialCard>
 </pages:PopupPage>

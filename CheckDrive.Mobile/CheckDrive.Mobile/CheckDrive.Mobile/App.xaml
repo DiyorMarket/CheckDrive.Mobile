@@ -1,31 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application x:Class="CheckDrive.Mobile.App"
              xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls">
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="Primary">#1C375C</Color>
-            <Color x:Key="PrimaryLight">#355a8b</Color>
-            <Color x:Key="Secondary">#F2F2F2</Color>
-
-            <Color x:Key="BackgroundLight">#F7F8FA</Color>
-            <Color x:Key="BackgroundDark">#E0E0E0</Color>
-
-            <Color x:Key="TextPrimary">#333333</Color>
-            <Color x:Key="TextSecondary">#666666</Color>
-
-            <Color x:Key="Success">#04aa6d</Color>
-            <Color x:Key="Danger">#bd3e3e</Color>
-            <Color x:Key="Info">#0091D5</Color>
-            <Color x:Key="Warning">#FFCC00</Color>
-
-            <Color x:Key="Border">#D3D3D3</Color>
-            <Color x:Key="Disabled">#B0B0B0</Color>
-            <Color x:Key="Shadow">#00000029</Color>
-
-            <Color x:Key="CardBackground">#FFFFFF</Color>
-
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
