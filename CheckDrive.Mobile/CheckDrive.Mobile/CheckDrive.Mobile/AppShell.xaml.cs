@@ -1,5 +1,6 @@
 ﻿using CheckDrive.Mobile.Views;
 using CheckDrive.Mobile.Views.Doctor;
+using CheckDrive.Mobile.Views.Mechanic;
 using System;
 using Xamarin.Forms;
 
@@ -26,7 +27,7 @@ namespace CheckDrive.Mobile
             switch (role)
             {
                 case "doctor":
-                    HomePage.Content = new DoctorHomePage();
+                    HomePage.Content = new MechanicHomePage();
                     HistoryPage.Content = new DoctorHistoryPage();
                     break;
                 case "driver":

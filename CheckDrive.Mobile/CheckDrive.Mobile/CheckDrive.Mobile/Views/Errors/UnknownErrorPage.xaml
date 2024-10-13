@@ -23,17 +23,18 @@
 
             <Label FontSize="18"
                    HorizontalOptions="Center"
-                   Text="Qayta urinib ko‘ring yoki muammo davom etsa, texnik asistenga murojaat qiling."
+                   Text="Iltimos, qayta urunib ko'ring. Agar muammo davom etsa, texnik yordamga murojaat qiling."
                    TextColor="Gray"
                    VerticalOptions="Center" />
 
             <Button Margin="0,15,0,0"
                     Padding="10"
                     BackgroundColor="#1C375C"
+                    Clicked="Close_Clicked"
                     CornerRadius="20"
                     FontSize="16"
                     HorizontalOptions="Center"
-                    Text="Asosiy saxifa"
+                    Text="Yopish"
                     TextColor="White"
                     VerticalOptions="Center"
                     WidthRequest="150" />

@@ -12,7 +12,7 @@ namespace CheckDrive.Mobile.Helpers
     {
         private static readonly Faker faker = new Faker();
 
-        public static CarDto GetCar() => new Faker<CarDto>()
+        public static Faker<CarDto> GetCar() => new Faker<CarDto>()
             .RuleFor(x => x.Model, f => f.Vehicle.Model())
             .RuleFor(x => x.Color, f => f.Commerce.Color())
             .RuleFor(x => x.Number, f => f.Vehicle.Vin())
@@ -24,8 +24,7 @@ namespace CheckDrive.Mobile.Helpers
             .RuleFor(x => x.RemainingFuel, (f, x) => f.Random.Decimal(50, x.FuelCapacity))
             .RuleFor(x => x.MonthlyDistanceLimit, f => f.Random.Number(500, 1500))
             .RuleFor(x => x.CurrentMonthMileage, f => f.Random.Number(500, 1500))
-            .RuleFor(x => x.Status, f => f.Random.Enum<CarStatus>())
-            .Generate();
+            .RuleFor(x => x.Status, f => f.Random.Enum<CarStatus>());
 
         public static RideDetailDto GetRideDetail() => new Faker<RideDetailDto>()
             .RuleFor(x => x.DistanceTravelled, f => f.Random.Number(10, 300))
@@ -34,9 +33,17 @@ namespace CheckDrive.Mobile.Helpers
             .RuleFor(x => x.FuelConsumptionAdjustment, f => f.Random.Number(0, 300))
             .Generate();
 
+        public static DoctorReviewDto GetDoctorReview() => new Faker<DoctorReviewDto>()
+            .RuleFor(x => x.ReviewerId, f => f.Random.Number())
+            .RuleFor(x => x.ReviewerName, f => f.Person.FullName)
+            .RuleFor(x => x.DriverId, f => f.Random.Number())
+            .RuleFor(x => x.DriverName, f => f.Person.FullName)
+            .RuleFor(x => x.IsApproved, f => f.Random.Bool())
+            .Generate();
+
         public static CheckPointDto GetCheckPoint()
         {
-            var car = GetCar();
+            var car = GetCar().Generate();
             var reviews = new List<ReviewDto>();
             ReviewDto previousReview = null;
 
@@ -75,6 +82,7 @@ namespace CheckDrive.Mobile.Helpers
             checkPoint.StartDate = reviews[0].Date;
             checkPoint.Car = car;
             checkPoint.Reviews = reviews;
+            checkPoint.DoctorReview = GetDoctorReview();
 
             if (checkPoint.Reviews.TrueForAll(x => x.Status == ReviewStatus.Approved))
             {

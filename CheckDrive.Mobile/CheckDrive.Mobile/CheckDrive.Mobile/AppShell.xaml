@@ -2,6 +2,7 @@
 <Shell x:Class="CheckDrive.Mobile.AppShell"
        xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:erros="clr-namespace:CheckDrive.Mobile.Views.Errors"
        xmlns:views="clr-namespace:CheckDrive.Mobile.Views"
        Title="CheckDrive.Mobile"
        NavBarIsVisible="False">
@@ -69,6 +70,8 @@
 
     <TabBar>
         <ShellContent ContentTemplate="{DataTemplate views:LoginPage}" Route="LoginPage" />
+        <ShellContent ContentTemplate="{DataTemplate erros:UnknownErrorPage}" Route="UnknownErrorPage" />
+        <ShellContent ContentTemplate="{DataTemplate erros:NoInternetErrorPage}" Route="NoInternetErrorPage" />
     </TabBar>
 
     <TabBar>

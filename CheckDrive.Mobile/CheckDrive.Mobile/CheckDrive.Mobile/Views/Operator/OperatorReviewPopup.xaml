@@ -97,7 +97,7 @@
                         HorizontalOptions="FillAndExpand"
                         Text="Rad qilish"
                         TextColor="White" />
-                <Button BackgroundColor="{StaticResource Success1}"
+                <Button BackgroundColor="{StaticResource Success}"
                         Command="{Binding ApproveCommand}"
                         CornerRadius="20"
                         HeightRequest="45"
