@@ -1,5 +1,4 @@
 using CheckDrive.Mobile.Exceptions;
-using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Services.Navigation;
 using CheckDrive.Mobile.Stores.Account;
@@ -21,6 +20,7 @@ namespace CheckDrive.Mobile
 {
     public partial class App : Application
     {
+        private readonly AppShell _shell;
         public App()
         {
             InitializeComponent();
@@ -29,7 +29,33 @@ namespace CheckDrive.Mobile
 
             ConfigureServices();
 
-            MainPage = new AppShell();
+            _shell = new AppShell();
+            MainPage = _shell;
+        }
+
+        protected override async void OnStart()
+        {
+            try
+            {
+                var accountStore = DependencyService.Get<IAccountStore>();
+                var isLoggedIn = await accountStore.IsLoggedInAsync();
+
+                if (isLoggedIn)
+                {
+                    var role = await accountStore.GetUserRoleAsync();
+                    RegisterRoutes(role);
+
+                    await Shell.Current.GoToAsync("//HomePage");
+                }
+                else
+                {
+                    await Shell.Current.Navigation.PushAsync(new LoginPage());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Startup error: {ex.Message}.");
+            }
         }
 
         private void InitializeErrorHandlers()
@@ -39,16 +65,9 @@ namespace CheckDrive.Mobile
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
         }
 
-        protected override async void OnStart()
+        public void RegisterRoutes(string role)
         {
-            try
-            {
-                await InitializeAppAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Startup error: {ex.Message}.");
-            }
+            _shell.RegisterRoutes(role);
         }
 
         private static void ConfigureServices()
@@ -68,30 +87,6 @@ namespace CheckDrive.Mobile
             DependencyService.Register<INavigationService, NavigationService>();
         }
 
-        private static async Task InitializeAppAsync()
-        {
-            if (!await IsLoggedInAsync())
-            {
-                await Shell.Current.GoToAsync(nameof(LoginPage));
-            }
-            else
-            {
-                await Shell.Current.GoToAsync("//HomePage");
-            }
-        }
-
-        private static async Task<bool> IsLoggedInAsync()
-        {
-            var token = await LocalStorage.GetAsync<string>(Models.Enums.LocalStorageKey.Token);
-
-            if (string.IsNullOrWhiteSpace(token) || JwtHelper.IsTokenExpired(token))
-            {
-                return true;
-            }
-
-            return true;
-        }
-
         private async void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
             if (e.NetworkAccess != NetworkAccess.Internet && !(MainPage is NoInternetErrorPage))
@@ -108,7 +103,7 @@ namespace CheckDrive.Mobile
             }
             else if (e.NetworkAccess == NetworkAccess.Internet && !(MainPage is AppShell))
             {
-                MainPage = new AppShell();
+                // MainPage = new AppShell();
             }
         }
 
@@ -127,8 +122,6 @@ namespace CheckDrive.Mobile
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                Console.WriteLine($"Unknown error occurred: {ex.Message}");
-
                 if (ex is InvalidTokenException)
                 {
                     await Shell.Current.GoToAsync(nameof(LoginPage), true);

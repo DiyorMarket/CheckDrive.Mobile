@@ -1,5 +1,4 @@
-﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Models.Enums;
+﻿using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Stores.Account;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -75,8 +74,6 @@ namespace CheckDrive.Mobile.ViewModels
         private async Task OnLogoutAsync()
         {
             var confirmed = await Application.Current.MainPage.DisplayAlert("Logout", "Are you sure you want to log out?", "Yes", "No");
-
-            LocalStorage.ClearAll();
 
             if (confirmed)
             {

@@ -60,13 +60,16 @@ namespace CheckDrive.Mobile.ViewModels
                 return;
             }
 
-            IsLoginButtonVisible = false;
             IsBusy = true;
+            IsLoginButtonVisible = false;
             IsErrorVisible = false;
 
             try
             {
                 await _accountDataStore.LoginAsync(Login, Password);
+                var role = await _accountDataStore.GetUserRoleAsync();
+
+                RegisterRoutes(role);
 
                 await _navigationService.NavigateToAsync(NavigationPageType.Home);
             }
@@ -102,6 +105,11 @@ namespace CheckDrive.Mobile.ViewModels
         private void TogglePasswordVisibility()
         {
             IsPasswordVisible = !IsPasswordVisible;
+        }
+
+        private static void RegisterRoutes(string role)
+        {
+            (Application.Current as App)?.RegisterRoutes(role);
         }
     }
 }

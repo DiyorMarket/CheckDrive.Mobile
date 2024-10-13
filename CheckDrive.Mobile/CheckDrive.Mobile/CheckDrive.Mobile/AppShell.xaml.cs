@@ -1,7 +1,7 @@
 ﻿using CheckDrive.Mobile.Views;
 using CheckDrive.Mobile.Views.Doctor;
 using CheckDrive.Mobile.Views.Mechanic;
-using System;
+using CheckDrive.Mobile.Views.Operator;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile
@@ -12,23 +12,28 @@ namespace CheckDrive.Mobile
         {
             InitializeComponent();
 
-            RegisterRoutes();
+            // RegiserDefaultRoutes();
+            // RegisterRoutes();
         }
 
-        private async void OnMenuItemClicked(object sender, EventArgs e)
+        public void RegisterRoutes(string role)
         {
-            // await Shell.Current.GoToAsync("//LoginPage");
-        }
-
-        private void RegisterRoutes()
-        {
-            var role = "doctor";
+            // Need to reset if user logged out and wants to login again.
+            HomePage.ContentTemplate = null;
+            HistoryPage.ContentTemplate = null;
 
             switch (role)
             {
                 case "doctor":
-                    HomePage.Content = new MechanicHomePage();
-                    HistoryPage.Content = new DoctorHistoryPage();
+                    HomePage.ContentTemplate = new DataTemplate(typeof(DoctorHomePage));
+                    HistoryPage.ContentTemplate = new DataTemplate(typeof(DoctorHistoryPage));
+                    break;
+                case "operator":
+                    HomePage.ContentTemplate = new DataTemplate(typeof(OperatorHomePage));
+                    HistoryPage.ContentTemplate = new DataTemplate(typeof(OperatorHistoryPage));
+                    break;
+                case "mechanic":
+                    HomePage.ContentTemplate = new DataTemplate(typeof(MechanicHomePage));
                     break;
                 case "driver":
                     HomePage.ContentTemplate = new DataTemplate(typeof(HomePage));
@@ -37,10 +42,6 @@ namespace CheckDrive.Mobile
                 default:
                     return;
             }
-            // Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-            //Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
-            //Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
-            //Routing.RegisterRoute(nameof(HistoryPage), typeof(HistoryPage));
         }
     }
 }

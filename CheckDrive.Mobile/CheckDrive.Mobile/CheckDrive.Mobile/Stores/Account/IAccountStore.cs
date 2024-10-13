@@ -9,5 +9,7 @@ namespace CheckDrive.Mobile.Stores.Account
         Task LogoutAsync();
         Task<AccountDto> GetAccountAsync();
         Task<int> GetEmployeeIdAsync();
+        Task<string> GetUserRoleAsync();
+        Task<bool> IsLoggedInAsync();
     }
 }

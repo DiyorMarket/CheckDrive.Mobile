@@ -47,9 +47,6 @@
                 </Setter>
             </Style>
 
-            <!--
-                Custom Style you can apply to any Flyout Item
-            -->
             <Style ApplyToDerivedTypes="True"
                    Class="MenuItemLayoutStyle"
                    TargetType="Layout">

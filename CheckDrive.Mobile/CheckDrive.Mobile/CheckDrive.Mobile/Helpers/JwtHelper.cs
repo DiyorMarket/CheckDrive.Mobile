@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
 
 namespace CheckDrive.Mobile.Helpers
 {
@@ -17,6 +19,19 @@ namespace CheckDrive.Mobile.Helpers
 
             var expirationDate = jwtToken.ValidTo;
             return expirationDate < DateTime.UtcNow;
+        }
+
+        public static string GetUserRole(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new ArgumentException("Cannot extract id from empty string.");
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+
+            return jwtToken.Claims.First(c => c.Type == ClaimTypes.Role).Value;
         }
     }
 }

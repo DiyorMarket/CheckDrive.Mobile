@@ -26,7 +26,7 @@
                                 FocusedTextColor="{StaticResource Main}"
                                 HasBorder="True"
                                 ItemsSource="{Binding Cars}"
-                                LabelText="Yoqilg'i markalari"
+                                LabelText="Avtomobil tanlash"
                                 LabelTextColor="DarkGray"
                                 SelectedItem="{Binding SelectedCar}"
                                 TextColor="DarkGray" />

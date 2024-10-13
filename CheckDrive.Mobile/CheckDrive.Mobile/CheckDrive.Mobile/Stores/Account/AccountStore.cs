@@ -116,5 +116,15 @@ namespace CheckDrive.Mobile.Stores.Account
 
             return result;
         }
+
+        public Task<string> GetUserRoleAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsLoggedInAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
