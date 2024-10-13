@@ -5,31 +5,30 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="Main">#1C375C</Color>
-            <Color x:Key="Primary">#F2F2F2</Color>
+            <Color x:Key="Primary">#1C375C</Color>
+            <Color x:Key="PrimaryLight">#355a8b</Color>
+            <Color x:Key="Secondary">#F2F2F2</Color>
+
+            <Color x:Key="BackgroundLight">#F7F8FA</Color>
+            <Color x:Key="BackgroundDark">#E0E0E0</Color>
+
+            <Color x:Key="TextPrimary">#333333</Color>
+            <Color x:Key="TextSecondary">#666666</Color>
+
             <Color x:Key="Success">#04aa6d</Color>
             <Color x:Key="Danger">#bd3e3e</Color>
-            <Color x:Key="PrimaryColor">#1C375C</Color>
-            <Color x:Key="SecondaryColor">#F5F5F5</Color>
-            <Style TargetType="Button">
-                <Setter Property="TextColor" Value="White" />
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Disabled">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="#332196F3" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
+            <Color x:Key="Info">#0091D5</Color>
+            <Color x:Key="Warning">#FFCC00</Color>
+
+            <Color x:Key="Border">#D3D3D3</Color>
+            <Color x:Key="Disabled">#B0B0B0</Color>
+            <Color x:Key="Shadow">#00000029</Color>
+
+            <Color x:Key="CardBackground">#FFFFFF</Color>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
