@@ -28,13 +28,14 @@
             <StackLayout Grid.Row="0"
                          Margin="25"
                          HorizontalOptions="FillAndExpand"
-                         Orientation="Horizontal">
+                         Orientation="Horizontal"
+                         VerticalOptions="Start">
                 <mdc:MaterialSearch Margin="0,0,5,0"
-                                    xct:IconTintColorEffect.TintColor="#1C375C"
+                                    xct:IconTintColorEffect.TintColor="#1c1c1c"
                                     BackgroundColor="White"
-                                    BorderColor="#1C375C"
+                                    BorderColor="#1c1c1c"
                                     FocusedBackgroundColor="White"
-                                    FocusedBorderColor="#1C375C"
+                                    FocusedBorderColor="#1c1c1c"
                                     HorizontalOptions="FillAndExpand"
                                     IsEnabled="True"
                                     LeadingIcon="icon_search.png"
@@ -48,6 +49,7 @@
                                   Type="Outlined">
                     <mdc:MaterialIconButton Animation="Scale"
                                             BackgroundColor="White"
+                                            Command="{Binding FilterCommand}"
                                             Icon="icon_filter.png" />
                 </mdc:MaterialCard>
             </StackLayout>

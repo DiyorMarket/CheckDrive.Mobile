@@ -55,6 +55,7 @@ namespace CheckDrive.Mobile.ViewModels
 
         protected static async Task DisplayErrorAsync(string message, string details)
         {
+            message += " Iltimios, qayta urunib ko'ring yoki texnik yordam bilan bog'laning.";
             var popup = new ErrorPopup(message, details);
 
             await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
