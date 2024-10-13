@@ -20,7 +20,6 @@ namespace CheckDrive.Mobile
 {
     public partial class App : Application
     {
-        private readonly AppShell _shell;
         public App()
         {
             InitializeComponent();
@@ -28,9 +27,6 @@ namespace CheckDrive.Mobile
             InitializeErrorHandlers();
 
             ConfigureServices();
-
-            _shell = new AppShell();
-            MainPage = _shell;
         }
 
         protected override async void OnStart()
@@ -43,13 +39,13 @@ namespace CheckDrive.Mobile
                 if (isLoggedIn)
                 {
                     var role = await accountStore.GetUserRoleAsync();
-                    RegisterRoutes(role);
+                    MainPage = new AppShell(role);
 
                     await Shell.Current.GoToAsync("//HomePage");
                 }
                 else
                 {
-                    await Shell.Current.Navigation.PushAsync(new LoginPage());
+                    MainPage = new LoginPage();
                 }
             }
             catch (Exception ex)
@@ -63,11 +59,6 @@ namespace CheckDrive.Mobile
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
-        }
-
-        public void RegisterRoutes(string role)
-        {
-            _shell.RegisterRoutes(role);
         }
 
         private static void ConfigureServices()

@@ -69,8 +69,7 @@ namespace CheckDrive.Mobile.ViewModels
                 await _accountDataStore.LoginAsync(Login, Password);
                 var role = await _accountDataStore.GetUserRoleAsync();
 
-                RegisterRoutes(role);
-
+                Application.Current.MainPage = new AppShell(role);
                 await _navigationService.NavigateToAsync(NavigationPageType.Home);
             }
             catch (Exception ex)
@@ -105,11 +104,6 @@ namespace CheckDrive.Mobile.ViewModels
         private void TogglePasswordVisibility()
         {
             IsPasswordVisible = !IsPasswordVisible;
-        }
-
-        private static void RegisterRoutes(string role)
-        {
-            (Application.Current as App)?.RegisterRoutes(role);
         }
     }
 }

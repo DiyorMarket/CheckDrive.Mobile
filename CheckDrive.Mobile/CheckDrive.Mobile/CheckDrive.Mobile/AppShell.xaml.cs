@@ -8,19 +8,21 @@ namespace CheckDrive.Mobile
 {
     public partial class AppShell : Shell
     {
-        public AppShell()
+        public AppShell(string role)
         {
             InitializeComponent();
 
             // RegiserDefaultRoutes();
-            // RegisterRoutes();
+            RegisterRoutes(role);
         }
 
         public void RegisterRoutes(string role)
         {
             // Need to reset if user logged out and wants to login again.
             HomePage.ContentTemplate = null;
+            HomePage.Content = null;
             HistoryPage.ContentTemplate = null;
+            HistoryPage.Content = null;
 
             switch (role)
             {
