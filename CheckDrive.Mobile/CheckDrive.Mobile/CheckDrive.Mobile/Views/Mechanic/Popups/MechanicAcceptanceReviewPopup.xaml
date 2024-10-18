@@ -27,8 +27,8 @@
                                BorderColor="DarkGray"
                                CornerRadius="10"
                                FocusedBackgroundColor="White"
-                               FocusedBorderColor="{StaticResource Main}"
-                               FocusedLabelTextColor="{StaticResource Main}"
+                               FocusedBorderColor="{StaticResource Primary}"
+                               FocusedLabelTextColor="{StaticResource Primary}"
                                HasBorder="True"
                                HorizontalOptions="FillAndExpand"
                                Keyboard="Numeric"
@@ -72,7 +72,7 @@
                             HeightRequest="100"
                             Placeholder="Izoh qoldirish"
                             Text="{Binding Notes}"
-                            TextColor="{StaticResource Main}"
+                            TextColor="{StaticResource Primary}"
                             Visual="Material" />
                 </StackLayout>
             </Frame>

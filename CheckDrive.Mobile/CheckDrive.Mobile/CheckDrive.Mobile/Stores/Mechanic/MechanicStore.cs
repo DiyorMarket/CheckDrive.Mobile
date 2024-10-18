@@ -1,4 +1,6 @@
-﻿using CheckDrive.Mobile.Models;
+﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Mechanic;
 using CheckDrive.Mobile.Models.Review;
 using System;
 using System.Collections.Generic;
@@ -6,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CheckDrive.Mobile.Stores.Mechanic
 {
-    public class MockMechanicHandoverStore : IMechanicHandoverStore
+    public class MechanicStore : IMechanicStore
     {
         public async Task CreateReviewAsync(MechanicHandoverReview review)
         {
@@ -26,6 +28,17 @@ namespace CheckDrive.Mobile.Stores.Mechanic
             }
 
             await Task.Delay(1500);
+        }
+
+        public async Task<List<MechanicHistoryDto>> GetHistoriesAsync()
+        {
+            var count = new Random().Next(5, 20);
+            var generator = FakeDataGenerator.GetMechanicHistory();
+            var histories = generator.Generate(count);
+
+            await Task.Delay(1000);
+
+            return histories;
         }
 
         public Task<List<DriverDto>> GetDriversForReviewAsync()

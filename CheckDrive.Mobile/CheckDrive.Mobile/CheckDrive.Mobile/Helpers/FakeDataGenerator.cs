@@ -3,6 +3,7 @@ using Bogus.Extensions.Poland;
 using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Doctor;
 using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.Models.Mechanic;
 using System;
 using System.Collections.Generic;
 
@@ -143,6 +144,16 @@ namespace CheckDrive.Mobile.Helpers
             .RuleFor(x => x.DriverName, f => f.Person.FullName)
             .RuleFor(x => x.Date, f => f.Date.Between(DateTime.Now, DateTime.Now.AddDays(-4)))
             .RuleFor(x => x.IsApproved, f => f.Random.Bool());
+
+        public static Faker<MechanicHistoryDto> GetMechanicHistory() => new Faker<MechanicHistoryDto>()
+            .RuleFor(x => x.CheckPointId, f => f.Random.Number(1, 1_000_000))
+            .RuleFor(x => x.DriverId, f => f.Random.Number(1, 1_000_000))
+            .RuleFor(x => x.DriverName, f => f.Person.FullName)
+            .RuleFor(x => x.CarId, f => f.Random.Number(1, 1_000_000))
+            .RuleFor(x => x.CarDetails, f => f.Vehicle.Model() + " " + f.Vehicle.Vin())
+            .RuleFor(x => x.Notes, f => f.Lorem.Sentence())
+            .RuleFor(x => x.Status, f => f.Random.Enum<ReviewStatus>())
+            .RuleFor(x => x.Date, f => f.Date.Between(DateTime.Now.AddDays(-10), DateTime.Now));
 
         private static CheckPointStage GetStage(ReviewType type)
         {

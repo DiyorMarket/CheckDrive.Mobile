@@ -12,13 +12,14 @@ namespace CheckDrive.Mobile
         {
             InitializeComponent();
 
-            // RegiserDefaultRoutes();
             RegisterRoutes(role);
         }
 
         public void RegisterRoutes(string role)
         {
-            // Need to reset if user logged out and wants to login again.
+            // When user logs out new AppShell will be created, and user may login with different role.
+            // Previous page templates should be removed, otherwise if user logged in previously as
+            // Driver and now logs in as Doctor he will still see the pages for Driver.
             HomePage.ContentTemplate = null;
             HomePage.Content = null;
             HistoryPage.ContentTemplate = null;
@@ -36,6 +37,7 @@ namespace CheckDrive.Mobile
                     break;
                 case "mechanic":
                     HomePage.ContentTemplate = new DataTemplate(typeof(MechanicHomePage));
+                    HistoryPage.ContentTemplate = new DataTemplate(typeof(MechanicHistoryPage));
                     break;
                 case "driver":
                     HomePage.ContentTemplate = new DataTemplate(typeof(HomePage));

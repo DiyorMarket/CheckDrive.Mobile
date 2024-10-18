@@ -17,7 +17,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
     public class MechanicAcceptanceViewModel : BaseViewModel
     {
         private readonly ICheckPointStore _checkPointStore;
-        private readonly IMechanicHandoverStore _mechanicStore;
+        private readonly IMechanicStore _mechanicStore;
 
         private readonly List<CheckPointDto> _allCheckPoints;
         public ObservableCollection<CheckPointDto> FilteredCheckPoints { get; }
@@ -31,7 +31,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
         public MechanicAcceptanceViewModel()
         {
             _checkPointStore = DependencyService.Get<ICheckPointStore>();
-            _mechanicStore = DependencyService.Get<IMechanicHandoverStore>();
+            _mechanicStore = DependencyService.Get<IMechanicStore>();
 
             _allCheckPoints = new List<CheckPointDto>();
             FilteredCheckPoints = new ObservableCollection<CheckPointDto>();

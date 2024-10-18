@@ -71,7 +71,7 @@ namespace CheckDrive.Mobile
             DependencyService.Register<IReviewStore, MockReviewStore>();
             DependencyService.Register<IHistoryStore, MockHistoryStore>();
             DependencyService.Register<IDoctorStore, MockDoctorStore>();
-            DependencyService.Register<IMechanicHandoverStore, MockMechanicHandoverStore>();
+            DependencyService.Register<IMechanicStore, MechanicStore>();
             DependencyService.Register<ICheckPointStore, MockCheckPointStore>();
             DependencyService.Register<ICarStore, MockCarStore>();
 

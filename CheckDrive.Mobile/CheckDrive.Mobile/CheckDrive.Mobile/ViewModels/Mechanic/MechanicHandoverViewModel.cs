@@ -18,7 +18,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
     public class MechanicHandoverViewModel : BaseViewModel
     {
         private readonly ICheckPointStore _checkPointStore;
-        private readonly IMechanicHandoverStore _mechanicStore;
+        private readonly IMechanicStore _mechanicStore;
         private readonly ICarStore _carStore;
 
         private readonly List<CarDto> _cars;
@@ -34,7 +34,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
         public MechanicHandoverViewModel()
         {
             _checkPointStore = DependencyService.Get<ICheckPointStore>();
-            _mechanicStore = DependencyService.Get<IMechanicHandoverStore>();
+            _mechanicStore = DependencyService.Get<IMechanicStore>();
             _carStore = DependencyService.Get<ICarStore>();
 
             _cars = new List<CarDto>();

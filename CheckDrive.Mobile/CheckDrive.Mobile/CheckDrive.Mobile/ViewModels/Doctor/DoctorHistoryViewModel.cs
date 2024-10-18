@@ -152,13 +152,13 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
             switch (sortBy.ToLower().Trim())
             {
                 case "date_asc":
-                    return query.OrderBy(x => x.Date);
+                    return query.OrderBy(x => x.Date.Date);
                 case "name_asc":
                     return query.OrderBy(x => x.DriverName);
                 case "name_desc":
                     return query.OrderByDescending(x => x.DriverName);
                 default:
-                    return query.OrderByDescending(x => x.Date);
+                    return query.OrderByDescending(x => x.Date.Date);
             }
         }
     }
