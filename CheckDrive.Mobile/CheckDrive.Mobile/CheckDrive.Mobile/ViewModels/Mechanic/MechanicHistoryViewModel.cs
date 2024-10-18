@@ -58,6 +58,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
 
                 _cars.AddRange(carsTask.Result);
 
+                _allHistory.AddRange(historiesTask.Result);
                 var sortedHistories = historiesTask.Result.OrderByDescending(x => x.Date.Date);
                 UpdateHistories(sortedHistories);
             }
@@ -88,6 +89,11 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             {
                 await DisplayErrorAsync("Tarixni yuklashda xato ro'y berdi.", ex.Message);
             }
+            finally
+            {
+                IsBusy = false;
+                IsRefreshing = false;
+            }
         }
 
         private void OnSearch(string search)
@@ -96,7 +102,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
                 ? _allHistory
                 : _allHistory.Where(x => x.DriverName.ToLower().Contains(search) || x.CarDetails.ToLower().Contains(search));
 
-            var sortedHistory = filteredHistory.OrderByDescending(x => x.Date).ToList();
+            var sortedHistory = filteredHistory.OrderByDescending(x => x.Date.Date).ToList();
             UpdateHistories(sortedHistory);
         }
 
