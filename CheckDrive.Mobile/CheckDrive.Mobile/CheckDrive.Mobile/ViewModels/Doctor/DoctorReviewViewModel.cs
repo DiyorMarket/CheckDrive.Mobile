@@ -40,7 +40,7 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
         private async void OnApprove()
         {
-            var reviewerId = await _accountStore.GetEmployeeIdAsync();
+            var reviewerId = await _accountStore.GetUserIdAsync();
             var review = new DoctorReview(reviewerId, Notes, IsHealthy, DriverId);
 
             _completionSource.SetResult(review);

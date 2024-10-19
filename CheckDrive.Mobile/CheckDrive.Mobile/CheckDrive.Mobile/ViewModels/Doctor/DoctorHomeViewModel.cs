@@ -40,6 +40,11 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
         public async Task LoadDriversAsync()
         {
+            if (IsRefreshing)
+            {
+                return;
+            }
+
             IsRefreshing = true;
 
             try

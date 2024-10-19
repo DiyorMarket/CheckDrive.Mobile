@@ -1,5 +1,5 @@
 ﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Account;
 using CheckDrive.Mobile.Models.Enums;
 using System;
 using System.Threading.Tasks;
@@ -29,7 +29,7 @@ namespace CheckDrive.Mobile.Stores.Account
             return Task.FromResult(_account);
         }
 
-        public Task<int> GetEmployeeIdAsync()
+        public Task<int> GetUserIdAsync()
         {
             var id = new Random().Next(100);
             return Task.FromResult(id);
@@ -58,6 +58,16 @@ namespace CheckDrive.Mobile.Stores.Account
         {
             LocalStorage.ClearAll();
             return Task.CompletedTask;
+        }
+
+        public Task<AccountDto> GetAccountAsync(string accountId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetAccountIdAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

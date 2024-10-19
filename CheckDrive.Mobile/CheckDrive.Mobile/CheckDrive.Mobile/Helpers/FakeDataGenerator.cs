@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Bogus.Extensions.Poland;
 using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Account;
 using CheckDrive.Mobile.Models.Doctor;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Models.Mechanic;
@@ -127,7 +128,7 @@ namespace CheckDrive.Mobile.Helpers
         public static AccountDto GetAccount() => new Faker<AccountDto>()
             .RuleFor(x => x.FirstName, f => f.Person.FirstName)
             .RuleFor(x => x.LastName, f => f.Person.LastName)
-            .RuleFor(x => x.Login, (f, x) => f.Internet.UserName(x.FirstName, x.LastName))
+            .RuleFor(x => x.UserName, (f, x) => f.Internet.UserName(x.FirstName, x.LastName))
             .RuleFor(x => x.Passport, f => f.Person.Pesel())
             .RuleFor(x => x.PhoneNumber, f => f.Phone.PhoneNumber("+998 9# ###-##-##"))
             .RuleFor(x => x.Email, f => f.Person.Email)

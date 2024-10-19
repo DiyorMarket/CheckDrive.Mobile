@@ -1,4 +1,5 @@
 ﻿using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Account;
 using System.Collections.Generic;
 
 namespace CheckDrive.Mobile.ViewModels.Operator

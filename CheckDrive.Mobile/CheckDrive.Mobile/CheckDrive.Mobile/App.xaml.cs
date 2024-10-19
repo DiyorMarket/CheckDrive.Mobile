@@ -2,6 +2,7 @@ using CheckDrive.Mobile.Exceptions;
 using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Services.Navigation;
 using CheckDrive.Mobile.Stores.Account;
+using CheckDrive.Mobile.Stores.Auth;
 using CheckDrive.Mobile.Stores.Car;
 using CheckDrive.Mobile.Stores.CheckPoint;
 using CheckDrive.Mobile.Stores.Doctor;
@@ -33,11 +34,12 @@ namespace CheckDrive.Mobile
         {
             try
             {
-                var accountStore = DependencyService.Get<IAccountStore>();
-                var isLoggedIn = await accountStore.IsLoggedInAsync();
+                var authStore = DependencyService.Get<IAuthStore>();
+                var isLoggedIn = await authStore.IsLoggedInAsync();
 
                 if (isLoggedIn)
                 {
+                    var accountStore = DependencyService.Get<IAccountStore>();
                     var role = await accountStore.GetUserRoleAsync();
                     MainPage = new AppShell(role);
 
@@ -67,10 +69,11 @@ namespace CheckDrive.Mobile
 
             DependencyService.Register<ApiClient>();
 
-            DependencyService.Register<IAccountStore, MockAccountStore>();
+            DependencyService.Register<IAuthStore, AuthStore>();
+            DependencyService.Register<IAccountStore, AccountStore>();
             DependencyService.Register<IReviewStore, MockReviewStore>();
             DependencyService.Register<IHistoryStore, MockHistoryStore>();
-            DependencyService.Register<IDoctorStore, MockDoctorStore>();
+            DependencyService.Register<IDoctorStore, DoctorStore>();
             DependencyService.Register<IMechanicStore, MechanicStore>();
             DependencyService.Register<ICheckPointStore, MockCheckPointStore>();
             DependencyService.Register<ICarStore, MockCarStore>();

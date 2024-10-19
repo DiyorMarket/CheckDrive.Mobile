@@ -79,7 +79,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic.Popups
 
         private async Task OnApprove()
         {
-            var reviewerId = await _accountStore.GetEmployeeIdAsync();
+            var reviewerId = await _accountStore.GetUserIdAsync();
             var review = new MechanicHandoverReview(reviewerId, Notes, IsApproved, SelectedCar.Id, InitialMileage, _checkPoint.Id, SelectedCar);
 
             _completionSource.SetResult(review);

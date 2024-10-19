@@ -2,6 +2,7 @@
 using CheckDrive.Mobile.Views.Doctor;
 using CheckDrive.Mobile.Views.Mechanic;
 using CheckDrive.Mobile.Views.Operator;
+using System;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile
@@ -25,7 +26,7 @@ namespace CheckDrive.Mobile
             HistoryPage.ContentTemplate = null;
             HistoryPage.Content = null;
 
-            switch (role)
+            switch (role.ToLower().Trim())
             {
                 case "doctor":
                     HomePage.ContentTemplate = new DataTemplate(typeof(DoctorHomePage));
@@ -44,7 +45,7 @@ namespace CheckDrive.Mobile
                     HistoryPage.ContentTemplate = new DataTemplate(typeof(HistoryPage));
                     break;
                 default:
-                    return;
+                    throw new ArgumentOutOfRangeException(nameof(role), $"Count not load pages for {role} role.");
             }
         }
     }
