@@ -1,8 +1,12 @@
-﻿using CheckDrive.Mobile.Models.Enums;
+﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Stores.Account;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using static Bogus.DataSets.Name;
 
 namespace CheckDrive.Mobile.ViewModels
 {
@@ -25,6 +29,8 @@ namespace CheckDrive.Mobile.ViewModels
 
         public ICommand EditProfileCommand { get; }
         public ICommand LogoutCommand { get; }
+        public ICommand BackCommand { get; }
+        public ICommand SaveCommand { get; }
 
         public ProfileViewModel()
         {
@@ -32,6 +38,8 @@ namespace CheckDrive.Mobile.ViewModels
 
             EditProfileCommand = new Command(async () => await OnEditProfileAsync());
             LogoutCommand = new Command(async () => await OnLogoutAsync());
+            BackCommand = new Command(async () => await OnBack());
+            SaveCommand = new Command(async () => await SaveEditsAsync());
         }
 
         public async Task LoadProfileDataAsync()
@@ -71,9 +79,31 @@ namespace CheckDrive.Mobile.ViewModels
             await _navigationService.NavigateToAsync(NavigationPageType.EditProfile);
         }
 
+        private async Task SaveEditsAsync()
+        {
+            var updatedAccount = GetAccount();
+
+            try
+            {
+                var result = await _accountService.UpdateAccountAsync(updatedAccount);
+
+                if (result == null)
+                {
+                    throw new Exception("Account update result is null.");
+                }
+
+                await _navigationService.NavigateToAsync(NavigationPageType.Profile);
+                await Application.Current.MainPage.DisplayAlert("Success", "Profil muvafaqiyatli tarzda o'zgartirildi.", "OK");
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Shaxsiy ma'lumotni yangilashda kutilmagan muammo yuzaga keldi. Iltimos, qayta urunib ko'ring yoki texnik yordam bilan bog'laning.", "OK");
+            }
+        }
+
         private async Task OnLogoutAsync()
         {
-            var confirmed = await Application.Current.MainPage.DisplayAlert("Logout", "Are you sure you want to log out?", "Yes", "No");
+            var confirmed = await Application.Current.MainPage.DisplayAlert("Logout", "Profildan chiqishni xohlaysizmi?", "Ha", "Yo'q");
 
             if (confirmed)
             {
@@ -81,6 +111,26 @@ namespace CheckDrive.Mobile.ViewModels
 
                 await _navigationService.NavigateToAsync(NavigationPageType.Login);
             }
+        }
+
+        private async Task OnBack()
+        {
+            await _navigationService.NavigateToAsync(NavigationPageType.Profile);
+        }
+
+        private AccountDto GetAccount()
+        {
+            return new AccountDto
+            {
+                Login = Login,
+                FirstName = FullName.Split(' ')[0],
+                LastName = FullName.Split(' ').Length > 1 ? FullName.Split(' ')[1] : "",
+                Passport = Passport,
+                PhoneNumber = PhoneNumber,
+                Email = Email,
+                Address = Address,
+                Birthdate = DateTime.Parse(Birthdate),
+            };
         }
     }
 }

@@ -17,6 +17,7 @@ namespace CheckDrive.Mobile.Services.Navigation
             {
                 { NavigationPageType.Login, nameof(LoginPage) },
                 { NavigationPageType.Profile, nameof(ProfilePage) },
+                { NavigationPageType.EditProfile, nameof(EditProfile) },
                 { NavigationPageType.Home, nameof(HomePage) },
             };
         }

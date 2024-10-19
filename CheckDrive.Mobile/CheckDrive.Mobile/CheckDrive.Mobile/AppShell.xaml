@@ -70,6 +70,9 @@
         <ShellContent ContentTemplate="{DataTemplate erros:UnknownErrorPage}" Route="UnknownErrorPage" />
         <ShellContent ContentTemplate="{DataTemplate erros:NoInternetErrorPage}" Route="NoInternetErrorPage" />
     </TabBar>
+    <TabBar>
+        <ShellContent ContentTemplate="{DataTemplate views:EditProfile}" Route="EditProfile" />
+    </TabBar>
 
     <TabBar>
         <ShellContent x:Name="HomePage"

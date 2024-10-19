@@ -1,6 +1,7 @@
 ﻿using CheckDrive.Mobile.Exceptions;
 using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Models.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -67,6 +68,44 @@ namespace CheckDrive.Mobile.Services
                 var response = await _client.SendAsync(request).ConfigureAwait(false);
 
                 return response;
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<TResponse> PutAsync<TRequest, TResponse>(string resource, TRequest body)
+        {
+            try
+            {
+                string token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    throw new InvalidTokenException("Token is empty.");
+                }
+
+                var request = new HttpRequestMessage(HttpMethod.Put, $"{BaseUrl}/{resource}");
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                var json = JsonConvert.SerializeObject(body);
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _client.SendAsync(request).ConfigureAwait(false);
+
+                response.EnsureSuccessStatusCode();
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<TResponse>(responseBody);
+
+                return result;
             }
             catch (HttpRequestException ex)
             {
