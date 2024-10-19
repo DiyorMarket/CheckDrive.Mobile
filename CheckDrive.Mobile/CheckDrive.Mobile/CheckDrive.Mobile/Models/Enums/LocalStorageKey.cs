@@ -3,6 +3,7 @@
     public enum LocalStorageKey
     {
         Account,
-        Token
+        Token,
+        ReviewConfirmation,
     }
 }
