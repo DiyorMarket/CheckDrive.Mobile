@@ -10,7 +10,6 @@
              BackgroundColor="White">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <converters:BooleanToImageConverter x:Key="BooleanToImageConverter" />
             <converters:BooleanToReviewStatusIconConverter x:Key="BooleanToIcon" />
             <converters:ReviewStatusToIconConverter x:Key="StatusToIconConverter" />
         </ResourceDictionary>

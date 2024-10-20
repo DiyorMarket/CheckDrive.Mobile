@@ -8,12 +8,6 @@
              xmlns:syncfusion="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:BooleanToImageConverter x:Key="BooleanToImageConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
     <ContentPage.Content>
         <Grid BackgroundColor="#F3F5F9"
               HorizontalOptions="FillAndExpand"
