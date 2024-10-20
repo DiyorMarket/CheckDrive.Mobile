@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.Converter
 {
-    public class ReviewStatusToIconConverter : IValueConverter
+    public class ReviewStatusToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -13,19 +13,21 @@ namespace CheckDrive.Mobile.Converter
             {
                 switch (status)
                 {
+                    case ReviewStatus.InProgress:
+                        return Color.FromHex("#04aa6d");
                     case ReviewStatus.Approved:
-                        return "icon_success.png";
-                    case ReviewStatus.RejectedByDriver:
+                        return Color.FromHex("#04aa6d");
                     case ReviewStatus.RejectedByReviewer:
-                        return "icon_error.png";
+                    case ReviewStatus.RejectedByDriver:
+                        return Color.FromHex("#bd3e3e");
                     case ReviewStatus.NotStarted:
-                        return "icon_circle.png";
+                        return Color.FromHex("#6b6b6b");
                     default:
-                        return "icon_warning.png";
+                        return Color.Transparent;
                 }
             }
 
-            return null;
+            return Color.Transparent;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

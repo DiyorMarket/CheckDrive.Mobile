@@ -6,6 +6,14 @@
              xmlns:md="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
              xmlns:progressBar="clr-namespace:Syncfusion.XForms.ProgressBar;assembly=Syncfusion.SfProgressBar.XForms"
              xmlns:viewmodels="clr-namespace:CheckDrive.Mobile.ViewModels">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ReviewStatusToColorConverter x:Key="StatusToColorConverter" />
+            <converters:ReviewStatusToIconConverter x:Key="StatusToIconConverter" />
+            <converters:ReviewTypeToShowLineBelowConverter x:Key="ShowLineBelowConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <RefreshView Command="{Binding RefreshCommand}"
                      IsRefreshing="{Binding IsBusy, Mode=OneWay}"
@@ -37,6 +45,7 @@
                                           Text="km"
                                           Type="TitleMedium" />
                     </StackLayout>
+
                     <progressBar:SfLinearProgressBar Grid.Row="1"
                                                      Margin="30,0"
                                                      CornerRadius="10"
@@ -63,6 +72,7 @@
                             </progressBar:RangeColorCollection>
                         </progressBar:SfLinearProgressBar.RangeColors>
                     </progressBar:SfLinearProgressBar>
+
                     <StackLayout Grid.Row="2"
                                  HorizontalOptions="CenterAndExpand"
                                  Orientation="Horizontal">
@@ -79,77 +89,80 @@
                     </StackLayout>
 
                     <md:MaterialLabel Grid.Row="3"
-                                      Margin="0,50,0,0"
+                                      Margin="0,25,0,0"
                                       HorizontalTextAlignment="Center"
                                       Text="{Binding Date}"
                                       TextColor="#878787"
                                       Type="TitleLarge"
                                       VerticalTextAlignment="Center" />
+
                     <StackLayout Grid.Row="4"
                                  Margin="25,10,25,10"
                                  HorizontalOptions="StartAndExpand">
-                        <progressBar:SfStepProgressBar x:Name="stepProgress"
-                                                       Margin="0,25,0,0"
-                                                       BackgroundColor="Transparent"
-                                                       BindableLayout.ItemsSource="{Binding Reviews}"
-                                                       HorizontalOptions="CenterAndExpand"
-                                                       Orientation="Vertical"
-                                                       TitleAlignment="Start"
-                                                       TitleSpace="10">
-                            <progressBar:SfStepProgressBar.InProgressStepStyle>
-                                <progressBar:StepStyle x:TypeArguments="progressBar:InProgressStepState"
-                                                       MarkerContentFillColor="White"
-                                                       MarkerContentType="Dot"
-                                                       MarkerFillColor="#04AA6D"
-                                                       MarkerShapeType="Circle"
-                                                       MarkerStrokeColor="#04AA6D"
-                                                       ProgressLineColor="#04AA6D" />
-                            </progressBar:SfStepProgressBar.InProgressStepStyle>
 
-                            <progressBar:SfStepProgressBar.CompletedStepStyle>
-                                <progressBar:StepStyle x:TypeArguments="progressBar:CompletedStepState"
-                                                       MarkerContentFillColor="White"
-                                                       MarkerContentType="Tick"
-                                                       MarkerFillColor="#04AA6D"
-                                                       MarkerShapeType="Circle"
-                                                       MarkerStrokeColor="#04AA6D"
-                                                       ProgressLineColor="#04AA6D" />
-                            </progressBar:SfStepProgressBar.CompletedStepStyle>
-
-                            <progressBar:SfStepProgressBar.NotStartedStepStyle>
-                                <progressBar:StepStyle x:TypeArguments="progressBar:NotStartedStepState"
-                                                       MarkerContentType="None"
-                                                       MarkerFillColor="Transparent"
-                                                       MarkerShapeType="Circle"
-                                                       MarkerStrokeColor="DarkGray"
-                                                       ProgressLineColor="DarkGray" />
-                            </progressBar:SfStepProgressBar.NotStartedStepStyle>
-
-                            <BindableLayout.ItemTemplate>
+                        <!--  Step Progress Bar (Vertical Alignment)  -->
+                        <CollectionView Margin="0,20,0,0"
+                                        HorizontalScrollBarVisibility="Never"
+                                        ItemsSource="{Binding Reviews}"
+                                        SelectionMode="None"
+                                        VerticalScrollBarVisibility="Never">
+                            <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <progressBar:StepView x:Name="stepView"
-                                                          ProgressValue="{Binding ProgressValue}"
-                                                          Status="{Binding StepStatus}">
-                                        <progressBar:StepView.PrimaryFormattedText>
-                                            <FormattedString>
-                                                <Span FontAttributes="Bold"
-                                                      FontSize="16"
-                                                      Text="{Binding ReviewName}" />
-                                                <Span Text="&#10;&#10;" />
-                                                <Span FontSize="Small" Text="{Binding Notes}" />
-                                            </FormattedString>
-                                        </progressBar:StepView.PrimaryFormattedText>
-                                        <progressBar:StepView.SecondaryFormattedText>
-                                            <FormattedString>
-                                                <Span FontAttributes="Bold"
-                                                      FontSize="Medium"
-                                                      Text="{Binding Time}" />
-                                            </FormattedString>
-                                        </progressBar:StepView.SecondaryFormattedText>
-                                    </progressBar:StepView>
+                                    <Grid Margin="0"
+                                          Padding="0"
+                                          ColumnDefinitions="*, *, 3*"
+                                          ColumnSpacing="0"
+                                          RowDefinitions="Auto, Auto"
+                                          RowSpacing="0">
+
+                                        <!--  Time on the left side of the circle  -->
+                                        <Label Grid.Row="1"
+                                               Grid.Column="0"
+                                               FontAttributes="Bold"
+                                               FontSize="Medium"
+                                               HorizontalOptions="End"
+                                               Text="{Binding Time}"
+                                               VerticalOptions="Start" />
+
+                                        <StackLayout Grid.Row="1"
+                                                     Grid.Column="1"
+                                                     Spacing="0">
+                                            <!--  Step Circle with Icon (Status Indicator)  -->
+                                            <Image HeightRequest="30"
+                                                   HorizontalOptions="Center"
+                                                   Source="{Binding Status, Converter={StaticResource StatusToIconConverter}}"
+                                                   VerticalOptions="Center"
+                                                   WidthRequest="30" />
+
+                                            <!--  Vertical Line Below Step (only visible if not last step)  -->
+                                            <BoxView BackgroundColor="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
+                                                     HeightRequest="75"
+                                                     HorizontalOptions="Center"
+                                                     IsVisible="{Binding Type, Converter={StaticResource ShowLineBelowConverter}}"
+                                                     VerticalOptions="Fill"
+                                                     WidthRequest="2" />
+                                        </StackLayout>
+
+
+                                        <!--  Title and Notes on the right side of the circle  -->
+                                        <StackLayout Grid.Row="1"
+                                                     Grid.Column="2"
+                                                     Margin="0,0,0,0"
+                                                     VerticalOptions="Start">
+                                            <Label FontAttributes="Bold"
+                                                   FontSize="Medium"
+                                                   Text="{Binding ReviewName}" />
+                                            <Label FontAttributes="Bold"
+                                                   FontSize="Small"
+                                                   Text="{Binding ReviewerName}" />
+                                            <Label FontSize="Small"
+                                                   Text="{Binding Notes}"
+                                                   TextColor="Gray" />
+                                        </StackLayout>
+                                    </Grid>
                                 </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </progressBar:SfStepProgressBar>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
                     </StackLayout>
                 </Grid>
             </ScrollView>
