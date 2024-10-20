@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="CheckDrive.Mobile.Views.EditProfile"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+<ContentPage x:Class="CheckDrive.Mobile.Views.EditProfile"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -10,63 +9,56 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ImageButton
-            Margin="10,10,0,0"
-            BackgroundColor="Transparent"
-            Command="{Binding BackCommand}"
-            HeightRequest="33"
-            HorizontalOptions="Start"
-            Source="back_button.png"
-            WidthRequest="33" />
+        <ImageButton Margin="10,10,0,0"
+                     BackgroundColor="Transparent"
+                     Command="{Binding BackCommand}"
+                     HeightRequest="33"
+                     HorizontalOptions="Start"
+                     Source="icon_arrow_left.png"
+                     WidthRequest="33" />
 
-        <Label
-            Margin="0,10,0,0"
-            FontAttributes="Bold"
-            FontSize="Large"
-            HorizontalOptions="Center"
-            Text="Profilni Tahrirlash"
-            TextColor="Black" />
+        <Label Margin="0,10,0,0"
+               FontAttributes="Bold"
+               FontSize="Large"
+               HorizontalOptions="Center"
+               Text="Profilni Tahrirlash"
+               TextColor="Black" />
         <StackLayout Grid.Row="1" Padding="20">
 
             <StackLayout Padding="0,0,0,0" Spacing="20">
 
-                <Frame
-                    Padding="10"
-                    BorderColor="LightGray"
-                    CornerRadius="10"
-                    HasShadow="False">
+                <Frame Padding="10"
+                       BorderColor="LightGray"
+                       CornerRadius="10"
+                       HasShadow="False">
                     <StackLayout>
                         <Label FontAttributes="Bold" Text="Ism Sharifi" />
-                        <Entry
-                            FontSize="Medium"
-                            Placeholder="Ism Sharifingizni kiriting"
-                            Text="{Binding FullName}" />
+                        <Entry FontSize="Medium"
+                               Placeholder="Ism Sharifingizni kiriting"
+                               Text="{Binding FullName}" />
                     </StackLayout>
                 </Frame>
 
                 <StackLayout Orientation="Horizontal" Spacing="10">
-                    <Frame
-                        Padding="10"
-                        BorderColor="LightGray"
-                        CornerRadius="10"
-                        HasShadow="False"
-                        WidthRequest="160">
+                    <Frame Padding="10"
+                           BorderColor="LightGray"
+                           CornerRadius="10"
+                           HasShadow="False"
+                           WidthRequest="160">
                         <StackLayout>
                             <Label FontAttributes="Bold" Text="Telefon Raqam" />
-                            <Entry
-                                FontSize="Medium"
-                                Keyboard="Telephone"
-                                Placeholder="Telefon raqamingizni kiriting"
-                                Text="{Binding PhoneNumber}" />
+                            <Entry FontSize="Medium"
+                                   Keyboard="Telephone"
+                                   Placeholder="Telefon raqamingizni kiriting"
+                                   Text="{Binding PhoneNumber}" />
                         </StackLayout>
                     </Frame>
 
-                    <Frame
-                        Padding="10"
-                        BorderColor="LightGray"
-                        CornerRadius="10"
-                        HasShadow="False"
-                        WidthRequest="160">
+                    <Frame Padding="10"
+                           BorderColor="LightGray"
+                           CornerRadius="10"
+                           HasShadow="False"
+                           WidthRequest="160">
                         <StackLayout>
                             <Label FontAttributes="Bold" Text="Tug'ilgan kun" />
                             <DatePicker Date="{Binding Birthdate}" Format="dd MMMM, yyyy" />
@@ -74,74 +66,65 @@
                     </Frame>
                 </StackLayout>
 
-                <Frame
-                    Padding="10"
-                    BorderColor="LightGray"
-                    CornerRadius="10"
-                    HasShadow="False">
+                <Frame Padding="10"
+                       BorderColor="LightGray"
+                       CornerRadius="10"
+                       HasShadow="False">
                     <StackLayout>
                         <Label FontAttributes="Bold" Text="Passport" />
-                        <Entry
-                            FontSize="Medium"
-                            Placeholder="Iltimos passportingizni kiriting"
-                            Text="{Binding Passport}" />
+                        <Entry FontSize="Medium"
+                               Placeholder="Iltimos passportingizni kiriting"
+                               Text="{Binding Passport}" />
                     </StackLayout>
                 </Frame>
 
-                <Frame
-                    Padding="10"
-                    BorderColor="LightGray"
-                    CornerRadius="10"
-                    HasShadow="False">
+                <Frame Padding="10"
+                       BorderColor="LightGray"
+                       CornerRadius="10"
+                       HasShadow="False">
                     <StackLayout>
                         <Label FontAttributes="Bold" Text="Yashash Manzili" />
-                        <Entry
-                            FontSize="Medium"
-                            Keyboard="Email"
-                            Placeholder="Yashash Manzilingizni kiriting"
-                            Text="{Binding Address}" />
-                    </StackLayout>
-                </Frame>
-                
-                <Frame
-                    Padding="10"
-                    BorderColor="LightGray"
-                    CornerRadius="10"
-                    HasShadow="False">
-                    <StackLayout>
-                        <Label FontAttributes="Bold" Text="Pochta" />
-                        <Entry
-                            FontSize="Medium"
-                            Keyboard="Email"
-                            Placeholder="Pochtangizni kiriting"
-                            Text="{Binding Email}" />
+                        <Entry FontSize="Medium"
+                               Keyboard="Email"
+                               Placeholder="Yashash Manzilingizni kiriting"
+                               Text="{Binding Address}" />
                     </StackLayout>
                 </Frame>
 
-                <Frame
-                    Padding="10"
-                    BorderColor="LightGray"
-                    CornerRadius="10"
-                    HasShadow="False">
+                <Frame Padding="10"
+                       BorderColor="LightGray"
+                       CornerRadius="10"
+                       HasShadow="False">
+                    <StackLayout>
+                        <Label FontAttributes="Bold" Text="Pochta" />
+                        <Entry FontSize="Medium"
+                               Keyboard="Email"
+                               Placeholder="Pochtangizni kiriting"
+                               Text="{Binding Email}" />
+                    </StackLayout>
+                </Frame>
+
+                <Frame Padding="10"
+                       BorderColor="LightGray"
+                       CornerRadius="10"
+                       HasShadow="False">
                     <StackLayout>
                         <Label FontAttributes="Bold" Text="Login" />
-                        <Entry
-                            FontSize="Medium"
-                            Placeholder="Loginni kiriting"
-                            Text="{Binding Login}" />
+                        <Entry FontSize="Medium"
+                               Placeholder="Loginni kiriting"
+                               Text="{Binding Login}" />
                     </StackLayout>
                 </Frame>
 
             </StackLayout>
 
-            <Button
-                BackgroundColor="#1C375C"
-                Command="{Binding SaveCommand}"
-                CornerRadius="20"
-                HorizontalOptions="FillAndExpand"
-                Text="Saqlash"
-                TextColor="White"
-                VerticalOptions="EndAndExpand" />
+            <Button BackgroundColor="#1C375C"
+                    Command="{Binding SaveCommand}"
+                    CornerRadius="20"
+                    HorizontalOptions="FillAndExpand"
+                    Text="Saqlash"
+                    TextColor="White"
+                    VerticalOptions="EndAndExpand" />
         </StackLayout>
 
     </Grid>

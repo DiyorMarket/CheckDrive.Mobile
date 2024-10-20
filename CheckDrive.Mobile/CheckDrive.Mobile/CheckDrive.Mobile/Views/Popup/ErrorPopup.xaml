@@ -49,7 +49,7 @@
                                        xct:IconTintColorEffect.TintColor="#8c8c8c"
                                        HeightRequest="25"
                                        HorizontalOptions="EndAndExpand"
-                                       Source="icon_arrow_down.png"
+                                       Source="arrow_down.png"
                                        WidthRequest="25" />
                             </StackLayout>
                         </xct:Expander.Header>
