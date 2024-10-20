@@ -25,11 +25,11 @@ namespace CheckDrive.Mobile.Views.Popup
             {
                 if (expander.IsExpanded)
                 {
-                    ExpanderIcon.Source = "icon_arrow_up.png";
+                    ExpanderIcon.Source = "arrow_up.png";
                 }
                 else
                 {
-                    ExpanderIcon.Source = "icon_arrow_down.png";
+                    ExpanderIcon.Source = "arrow_down.png";
                 }
             }
         }

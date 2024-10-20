@@ -3,6 +3,7 @@ using Bogus.Extensions.Poland;
 using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Account;
 using CheckDrive.Mobile.Models.Doctor;
+using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Models.Mechanic;
 using System;
