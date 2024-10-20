@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace CheckDrive.Mobile.Models
+namespace CheckDrive.Mobile.Models.Driver
 {
-    public class HistoryDto
+    public class DriverReviewHistory
     {
         public string IconSource { get; set; }
         public string CarDetails { get; set; }

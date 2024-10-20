@@ -1,4 +1,4 @@
-﻿using CheckDrive.Mobile.Models;
+﻿using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Models.Mechanic;
 using CheckDrive.Mobile.Models.Review;
 using System.Collections.Generic;

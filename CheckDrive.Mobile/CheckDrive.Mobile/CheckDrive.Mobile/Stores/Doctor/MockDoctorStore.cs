@@ -1,6 +1,6 @@
 ﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Doctor;
+using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Models.Review;
 using System;
 using System.Collections.Generic;

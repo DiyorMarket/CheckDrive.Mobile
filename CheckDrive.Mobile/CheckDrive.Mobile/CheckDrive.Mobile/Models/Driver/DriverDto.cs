@@ -1,4 +1,4 @@
-﻿namespace CheckDrive.Mobile.Models
+﻿namespace CheckDrive.Mobile.Models.Driver
 {
     public class DriverDto
     {

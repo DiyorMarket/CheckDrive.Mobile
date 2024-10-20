@@ -1,4 +1,4 @@
-﻿using CheckDrive.Mobile.Models;
+﻿using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Models.Review;
 using CheckDrive.Mobile.Stores.Doctor;
 using CheckDrive.Mobile.Views.Doctor;
