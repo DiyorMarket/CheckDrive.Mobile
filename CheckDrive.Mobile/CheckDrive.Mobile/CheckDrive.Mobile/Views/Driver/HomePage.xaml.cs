@@ -1,5 +1,4 @@
-﻿using CheckDrive.Mobile.ViewModels;
-
+﻿using CheckDrive.Mobile.ViewModels.Driver;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

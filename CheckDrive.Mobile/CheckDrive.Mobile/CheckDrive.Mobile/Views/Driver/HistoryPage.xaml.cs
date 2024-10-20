@@ -1,7 +1,7 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using CheckDrive.Mobile.ViewModels;
 using System.Threading.Tasks;
+using CheckDrive.Mobile.ViewModels.Driver;
 
 namespace CheckDrive.Mobile.Views
 {

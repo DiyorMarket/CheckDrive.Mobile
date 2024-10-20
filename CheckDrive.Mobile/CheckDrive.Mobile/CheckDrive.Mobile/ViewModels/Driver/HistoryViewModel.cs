@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace CheckDrive.Mobile.ViewModels
+namespace CheckDrive.Mobile.ViewModels.Driver
 {
     public class HistoryViewModel : BaseViewModel
     {

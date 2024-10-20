@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace CheckDrive.Mobile.ViewModels
+namespace CheckDrive.Mobile.ViewModels.Driver
 {
     public class HomeViewModel : BaseViewModel
     {
@@ -97,7 +97,7 @@ namespace CheckDrive.Mobile.ViewModels
 
             MonthlyDistanceLimit = car.MonthlyDistanceLimit;
             CurrentMonthMileage = car.CurrentMonthMileage;
-            MileageLimitProgress = (int)((car.CurrentMonthMileage * 100) / car.MonthlyDistanceLimit);
+            MileageLimitProgress = (int)(car.CurrentMonthMileage * 100 / car.MonthlyDistanceLimit);
         }
     }
 }
