@@ -1,17 +1,17 @@
-﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Models;
+﻿using CheckDrive.Mobile.Models.Account;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Stores.Account;
+using CheckDrive.Mobile.Stores.Auth;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
-using static Bogus.DataSets.Name;
 
 namespace CheckDrive.Mobile.ViewModels
 {
     public class ProfileViewModel : BaseViewModel
     {
+        private readonly IAuthStore _authStore;
         private readonly IAccountStore _accountService;
 
         public string ProfileImage { get; set; }
@@ -35,6 +35,7 @@ namespace CheckDrive.Mobile.ViewModels
         public ProfileViewModel()
         {
             _accountService = DependencyService.Get<IAccountStore>();
+            _authStore = DependencyService.Get<IAuthStore>();
 
             EditProfileCommand = new Command(async () => await OnEditProfileAsync());
             LogoutCommand = new Command(async () => await OnLogoutAsync());
@@ -44,14 +45,15 @@ namespace CheckDrive.Mobile.ViewModels
 
         public async Task LoadProfileDataAsync()
         {
-            var account = await _accountService.GetAccountAsync();
+            var accountId = await _accountService.GetAccountIdAsync();
+            var account = await _accountService.GetAccountAsync(accountId);
 
             if (account is null)
             {
                 return;
             }
 
-            Login = account.Login;
+            Login = account.UserName;
             FullName = $"{account.FirstName} {account.LastName}";
             Passport = account.Passport;
             PhoneNumber = account.PhoneNumber;
@@ -105,11 +107,9 @@ namespace CheckDrive.Mobile.ViewModels
         {
             var confirmed = await Application.Current.MainPage.DisplayAlert("Logout", "Profildan chiqishni xohlaysizmi?", "Ha", "Yo'q");
 
-            LocalStorage.ClearAll();
-
             if (confirmed)
             {
-                await _accountService.LogoutAsync();
+                _authStore.Logout();
 
                 await _navigationService.NavigateToAsync(NavigationPageType.Login);
             }
@@ -124,7 +124,7 @@ namespace CheckDrive.Mobile.ViewModels
         {
             return new AccountDto
             {
-                Login = Login,
+                UserName = Login,
                 FirstName = FullName.Split(' ')[0],
                 LastName = FullName.Split(' ').Length > 1 ? FullName.Split(' ')[1] : "",
                 Passport = Passport,

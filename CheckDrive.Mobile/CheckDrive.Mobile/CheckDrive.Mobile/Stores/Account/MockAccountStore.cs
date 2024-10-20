@@ -1,5 +1,7 @@
 ﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Account;
+using CheckDrive.Mobile.Models.Enums;
+using System;
 using System.Threading.Tasks;
 
 namespace CheckDrive.Mobile.Stores.Account
@@ -13,6 +15,8 @@ namespace CheckDrive.Mobile.Stores.Account
             _account = FakeDataGenerator.GetAccount();
         }
 
+        private string login = string.Empty;
+
         public Task<AccountDto> GetAccountAsync()
         {
             return Task.FromResult(_account);
@@ -25,14 +29,45 @@ namespace CheckDrive.Mobile.Stores.Account
             return Task.FromResult(_account);
         }
 
-        public Task LoginAsync(string login, string password)
+        public Task<int> GetUserIdAsync()
         {
-            return Task.CompletedTask;
+            var id = new Random().Next(100);
+            return Task.FromResult(id);
+        }
+
+        public Task<string> GetUserRoleAsync()
+        {
+            return Task.FromResult(login);
+        }
+
+        public async Task<bool> IsLoggedInAsync()
+        {
+            var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
+            this.login = token;
+
+            return !string.IsNullOrEmpty(token);
+        }
+
+        public async Task LoginAsync(string login, string password)
+        {
+            this.login = login;
+            await LocalStorage.SaveAsync(login, LocalStorageKey.Token);
         }
 
         public Task LogoutAsync()
         {
+            LocalStorage.ClearAll();
             return Task.CompletedTask;
+        }
+
+        public Task<AccountDto> GetAccountAsync(string accountId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetAccountIdAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -2,21 +2,22 @@
 <Shell x:Class="CheckDrive.Mobile.AppShell"
        xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:erros="clr-namespace:CheckDrive.Mobile.Views.Errors"
        xmlns:views="clr-namespace:CheckDrive.Mobile.Views"
        Title="CheckDrive.Mobile"
        NavBarIsVisible="False">
     <Shell.Resources>
         <ResourceDictionary>
             <Style x:Key="BaseStyle" TargetType="Element">
-                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.ForegroundColor" Value="White" />
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource BackgroundLight}" />
+                <Setter Property="Shell.ForegroundColor" Value="{StaticResource Primary}" />
                 <Setter Property="Shell.TitleColor" Value="White" />
                 <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
                 <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
-                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource BackgroundLight}" />
                 <Setter Property="Shell.TabBarForegroundColor" Value="#F2968F" />
-                <Setter Property="Shell.TabBarUnselectedColor" Value="#33363F" />
-                <Setter Property="Shell.TabBarTitleColor" Value="#1C375C" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource TextPrimary}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource Primary}" />
             </Style>
             <Style BasedOn="{StaticResource BaseStyle}" TargetType="TabBar" />
             <Style BasedOn="{StaticResource BaseStyle}" TargetType="FlyoutItem" />
@@ -38,7 +39,7 @@
                             </VisualState>
                             <VisualState x:Name="Selected">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource BackgroundLight}" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -46,9 +47,6 @@
                 </Setter>
             </Style>
 
-            <!--
-                Custom Style you can apply to any Flyout Item
-            -->
             <Style ApplyToDerivedTypes="True"
                    Class="MenuItemLayoutStyle"
                    TargetType="Layout">
@@ -69,18 +67,20 @@
 
     <TabBar>
         <ShellContent ContentTemplate="{DataTemplate views:LoginPage}" Route="LoginPage" />
+        <ShellContent ContentTemplate="{DataTemplate erros:UnknownErrorPage}" Route="UnknownErrorPage" />
+        <ShellContent ContentTemplate="{DataTemplate erros:NoInternetErrorPage}" Route="NoInternetErrorPage" />
     </TabBar>
     <TabBar>
         <ShellContent ContentTemplate="{DataTemplate views:EditProfile}" Route="EditProfile" />
     </TabBar>
 
     <TabBar>
-        <ShellContent Title="Asosiy"
-                      ContentTemplate="{DataTemplate views:HomePage}"
+        <ShellContent x:Name="HomePage"
+                      Title="Asosiy"
                       Icon="icon_home.png"
                       Route="HomePage" />
-        <ShellContent Title="Tarix"
-                      ContentTemplate="{DataTemplate views:HistoryPage}"
+        <ShellContent x:Name="HistoryPage"
+                      Title="Tarix"
                       Icon="icon_history.png"
                       Route="HistoryPage" />
         <ShellContent Title="Profil"

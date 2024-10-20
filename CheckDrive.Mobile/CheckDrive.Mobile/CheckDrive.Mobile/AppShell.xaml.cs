@@ -1,28 +1,52 @@
-﻿using System;
+﻿using CheckDrive.Mobile.Views;
+using CheckDrive.Mobile.Views.Doctor;
+using CheckDrive.Mobile.Views.Mechanic;
+using CheckDrive.Mobile.Views.Operator;
+using System;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile
 {
     public partial class AppShell : Shell
     {
-        public AppShell()
+        public AppShell(string role)
         {
             InitializeComponent();
 
-            RegisterRoutes();
+            RegisterRoutes(role);
         }
 
-        private async void OnMenuItemClicked(object sender, EventArgs e)
+        public void RegisterRoutes(string role)
         {
-            // await Shell.Current.GoToAsync("//LoginPage");
-        }
+            // When user logs out new AppShell will be created, and user may login with different role.
+            // Previous page templates should be removed, otherwise if user logged in previously as
+            // Driver and now logs in as Doctor he will still see the pages for Driver.
+            HomePage.ContentTemplate = null;
+            HomePage.Content = null;
+            HistoryPage.ContentTemplate = null;
+            HistoryPage.Content = null;
 
-        private static void RegisterRoutes()
-        {
-            // Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-            //Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
-            //Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
-            //Routing.RegisterRoute(nameof(HistoryPage), typeof(HistoryPage));
+            switch (role.ToLower().Trim())
+            {
+                case "doctor":
+                    HomePage.ContentTemplate = new DataTemplate(typeof(DoctorHomePage));
+                    HistoryPage.ContentTemplate = new DataTemplate(typeof(DoctorHistoryPage));
+                    break;
+                case "operator":
+                    HomePage.ContentTemplate = new DataTemplate(typeof(OperatorHomePage));
+                    HistoryPage.ContentTemplate = new DataTemplate(typeof(OperatorHistoryPage));
+                    break;
+                case "mechanic":
+                    HomePage.ContentTemplate = new DataTemplate(typeof(MechanicHomePage));
+                    HistoryPage.ContentTemplate = new DataTemplate(typeof(MechanicHistoryPage));
+                    break;
+                case "driver":
+                    HomePage.ContentTemplate = new DataTemplate(typeof(HomePage));
+                    HistoryPage.ContentTemplate = new DataTemplate(typeof(HistoryPage));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(role), $"Count not load pages for {role} role.");
+            }
         }
     }
 }
