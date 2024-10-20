@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Mechanic.Popups.MechanicHandoverReviewPopup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 CloseWhenBackgroundIsClicked="False">
+    <mdc:MaterialCard BackgroundColor="White"
+                      CornerRadius="10"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center"
+                      WidthRequest="300">
+        <StackLayout Padding="20">
+            <mdc:MaterialLabel FontAttributes="Bold"
+                               FontSize="Large"
+                               HorizontalOptions="Center"
+                               Text="{Binding DriverName}" />
+
+            <mdc:MaterialPicker Margin="0,25,0,0"
+                                BackgroundColor="White"
+                                BorderColor="DarkGray"
+                                CornerRadius="10"
+                                FocusedBackgroundColor="White"
+                                FocusedBorderColor="{StaticResource Primary}"
+                                FocusedLabelTextColor="{StaticResource Primary}"
+                                FocusedTextColor="{StaticResource Primary}"
+                                HasBorder="True"
+                                ItemsSource="{Binding Cars}"
+                                LabelText="Avtomobil tanlash"
+                                LabelTextColor="DarkGray"
+                                SelectedItem="{Binding SelectedCar}"
+                                TextColor="DarkGray" />
+
+            <mdc:MaterialEntry Margin="0,15,0,0"
+                               BackgroundColor="White"
+                               BorderColor="DarkGray"
+                               CornerRadius="10"
+                               FocusedBackgroundColor="White"
+                               FocusedBorderColor="{StaticResource Primary}"
+                               FocusedLabelTextColor="{StaticResource Primary}"
+                               HasBorder="True"
+                               HorizontalOptions="FillAndExpand"
+                               Keyboard="Numeric"
+                               LabelText="Avtomobilning dastlabki kilometri"
+                               LabelTextColor="DarkGray"
+                               Text="{Binding InitialMileage}"
+                               TextColor="DarkGray"
+                               WidthRequest="145" />
+
+            <mdc:MaterialSwitch Margin="0,15,0,0"
+                                AnimateError="False"
+                                BackgroundOnSelectedColor="#00897B"
+                                BackgroundOnUnselectedColor="#bd3e3e"
+                                BorderOnSelectedColor="#00897B"
+                                BorderOnUnselectedColor="#bd3e3e"
+                                HeightRequest="40"
+                                IsToggled="{Binding IsApproved}"
+                                Text="Topshirish"
+                                TextColor="#0d1a26"
+                                ThumbSelectedColor="#fafafa"
+                                ThumbUnselectedColor="#fafafa" />
+
+            <Frame Margin="0,15,0,0"
+                   Padding="15,10"
+                   BorderColor="Gray"
+                   CornerRadius="10"
+                   HasShadow="False">
+                <StackLayout>
+                    <Editor BackgroundColor="Transparent"
+                            HeightRequest="100"
+                            Placeholder="Izoh qoldirish"
+                            Text="{Binding Notes}"
+                            TextColor="{StaticResource Primary}"
+                            Visual="Material" />
+                </StackLayout>
+            </Frame>
+
+            <Grid Margin="0,30,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <mdc:MaterialButton Grid.Column="0"
+                                    BackgroundColor="Transparent"
+                                    BorderColor="#1C375C"
+                                    ButtonType="Outlined"
+                                    Command="{Binding CancelCommand}"
+                                    CornerRadius="20"
+                                    HorizontalOptions="FillAndExpand"
+                                    Text="Yopish"
+                                    TextColor="#1C375C" />
+                <mdc:MaterialButton Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    BackgroundColor="#1C375C"
+                                    Command="{Binding ApproveCommand}"
+                                    CornerRadius="20"
+                                    HorizontalOptions="FillAndExpand"
+                                    Text="Tasdiqlash"
+                                    TextColor="White" />
+            </Grid>
+        </StackLayout>
+    </mdc:MaterialCard>
+</pages:PopupPage>

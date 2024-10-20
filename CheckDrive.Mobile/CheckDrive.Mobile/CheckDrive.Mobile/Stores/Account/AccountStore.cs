@@ -1,12 +1,7 @@
 ﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Account;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Services;
-using Newtonsoft.Json;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -21,94 +16,46 @@ namespace CheckDrive.Mobile.Stores.Account
             _client = DependencyService.Get<ApiClient>();
         }
 
-        public async Task LoginAsync(string login, string password)
+        public async Task<AccountDto> GetAccountAsync(string accountId)
         {
-            var token = await AuthenticateUserAsync(login, password);
+            var account = await _client.GetAsync<AccountDto>($"accounts/{accountId}");
 
-            await LocalStorage.SaveAsync(token, LocalStorageKey.Token);
-            await ProcessLoginAsync(token);
-        }
-
-        public Task LogoutAsync()
-        {
-            LocalStorage.RemoveAsync(LocalStorageKey.Token);
-            LocalStorage.RemoveAsync(LocalStorageKey.Account);
-
-            return Task.CompletedTask;
-        }
-
-        public async Task<AccountDto> GetAccountAsync()
-        {
-            var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
-
-            if (string.IsNullOrWhiteSpace(token))
-            {
-                return null;
-            }
-
-            var accountId = ExtractAccountIdFromToken(token);
-            var account = await FetchAccountAsync(accountId);
+            await LocalStorage.SaveAsync(account, LocalStorageKey.Account);
 
             return account;
         }
 
-        private async Task<string> AuthenticateUserAsync(string login, string password)
+        public async Task<AccountDto> UpdateAccountAsync(AccountDto account)
         {
-            var request = new { login, password };
-            var json = JsonConvert.SerializeObject(request);
+            var updatedAccount = await _client.PutAsync<AccountDto, AccountDto>($"accounts/{account.AccountId}", account);
 
-            var response = await _client.PostAsync("login/login", json);
-            response.EnsureSuccessStatusCode();
+            await LocalStorage.SaveAsync(updatedAccount, LocalStorageKey.Account);
 
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<string>(responseBody);
+            return updatedAccount;
         }
 
-        private async Task ProcessLoginAsync(string token)
+        public async Task<string> GetAccountIdAsync()
         {
-            var accountId = ExtractAccountIdFromToken(token);
-            var driver = await FetchDriverDataAsync(accountId);
+            var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
+            var accountId = JwtHelper.GetAccountId(token);
 
-            if (driver != null)
-            {
-                await LocalStorage.SaveAsync(driver, LocalStorageKey.Account);
-            }
+            return accountId;
         }
 
-        private static int ExtractAccountIdFromToken(string token)
+        public async Task<int> GetUserIdAsync()
         {
-            if (string.IsNullOrWhiteSpace(token))
-            {
-                throw new ArgumentException("Cannot extract id from empty string.");
-            }
+            var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
+            var userId = JwtHelper.GetUserId(token);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
-
-            return int.Parse(jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            return int.Parse(userId);
         }
 
-        private async Task<AccountDto> FetchAccountAsync(int accountId)
+        public async Task<string> GetUserRoleAsync()
         {
-            var response = await _client.GetAsync($"accounts/{accountId}");
-            response.EnsureSuccessStatusCode();
+            var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
+            var userRole = JwtHelper.GetUserRole(token);
 
-            var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<AccountDto>(json);
-
-            return result;
-        }
-
-        private async Task<AccountDto> FetchDriverDataAsync(int accountId)
-        {
-            var query = $"drivers?accountId={accountId}";
-            var response = await _client.GetAsync(query);
-            response.EnsureSuccessStatusCode();
-
-            var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<AccountDto>(json);
-
-            return result;
+            return userRole;
         }
     }
 }

@@ -13,21 +13,19 @@ namespace CheckDrive.Mobile.Converter
             {
                 switch (status)
                 {
-                    case ReviewStatus.InProgress:
-                        return "";
                     case ReviewStatus.Approved:
                         return "icon_success.png";
-                    case ReviewStatus.RejectedByReviewer:
                     case ReviewStatus.RejectedByDriver:
+                    case ReviewStatus.RejectedByReviewer:
                         return "icon_error.png";
                     case ReviewStatus.NotStarted:
                         return "icon_circle.png";
                     default:
-                        return "icon_circle.png";
+                        return "icon_warning.png";
                 }
             }
 
-            return "icon_circle.png";
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

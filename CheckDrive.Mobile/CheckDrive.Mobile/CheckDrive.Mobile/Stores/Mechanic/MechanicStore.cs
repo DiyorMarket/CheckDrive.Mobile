@@ -1,0 +1,49 @@
+﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Mechanic;
+using CheckDrive.Mobile.Models.Review;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace CheckDrive.Mobile.Stores.Mechanic
+{
+    public class MechanicStore : IMechanicStore
+    {
+        public async Task CreateReviewAsync(MechanicHandoverReview review)
+        {
+            if (new Random().Next(0, 100) % 2 == 0)
+            {
+                throw new Exception("Random exception");
+            }
+
+            await Task.Delay(1500);
+        }
+
+        public async Task CreateReviewAsync(MechanicAcceptanceReview review)
+        {
+            if (new Random().Next(0, 100) % 2 == 0)
+            {
+                throw new Exception("Random exception");
+            }
+
+            await Task.Delay(1500);
+        }
+
+        public async Task<List<MechanicHistoryDto>> GetHistoriesAsync()
+        {
+            var count = new Random().Next(5, 20);
+            var generator = FakeDataGenerator.GetMechanicHistory();
+            var histories = generator.Generate(count);
+
+            await Task.Delay(1000);
+
+            return histories;
+        }
+
+        public Task<List<DriverDto>> GetDriversForReviewAsync()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

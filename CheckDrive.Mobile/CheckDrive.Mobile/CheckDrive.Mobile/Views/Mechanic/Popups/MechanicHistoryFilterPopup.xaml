@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Mechanic.Popups.MechanicHistoryFilterPopup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:popups="clr-namespace:CheckDrive.Mobile.ViewModels.Mechanic.Popups"
+                 x:DataType="popups:MechanicHistoryFilterViewModel">
+    <mdc:MaterialCard Padding="25"
+                      BackgroundColor="#FFFFFF"
+                      CornerRadius="15"
+                      HasShadow="True"
+                      HorizontalOptions="Center"
+                      ShadowColor="#000000"
+                      VerticalOptions="Center"
+                      WidthRequest="320">
+        <StackLayout>
+            <!--  Header  -->
+            <mdc:MaterialLabel FontSize="Large"
+                               Style="{StaticResource Title}"
+                               Text="Tarixni saralash" />
+
+            <!--  Filter by Driver  -->
+            <mdc:MaterialLabel Margin="5,0,0,0"
+                               FontAttributes="Bold"
+                               FontSize="Medium"
+                               Text="Saralash"
+                               TextColor="#4a4a4a" />
+            <mdc:MaterialPicker ItemsSource="{Binding Drivers}"
+                                LabelText="Haydovchi bo'yicha saralash"
+                                SelectedItem="{Binding SelectedDriver}"
+                                Style="{StaticResource Picker}" />
+
+            <mdc:MaterialPicker Margin="0,20,0,0"
+                                ItemsSource="{Binding Cars}"
+                                LabelText="Haydovchi bo'yicha saralash"
+                                SelectedItem="{Binding SelectedCar}"
+                                Style="{StaticResource Picker}" />
+
+            <!--  Filter by Status  -->
+            <mdc:MaterialPicker Margin="0,20,0,0"
+                                ItemsSource="{Binding Statuses}"
+                                LabelText="Status bo'yicha saralash"
+                                LabelTextColor="#242424"
+                                SelectedItem="{Binding SelectedStatus}"
+                                Style="{StaticResource Picker}" />
+
+            <!--  Date Filters  -->
+            <Grid Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.1*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <mdc:MaterialDatePicker Grid.Column="0"
+                                        Date="{Binding StartDate}"
+                                        LabelText="Boshlanish sanasi"
+                                        MaximumDate="{Binding MaxDate}"
+                                        MinimumDate="{Binding MinDate}"
+                                        Style="{StaticResource DatePicker}" />
+                <mdc:MaterialDatePicker Grid.Column="2"
+                                        Date="{Binding EndDate}"
+                                        LabelText="Tugash sanasi"
+                                        MaximumDate="{Binding MaxDate}"
+                                        MinimumDate="{Binding MinDate}"
+                                        Style="{StaticResource DatePicker}" />
+            </Grid>
+
+            <!--  Sorting Options  -->
+            <mdc:MaterialLabel Margin="5,20,0,0"
+                               FontAttributes="Bold"
+                               FontSize="Medium"
+                               Text="Tartiblash"
+                               TextColor="#4a4a4a"
+                               VerticalTextAlignment="End" />
+            <mdc:MaterialPicker ItemsSource="{Binding SortOptions}"
+                                LabelText="Tartiblash uslubini tanlang"
+                                SelectedItem="{Binding SelectedSort}"
+                                Style="{StaticResource Picker}" />
+
+            <!--  Buttons  -->
+            <Grid Margin="0,30,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.1*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <mdc:MaterialButton Grid.Column="0"
+                                    Command="{Binding ResetCommand}"
+                                    Style="{StaticResource CancelButton}"
+                                    Text="Asl holatni tiklash" />
+                <mdc:MaterialButton Grid.Column="2"
+                                    Command="{Binding ApplyCommand}"
+                                    Style="{StaticResource AcceptButton}"
+                                    Text="Qo'llash" />
+            </Grid>
+        </StackLayout>
+    </mdc:MaterialCard>
+</pages:PopupPage>

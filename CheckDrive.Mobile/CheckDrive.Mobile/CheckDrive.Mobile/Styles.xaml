@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary x:Class="CheckDrive.Mobile.Styles"
+                    xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+    <!--  Define your styles, colors, and other resources here  -->
+
+    <!--  Colors  -->
+    <Color x:Key="Primary">#1C375C</Color>
+    <Color x:Key="PrimaryLight">#355a8b</Color>
+    <Color x:Key="Secondary">#F2F2F2</Color>
+
+    <Color x:Key="BackgroundLight">#F7F8FA</Color>
+    <Color x:Key="BackgroundDark">#E0E0E0</Color>
+
+    <Color x:Key="TextLight">#fafafa</Color>
+    <Color x:Key="TextPrimary">#333333</Color>
+    <Color x:Key="TextSecondary">#444444</Color>
+
+    <Color x:Key="Success">#00897B</Color>
+    <Color x:Key="Danger">#bd3e3e</Color>
+    <Color x:Key="Info">#0091D5</Color>
+    <Color x:Key="Warning">#FFCC00</Color>
+
+    <Color x:Key="Border">#D3D3D3</Color>
+    <Color x:Key="BorderDarkGray">#808080</Color>
+    <Color x:Key="BorderMediumDarkGray">#B0B0B0</Color>
+    <Color x:Key="BorderCharcoal">#4A4A4A</Color>
+
+    <Color x:Key="Disabled">#B0B0B0</Color>
+    <Color x:Key="Shadow">#00000029</Color>
+
+    <Color x:Key="CardBackground">#FFFFFF</Color>
+
+    <!--  Controls  -->
+
+    <Style x:Key="Search" TargetType="mdc:MaterialSearch">
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="FocusedBackgroundColor" Value="White" />
+        <Setter Property="LeadingIcon" Value="icon_search.png" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="BorderColor" Value="{StaticResource BorderDarkGray}" />
+        <Setter Property="FocusedBorderColor" Value="{StaticResource BorderCharcoal}" />
+        <Setter Property="SearchOnEveryTextChange" Value="True" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+    </Style>
+
+    <Style x:Key="ProgressIndicator" TargetType="mdc:MaterialProgressIndicator">
+        <Setter Property="TrackColor" Value="{StaticResource BorderDarkGray}" />
+        <Setter Property="IndicatorColor" Value="{StaticResource Primary}" />
+        <Setter Property="Type" Value="Circular" />
+        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+    </Style>
+
+    <Style x:Key="Title" TargetType="mdc:MaterialLabel">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+    </Style>
+
+    <Style x:Key="Switch" TargetType="mdc:MaterialSwitch">
+        <Setter Property="BackgroundOnSelectedColor" Value="{StaticResource Success}" />
+        <Setter Property="BackgroundOnUnselectedColor" Value="{StaticResource Danger}" />
+        <Setter Property="BorderOnSelectedColor" Value="{StaticResource Success}" />
+        <Setter Property="BorderOnUnselectedColor" Value="{StaticResource Danger}" />
+        <Setter Property="ThumbSelectedColor" Value="{StaticResource TextLight}" />
+        <Setter Property="ThumbUnselectedColor" Value="{StaticResource TextLight}" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="TextSide" Value="Left" />
+        <Setter Property="SwitchHorizontalOptions" Value="EndAndExpand" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        <Setter Property="HeightRequest" Value="40" />
+    </Style>
+
+    <!--  Buttons  -->
+    <Style x:Key="AcceptButton" TargetType="mdc:MaterialButton">
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryLight}" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="TextColor" Value="{StaticResource TextLight}" />
+    </Style>
+
+    <Style x:Key="CancelButton" TargetType="mdc:MaterialButton">
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="ButtonType" Value="Outlined" />
+        <Setter Property="BorderColor" Value="{StaticResource PrimaryLight}" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryLight}" />
+    </Style>
+
+    <!--  Inputs  -->
+    <Style x:Key="Editor" TargetType="mdc:MaterialEditor">
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="FocusedBackgroundColor" Value="White" />
+        <Setter Property="HasBorder" Value="True" />
+        <Setter Property="BorderColor" Value="{StaticResource BorderDarkGray}" />
+        <Setter Property="FocusedBorderColor" Value="{StaticResource BorderCharcoal}" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LabelTextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="FocusedLabelTextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="CursorColor" Value="{StaticResource BorderCharcoal}" />
+        <Setter Property="Keyboard" Value="Text" />
+        <Setter Property="HeightRequest" Value="100" />
+    </Style>
+
+    <Style x:Key="Picker" TargetType="mdc:MaterialPicker">
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="FocusedBackgroundColor" Value="White" />
+        <Setter Property="BorderColor" Value="{StaticResource BorderDarkGray}" />
+        <Setter Property="FocusedBorderColor" Value="{StaticResource BorderCharcoal}" />
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="FocusedTextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LabelTextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="FocusedLabelTextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="HasBorder" Value="True" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="CornerRadius" Value="10" />
+    </Style>
+
+    <Style x:Key="DatePicker" TargetType="mdc:MaterialDatePicker">
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="FocusedBackgroundColor" Value="White" />
+        <Setter Property="BorderColor" Value="{StaticResource BorderDarkGray}" />
+        <Setter Property="FocusedBorderColor" Value="{StaticResource BorderCharcoal}" />
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="FocusedTextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LabelTextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="FocusedLabelTextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="HasBorder" Value="True" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="CornerRadius" Value="10" />
+    </Style>
+
+</ResourceDictionary>

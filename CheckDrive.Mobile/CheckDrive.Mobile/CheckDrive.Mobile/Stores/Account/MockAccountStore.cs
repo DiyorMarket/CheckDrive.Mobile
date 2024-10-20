@@ -1,26 +1,73 @@
 ﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Account;
+using CheckDrive.Mobile.Models.Enums;
+using System;
 using System.Threading.Tasks;
 
 namespace CheckDrive.Mobile.Stores.Account
 {
     internal class MockAccountStore : IAccountStore
     {
-        public Task<AccountDto> GetAccountAsync()
-        {
-            var account = FakeDataGenerator.GetAccount();
+        private AccountDto _account;
 
-            return Task.FromResult(account);
+        public MockAccountStore()
+        {
+            _account = FakeDataGenerator.GetAccount();
         }
 
-        public Task LoginAsync(string login, string password)
+        private string login = string.Empty;
+
+        public Task<AccountDto> GetAccountAsync()
         {
-            return Task.CompletedTask;
+            return Task.FromResult(_account);
+        }
+
+        public Task<AccountDto> UpdateAccountAsync(AccountDto account)
+        {
+            _account = account;
+
+            return Task.FromResult(_account);
+        }
+
+        public Task<int> GetUserIdAsync()
+        {
+            var id = new Random().Next(100);
+            return Task.FromResult(id);
+        }
+
+        public Task<string> GetUserRoleAsync()
+        {
+            return Task.FromResult(login);
+        }
+
+        public async Task<bool> IsLoggedInAsync()
+        {
+            var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
+            this.login = token;
+
+            return !string.IsNullOrEmpty(token);
+        }
+
+        public async Task LoginAsync(string login, string password)
+        {
+            this.login = login;
+            await LocalStorage.SaveAsync(login, LocalStorageKey.Token);
         }
 
         public Task LogoutAsync()
         {
+            LocalStorage.ClearAll();
             return Task.CompletedTask;
+        }
+
+        public Task<AccountDto> GetAccountAsync(string accountId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetAccountIdAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

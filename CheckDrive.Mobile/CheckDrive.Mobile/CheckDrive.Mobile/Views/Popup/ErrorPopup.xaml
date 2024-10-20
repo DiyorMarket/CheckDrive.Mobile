@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Popup.ErrorPopup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:md="clr-namespace:Plugin.MaterialDesignControls;assembly=Plugin.MaterialDesignControls"
+                 xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+    <pages:PopupPage.Content>
+        <Frame Padding="0"
+               BackgroundColor="Transparent"
+               CornerRadius="15"
+               HasShadow="True"
+               HorizontalOptions="Center"
+               VerticalOptions="Center">
+            <mdc:MaterialCard BackgroundColor="White"
+                              CornerRadius="15"
+                              HasShadow="True"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center"
+                              WidthRequest="300">
+                <StackLayout Padding="20" Spacing="15">
+                    <Image HeightRequest="60"
+                           HorizontalOptions="Center"
+                           Source="icon_error.png"
+                           VerticalOptions="Center"
+                           WidthRequest="60" />
+
+                    <Label FontAttributes="Bold"
+                           FontSize="Large"
+                           HorizontalOptions="Center"
+                           Text="Kutilmagan xato ro'y berdi"
+                           TextColor="{StaticResource Danger}" />
+                    <Label FontAttributes="Bold"
+                           FontSize="Medium"
+                           HorizontalOptions="StartAndExpand"
+                           Text="{Binding Message}"
+                           TextColor="#8c8c8c" />
+
+                    <xct:Expander Margin="0,20" Tapped="Expander_Tapped">
+                        <xct:Expander.Header>
+                            <StackLayout Orientation="Horizontal">
+                                <Label FontAttributes="Bold"
+                                       FontSize="Small"
+                                       HorizontalTextAlignment="Start"
+                                       Text="Texnik yordam uchun"
+                                       TextColor="#8c8c8c" />
+                                <Image x:Name="ExpanderIcon"
+                                       xct:IconTintColorEffect.TintColor="#8c8c8c"
+                                       HeightRequest="25"
+                                       HorizontalOptions="EndAndExpand"
+                                       Source="icon_arrow_down.png"
+                                       WidthRequest="25" />
+                            </StackLayout>
+                        </xct:Expander.Header>
+                        <StackLayout Margin="0,10,0,0">
+                            <Label FontAttributes="Bold"
+                                   FontSize="Small"
+                                   Text="{Binding Details}"
+                                   TextColor="#5a6474" />
+                        </StackLayout>
+                    </xct:Expander>
+
+                    <mdc:MaterialButton Margin="0,25,0,0"
+                                        BackgroundColor="{StaticResource PrimaryLight}"
+                                        Clicked="Close_Clicked"
+                                        CornerRadius="25"
+                                        HeightRequest="45"
+                                        HorizontalOptions="Center"
+                                        Text="Yopish"
+                                        TextColor="White"
+                                        WidthRequest="150" />
+                </StackLayout>
+            </mdc:MaterialCard>
+        </Frame>
+    </pages:PopupPage.Content>
+</pages:PopupPage>

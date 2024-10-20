@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Renderers\MaterialEditorRenderer.cs" />
     <Compile Include="Renderers\MaterialEntryRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -126,12 +127,6 @@
     <AndroidResource Include="Resources\drawable\xamarin_logo.png" />
     <AndroidResource Include="Resources\drawable\icon_about.png" />
     <AndroidResource Include="Resources\drawable\icon_feed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CheckDrive.Mobile\CheckDrive.Mobile.csproj">
-      <Project>{F1E290DB-B0EA-4AE6-9C75-930572F977A2}</Project>
-      <Name>CheckDrive.Mobile</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\icon_history.png" />
@@ -258,6 +253,23 @@
     <AndroidResource Include="Resources\drawable\icon_filter.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon_arrow_down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\icon_arrow_up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\back_button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CheckDrive.Mobile\CheckDrive.Mobile.csproj">
+      <Project>{dba4e651-666f-463e-bc71-3a301bbcd99b}</Project>
+      <Name>CheckDrive.Mobile</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>

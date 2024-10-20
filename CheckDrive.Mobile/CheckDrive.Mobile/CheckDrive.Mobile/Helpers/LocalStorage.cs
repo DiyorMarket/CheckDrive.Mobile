@@ -1,4 +1,4 @@
-﻿using CheckDrive.Mobile.Models;
+﻿using CheckDrive.Mobile.Models.Account;
 using CheckDrive.Mobile.Models.Enums;
 using Newtonsoft.Json;
 using System;
@@ -43,24 +43,6 @@ namespace CheckDrive.Mobile.Helpers
         public static void ClearAll()
         {
             SecureStorage.RemoveAll();
-        }
-
-        public static void SaveAccount(AccountDto account)
-        {
-            try
-            {
-                var jsonDateTime = JsonConvert.SerializeObject(DateTime.Now);
-                var json = JsonConvert.SerializeObject(account);
-
-                SecureStorage.Remove(securetyKey);
-
-                SecureStorage.SetAsync(securetyKey, json);
-                SecureStorage.SetAsync(securetyKeySavedDate, jsonDateTime);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving {securetyKey}: {ex.Message}");
-            }
         }
 
         public static void SaveToken(string token)

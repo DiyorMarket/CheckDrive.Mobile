@@ -1,58 +1,39 @@
-﻿using CheckDrive.Mobile.Helpers;
+﻿using CheckDrive.Mobile.Models.Driver;
+using CheckDrive.Mobile.ViewModels.Driver.Popups;
+using CheckDrive.Mobile.Views.Driver.Popups;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Essentials;
 
 namespace CheckDrive.Mobile.Services
 {
     public class SignalRService
     {
-        public ICommand SendResponseCommand { get; set; }
-
         private HubConnection _hubConnection;
 
-        public SignalRService()
+        public async Task StartConnectionAsync(string token)
         {
-            _hubConnection = new HubConnectionBuilder()
-                .WithUrl("http://miraziz-001-site1.ctempurl.com/api/chat", options =>
+            try
+            {
+                _hubConnection = new HubConnectionBuilder()
+                    .WithUrl("url", options =>
+                    {
+                        options.AccessTokenProvider = () => Task.FromResult(token);
+                    })
+                    .Build();
+
+                _hubConnection.On<ReviewConfirmationRequest>("ReviewConfirmation", async (request) =>
                 {
-                    options.AccessTokenProvider = async () => await GetTokenAsync();
-                })
-            .Build();
+                    var key = GetKey(request);
+                    var json = JsonConvert.SerializeObject(request);
+                    await SecureStorage.SetAsync(key, json);
 
-            _hubConnection.On<int, int, string>("ReceiveMessage", async (status, reviewId, message) =>
-            {
-                LocalStorage.SaveSignalRDataFOrStatus(status);
-                LocalStorage.SaveSignalRDataForReviewID(reviewId);
-                await ShowPopupAsync(message);
-            });
-        }
+                    await HandleAsync(request);
+                });
 
-        public async Task SendResponse(bool isAccepted)
-        {
-            var signalRData = LocalStorage.GetSignalRData();
-            var status = signalRData.statusNumber;
-            int reviewId = signalRData.reviewId;
-            try
-            {
-                await Task.Delay(2000);
-                await _hubConnection.SendAsync("ReceivePrivateResponse", status, reviewId, isAccepted);
-                LocalStorage.RemoveSignalRData();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-        }
-
-        public async Task StartConnectionAsync()
-        {
-            try
-            {
                 await _hubConnection.StartAsync();
-                Console.WriteLine("Соединение установлено.");
             }
             catch (Exception ex)
             {
@@ -73,35 +54,26 @@ namespace CheckDrive.Mobile.Services
             }
         }
 
-        private async Task ShowPopupAsync(string message)
+        private static async Task HandleAsync(ReviewConfirmationRequest request)
         {
-            try
+            var completionSource = new TaskCompletionSource<bool>();
+            var popup = new ReviewConfirmationPopup()
             {
-                await SecureStorage.SetAsync("popup_message", message);
-                await SecureStorage.SetAsync("popup_visible", "true");
+                BindingContext = new ReviewConfirmationViewModel(request, completionSource)
+            };
 
+            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
 
-                Console.WriteLine("Popup ochildi.");
-            }
-            catch (Exception ex)
+            var isHandled = await completionSource.Task;
+
+            if (isHandled)
             {
-                Console.WriteLine($"Popup ochishda xatolik: {ex.Message}");
+                var key = GetKey(request);
+                SecureStorage.Remove(key);
             }
         }
 
-
-        private async Task<string> GetTokenAsync()
-        {
-            try
-            {
-                return await SecureStorage.GetAsync("tasty-cookies");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ошибка при получении токена: {ex.Message}");
-                return string.Empty;
-            }
-        }
-
+        private static string GetKey(ReviewConfirmationRequest request)
+            => $"{nameof(ReviewConfirmationRequest)}-{request.CheckPointId}";
     }
 }

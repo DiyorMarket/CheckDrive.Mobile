@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="CheckDrive.Mobile.Views.Doctor.DoctorHomePage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:doctor="clr-namespace:CheckDrive.Mobile.ViewModels.Doctor"
+             xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+             xmlns:models="clr-namespace:CheckDrive.Mobile.Models"
+             x:DataType="doctor:DoctorHomeViewModel">
+    <ContentPage.Content>
+        <Grid>
+            <StackLayout Margin="20" Spacing="15">
+                <mdc:MaterialLabel FontSize="Large"
+                                   Style="{StaticResource Title}"
+                                   Text="{Binding CurrentDate, StringFormat='{0:MMMM dd, yyyy}'}" />
+
+                <mdc:MaterialSearch Placeholder="Haydovchilarni izlash..."
+                                    SearchCommand="{Binding SearchCommand}"
+                                    Style="{StaticResource Search}" />
+
+                <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+                    <CollectionView Margin="0"
+                                    EmptyView="Tekshiruv uchun xaydovichlar topilmadi"
+                                    ItemsSource="{Binding Drivers}"
+                                    SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:DriverDto">
+                                <StackLayout Padding="0,20" BackgroundColor="White">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Margin="0"
+                                               FontSize="Medium"
+                                               Text="{Binding FullName}"
+                                               TextColor="{StaticResource Primary}"
+                                               VerticalOptions="StartAndExpand" />
+
+                                        <mdc:MaterialButton BackgroundColor="{StaticResource Primary}"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"
+                                                            CommandParameter="{Binding .}"
+                                                            HorizontalOptions="EndAndExpand"
+                                                            Text="Tekshirish" />
+                                    </StackLayout>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </RefreshView>
+            </StackLayout>
+
+            <mdc:MaterialProgressIndicator IsVisible="{Binding IsBusy}" Style="{StaticResource ProgressIndicator}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

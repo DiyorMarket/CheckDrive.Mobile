@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Popup.SuccessPopup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:md="clr-namespace:Plugin.MaterialDesignControls;assembly=Plugin.MaterialDesignControls"
+                 xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+    <pages:PopupPage.Content>
+        <Frame Padding="0"
+               BackgroundColor="Transparent"
+               CornerRadius="15"
+               HasShadow="True"
+               HorizontalOptions="Center"
+               VerticalOptions="Center">
+            <mdc:MaterialCard BackgroundColor="White"
+                              CornerRadius="15"
+                              HasShadow="True"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center"
+                              WidthRequest="300">
+                <StackLayout Padding="20" Spacing="15">
+                    <Image HeightRequest="60"
+                           HorizontalOptions="Center"
+                           Source="icon_success.png"
+                           VerticalOptions="Center"
+                           WidthRequest="60" />
+
+                    <Label FontAttributes="Bold"
+                           FontSize="Large"
+                           HorizontalOptions="Center"
+                           Text="Muvaffaqiyatli bajarildi"
+                           TextColor="{StaticResource Success}" />
+                    <Label FontAttributes="Bold"
+                           FontSize="Medium"
+                           HorizontalOptions="StartAndExpand"
+                           Text="{Binding Message}"
+                           TextColor="#8c8c8c" />
+
+                    <mdc:MaterialButton Margin="0,25,0,0"
+                                        BackgroundColor="{StaticResource PrimaryLight}"
+                                        Clicked="Close_Clicked"
+                                        CornerRadius="25"
+                                        HeightRequest="45"
+                                        HorizontalOptions="Center"
+                                        Text="Yopish"
+                                        TextColor="White"
+                                        WidthRequest="150" />
+                </StackLayout>
+            </mdc:MaterialCard>
+        </Frame>
+    </pages:PopupPage.Content>
+</pages:PopupPage>

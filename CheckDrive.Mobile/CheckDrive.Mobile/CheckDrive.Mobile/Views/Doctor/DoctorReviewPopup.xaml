@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Doctor.DoctorReviewPopup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:doctor="clr-namespace:CheckDrive.Mobile.ViewModels.Doctor"
+                 xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 x:DataType="doctor:DoctorReviewViewModel"
+                 CloseWhenBackgroundIsClicked="False">
+    <mdc:MaterialCard BackgroundColor="White"
+                      CornerRadius="10"
+                      HeightRequest="350"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center"
+                      WidthRequest="300">
+        <Grid Padding="20" RowDefinitions="Auto, Auto, *, Auto">
+            <mdc:MaterialLabel Grid.Row="0"
+                               FontSize="Large"
+                               Style="{StaticResource Title}"
+                               Text="{Binding FullName}" />
+
+            <mdc:MaterialSwitch Grid.Row="1"
+                                Margin="0,15,0,0"
+                                IsToggled="{Binding IsHealthy}"
+                                Style="{StaticResource Switch}"
+                                Text="Sog'lom" />
+
+            <!--<mdc:MaterialEditor Grid.Row="2"
+                                BackgroundColor="White"
+                                BorderColor="{StaticResource BorderDarkGray}"
+                                BorderWidth="2"
+                                CornerRadius="10"
+                                CursorColor="{StaticResource PrimaryLight}"
+                                FocusedBackgroundColor="White"
+                                FocusedBorderColor="{StaticResource BorderCharcoal}"
+                                FocusedLabelTextColor="{StaticResource TextPrimary}"
+                                HasBorder="True"
+                                HeightRequest="100"
+                                Keyboard="Text"
+                                LabelText="Izoh"
+                                Placeholder="Izoh qoldirish..."
+                                PlaceholderColor="{StaticResource TextSecondary}"
+                                TextColor="{StaticResource TextPrimary}"
+                                VerticalOptions="Fill" />-->
+            <mdc:MaterialEditor Grid.Row="2"
+                                LabelText="Izoh"
+                                Placeholder="Izoh qoldirish..."
+                                Style="{StaticResource Editor}"
+                                Text="{Binding Notes}" />
+
+            <Grid Grid.Row="3" Margin="0,30,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <mdc:MaterialButton Grid.Column="0"
+                                    Command="{Binding CancelCommand}"
+                                    HorizontalOptions="FillAndExpand"
+                                    Style="{StaticResource CancelButton}"
+                                    Text="Yopish" />
+                <mdc:MaterialButton Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    Command="{Binding ApproveCommand}"
+                                    HorizontalOptions="FillAndExpand"
+                                    Style="{StaticResource AcceptButton}"
+                                    Text="Tasdiqlash" />
+            </Grid>
+        </Grid>
+    </mdc:MaterialCard>
+</pages:PopupPage>
