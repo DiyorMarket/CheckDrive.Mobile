@@ -12,21 +12,21 @@ namespace CheckDrive.Mobile.Helpers
             var jwtToken = ValidateOrThrow(token);
 
             var expirationDate = jwtToken.ValidTo;
-            return expirationDate < DateTime.UtcNow;
+            return expirationDate > DateTime.UtcNow;
         }
 
         public static string GetAccountId(string token)
         {
             var jwtToken = ValidateOrThrow(token);
 
-            return jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            return jwtToken.Claims.First(c => c.Type == ClaimTypes.PrimarySid).Value;
         }
 
         public static string GetUserId(string token)
         {
             var jwtToken = ValidateOrThrow(token);
 
-            return jwtToken.Claims.First(c => c.Type == ClaimTypes.Sid).Value;
+            return jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
         }
 
         public static string GetUserRole(string token)
