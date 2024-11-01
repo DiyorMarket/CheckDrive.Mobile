@@ -20,7 +20,7 @@ namespace CheckDrive.Mobile.Stores.Doctor
 
         public async Task CreateAsync(DoctorReview review)
         {
-            var response = await _client.PostAsync("reviews/doctors/13", review);
+            var response = await _client.PostAsync($"reviews/doctors/{review.ReviewerId}", review);
             response.EnsureSuccessStatusCode();
         }
 

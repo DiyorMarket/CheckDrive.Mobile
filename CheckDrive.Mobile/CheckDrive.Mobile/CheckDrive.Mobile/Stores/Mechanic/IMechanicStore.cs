@@ -8,7 +8,8 @@ namespace CheckDrive.Mobile.Stores.Mechanic
 {
     public interface IMechanicStore
     {
-        Task<List<DriverDto>> GetDriversForReviewAsync();
+        Task<List<DriverDto>> GetDriversForHandoverReviewAsync();
+        Task<List<DriverDto>> GetDriversForAcceptanceReviewAsync();
         Task<List<MechanicHistoryDto>> GetHistoriesAsync();
         Task CreateReviewAsync(MechanicHandoverReview review);
         Task CreateReviewAsync(MechanicAcceptanceReview review);
