@@ -83,9 +83,8 @@ namespace CheckDrive.Mobile.Helpers
 
             var checkPoint = new CheckPointDto();
             checkPoint.StartDate = reviews[0].Date;
-            checkPoint.Car = car;
             checkPoint.Reviews = reviews;
-            checkPoint.DoctorReview = GetDoctorReview();
+            // checkPoint.DoctorReview = GetDoctorReview();
 
             if (checkPoint.Reviews.TrueForAll(x => x.Status == ReviewStatus.Approved))
             {
@@ -118,7 +117,7 @@ namespace CheckDrive.Mobile.Helpers
             history.Id = faker.Random.Number(1, 10000);
             history.Stage = checkPoint.Stage;
             history.Status = checkPoint.Status;
-            history.Date = checkPoint.StartDate;
+            history.StartDate = checkPoint.StartDate;
             history.RideDetail = rideDetail;
             history.CarDetail = checkPoint.Car;
             history.Reviews = checkPoint.Reviews;
