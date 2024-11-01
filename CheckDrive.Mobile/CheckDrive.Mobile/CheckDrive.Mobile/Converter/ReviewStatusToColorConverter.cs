@@ -21,9 +21,9 @@ namespace CheckDrive.Mobile.Converter
                     case ReviewStatus.RejectedByDriver:
                         return Color.FromHex("#bd3e3e");
                     case ReviewStatus.NotStarted:
-                        return Color.FromHex("#6b6b6b");
+                        return Color.FromHex("#1f2121");
                     default:
-                        return Color.Transparent;
+                        return Color.Black;
                 }
             }
 

@@ -21,7 +21,7 @@ namespace CheckDrive.Mobile.Converter
                     case ReviewStatus.NotStarted:
                         return "icon_circle.png";
                     default:
-                        return "icon_warning.png";
+                        return "circle_outlined.png";
                 }
             }
 
