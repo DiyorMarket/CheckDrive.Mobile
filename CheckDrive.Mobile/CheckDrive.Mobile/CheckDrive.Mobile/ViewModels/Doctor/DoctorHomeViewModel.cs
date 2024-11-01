@@ -40,11 +40,6 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
         public async Task LoadDriversAsync()
         {
-            if (IsRefreshing)
-            {
-                return;
-            }
-
             IsRefreshing = true;
 
             try
@@ -119,6 +114,10 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
             {
                 await _doctorStore.CreateAsync(review);
                 await DisplaySuccessAsync($"{driverName} uchun tekshiruv muvaffaqiyatli saqlandi.");
+
+                var driver = _drivers.Find(x => x.Id == review.DriverId);
+                _drivers.Remove(driver);
+                Drivers.Remove(driver);
             }
             catch (Exception ex)
             {

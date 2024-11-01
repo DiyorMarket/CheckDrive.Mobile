@@ -45,35 +45,42 @@ namespace CheckDrive.Mobile.ViewModels
 
         public async Task LoadProfileDataAsync()
         {
-            var accountId = await _accountService.GetAccountIdAsync();
-            var account = await _accountService.GetAccountAsync(accountId);
-
-            if (account is null)
+            try
             {
-                return;
+                var accountId = await _accountService.GetAccountIdAsync();
+                var account = await _accountService.GetAccountAsync(accountId);
+
+                if (account is null)
+                {
+                    return;
+                }
+
+                Login = account.UserName;
+                FullName = $"{account.FirstName} {account.LastName}";
+                Passport = account.Passport;
+                PhoneNumber = account.PhoneNumber;
+                Email = account.Email;
+                Address = account.Address;
+                Birthdate = account.Birthdate.ToString("dd MMMM, yyyy");
+
+                OnPropertyChanged(nameof(ProfileImage));
+
+                OnPropertyChanged(nameof(Login));
+                OnPropertyChanged(nameof(FullName));
+                OnPropertyChanged(nameof(Passport));
+                OnPropertyChanged(nameof(PhoneNumber));
+                OnPropertyChanged(nameof(Email));
+                OnPropertyChanged(nameof(Address));
+                OnPropertyChanged(nameof(Birthdate));
+
+                OnPropertyChanged(nameof(VehicleMake));
+                OnPropertyChanged(nameof(VehicleModel));
+                OnPropertyChanged(nameof(VehicleYear));
             }
-
-            Login = account.UserName;
-            FullName = $"{account.FirstName} {account.LastName}";
-            Passport = account.Passport;
-            PhoneNumber = account.PhoneNumber;
-            Email = account.Email;
-            Address = account.Address;
-            Birthdate = account.Birthdate.ToString("dd MMMM, yyyy");
-
-            OnPropertyChanged(nameof(ProfileImage));
-
-            OnPropertyChanged(nameof(Login));
-            OnPropertyChanged(nameof(FullName));
-            OnPropertyChanged(nameof(Passport));
-            OnPropertyChanged(nameof(PhoneNumber));
-            OnPropertyChanged(nameof(Email));
-            OnPropertyChanged(nameof(Address));
-            OnPropertyChanged(nameof(Birthdate));
-
-            OnPropertyChanged(nameof(VehicleMake));
-            OnPropertyChanged(nameof(VehicleModel));
-            OnPropertyChanged(nameof(VehicleYear));
+            catch (Exception ex)
+            {
+                await DisplayErrorAsync($"Profilni yuklashda xato ro'y berdi.", ex.Message);
+            }
         }
 
         private async Task OnEditProfileAsync()

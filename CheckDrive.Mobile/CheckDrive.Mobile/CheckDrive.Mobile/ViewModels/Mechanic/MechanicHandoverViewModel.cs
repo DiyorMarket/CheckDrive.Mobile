@@ -10,8 +10,8 @@ using CheckDrive.Mobile.Stores.Car;
 using CheckDrive.Mobile.ViewModels.Mechanic.Popups;
 using CheckDrive.Mobile.Models.Review;
 using CheckDrive.Mobile.Stores.CheckPoint;
-using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Views.Mechanic.Popups;
+using CheckDrive.Mobile.Models.Enums;
 
 namespace CheckDrive.Mobile.ViewModels.Mechanic
 {
@@ -45,7 +45,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
 
             SearchCommand = new Command<string>(OnSearch);
             RefreshCommand = new Command(async () => await LoadDriversAsync());
-            ShowReviewPopupCommand = new Command<CheckPointDto>(async (checkPoint) => await ShowReviewPopup(checkPoint));
+            ShowReviewPopupCommand = new Command<CheckPointDto>(async (driver) => await ShowReviewPopup(driver));
         }
 
         public async Task LoadDriversAsync()
@@ -54,20 +54,18 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
 
             try
             {
-                var checkPointsTask = _checkPointStore.GetCheckPointsAsync(CheckPointStage.DoctorReview);
-                var carsTask = _carStore.GetAvailableCarsAsync();
+                var checkPoints = await _checkPointStore.GetCheckPointsAsync(CheckPointStage.DoctorReview);
+                var cars = await _carStore.GetAvailableCarsAsync();
 
-                await Task.WhenAll(checkPointsTask, carsTask);
-
-                _allCheckPoints.AddRange(checkPointsTask.Result);
+                _allCheckPoints.AddRange(checkPoints);
                 FilteredCheckPoints.Clear();
-                foreach (var checkPoint in checkPointsTask.Result)
+                foreach (var checkPoint in checkPoints)
                 {
                     FilteredCheckPoints.Add(checkPoint);
                 }
 
                 _cars.Clear();
-                _cars.AddRange(carsTask.Result);
+                _cars.AddRange(cars);
             }
             catch (Exception ex)
             {
@@ -136,6 +134,12 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             {
                 await _mechanicStore.CreateReviewAsync(review);
                 await DisplaySuccessAsync($"{driverName}ga {review.Car} topshirish so'rovi muvaffaqiyatli yuborildi.");
+
+                var checkPointToRemove = _allCheckPoints.First(x => x.Id == review.CheckPointId);
+                _allCheckPoints.Remove(checkPointToRemove);
+
+                checkPointToRemove = FilteredCheckPoints.First(x => x.Id == review.CheckPointId);
+                FilteredCheckPoints.Remove(checkPointToRemove);
             }
             catch (Exception ex)
             {

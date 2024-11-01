@@ -119,6 +119,12 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             {
                 await _mechanicStore.CreateReviewAsync(review);
                 await DisplaySuccessAsync($"{driverName}dan {carName} qabul qilish so'rovi muvaffaqiyatli yuborildi.");
+
+                var checkPointToRemove = _allCheckPoints.First(x => x.Id == review.CheckPointId);
+                _allCheckPoints.Remove(checkPointToRemove);
+
+                checkPointToRemove = FilteredCheckPoints.First(x => x.Id == review.CheckPointId);
+                FilteredCheckPoints.Remove(checkPointToRemove);
             }
             catch (Exception ex)
             {

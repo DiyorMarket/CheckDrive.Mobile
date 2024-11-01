@@ -19,6 +19,13 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic.Popups
             set => SetProperty(ref _finalMileage, value);
         }
 
+        private decimal _remainingFuelAmount;
+        public decimal RemainingFuelAmount // Calculate on mileage change based on the car's average consumption, if exceeds then set to 0, allow users enter manually as well
+        {
+            get => _remainingFuelAmount;
+            set => SetProperty(ref _remainingFuelAmount, value);
+        }
+
         private bool _isApproved;
         public bool IsApproved
         {
@@ -56,7 +63,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic.Popups
         private async Task OnApproveAsync()
         {
             var reviewerId = await _accountStore.GetUserIdAsync();
-            var review = new MechanicAcceptanceReview(reviewerId, Notes, IsApproved, FinalMileage, _checkPointDto.Id);
+            var review = new MechanicAcceptanceReview(reviewerId, Notes, IsApproved, FinalMileage, _checkPointDto.Id, RemainingFuelAmount);
 
             _completionSource.SetResult(review);
         }
