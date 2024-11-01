@@ -9,5 +9,10 @@
         {
             DriverId = driverId;
         }
+
+        public override string GetReviewConfirmationMessage()
+        {
+            return "";
+        }
     }
 }

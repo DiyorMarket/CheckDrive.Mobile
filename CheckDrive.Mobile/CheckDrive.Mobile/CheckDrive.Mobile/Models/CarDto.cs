@@ -14,9 +14,11 @@ namespace CheckDrive.Mobile.Models
         public decimal AverageFuelConsumption { get; set; }
         public decimal FuelCapacity { get; set; }
         public decimal RemainingFuel { get; set; }
-        public decimal MonthlyDistanceLimit { get; set; }
         public decimal CurrentMonthMileage { get; set; }
         public CarStatus Status { get; set; }
+
+        public decimal MonthlyDistanceLimit => YearlyDistanceLimit * 12;
+        public decimal MileageLimitProgress => (int)(CurrentMonthMileage * 100 / MonthlyDistanceLimit);
 
         public override string ToString()
         {

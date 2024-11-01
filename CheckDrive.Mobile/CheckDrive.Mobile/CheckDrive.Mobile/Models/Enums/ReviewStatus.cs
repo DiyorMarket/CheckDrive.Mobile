@@ -2,10 +2,11 @@
 {
     public enum ReviewStatus
     {
-        InProgress,
-        Approved,
-        RejectedByReviewer,
-        RejectedByDriver,
-        NotStarted
+        Approved = 0,
+        PendingDriverApproval = 1,
+        RejectedByReviewer = 2,
+        RejectedByDriver = 3,
+        NotStarted = 4,
+        InProgress = 5,
     }
 }
