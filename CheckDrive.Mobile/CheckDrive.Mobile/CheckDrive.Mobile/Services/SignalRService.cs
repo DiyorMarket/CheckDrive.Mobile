@@ -1,11 +1,11 @@
-﻿using CheckDrive.Mobile.Models.Driver;
-using CheckDrive.Mobile.ViewModels.Driver.Popups;
-using CheckDrive.Mobile.Views.Driver.Popups;
+﻿using CheckDrive.Mobile.Helpers;
+using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.Models.Review;
 using Microsoft.AspNetCore.SignalR.Client;
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.Services
 {
@@ -13,31 +13,45 @@ namespace CheckDrive.Mobile.Services
     {
         private HubConnection _hubConnection;
 
-        public async Task StartConnectionAsync(string token)
+        public async Task StartConnectionAsync()
         {
+            var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
+
             try
             {
                 _hubConnection = new HubConnectionBuilder()
-                    .WithUrl("url", options =>
+                    .WithUrl("https://4hq2t8p1-7111.euw.devtunnels.ms/review-hub", options =>
                     {
                         options.AccessTokenProvider = () => Task.FromResult(token);
                     })
                     .Build();
 
-                _hubConnection.On<ReviewConfirmationRequest>("ReviewConfirmation", async (request) =>
+                _hubConnection.On<ReviewDto>("NotifyDoctorReview", request =>
                 {
-                    var key = GetKey(request);
-                    var json = JsonConvert.SerializeObject(request);
-                    await SecureStorage.SetAsync(key, json);
+                    MessagingCenter.Send(this, "NotifyDoctorReview", request);
+                });
 
-                    await HandleAsync(request);
+                _hubConnection.On<MechanicHandoverReview>("MechanicHandoverConfirmation", request =>
+                {
+                    MessagingCenter.Send(this, "MechanicHandoverConfirmation", request);
+                });
+
+                _hubConnection.On<OperatorReview>("OperatorReviewConfirmation", request =>
+                {
+                    MessagingCenter.Send(this, "OperatorReviewConfirmation", request);
+                });
+
+                _hubConnection.On<MechanicAcceptanceReview>("MechanicAcceptanceConfirmation", request =>
+                {
+                    MessagingCenter.Send(this, "MechanicAcceptanceConfirmation", request);
                 });
 
                 await _hubConnection.StartAsync();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                // TODO change to error popup
+                Console.WriteLine($"Error connecting to SignalR: {ex.Message}");
             }
         }
 
@@ -46,34 +60,11 @@ namespace CheckDrive.Mobile.Services
             try
             {
                 await _hubConnection.StopAsync();
-                Console.WriteLine("Соединение закрыто.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка: {ex.Message}");
+                Console.WriteLine($"Error disconnecting to SignalR: {ex.Message}");
             }
         }
-
-        private static async Task HandleAsync(ReviewConfirmationRequest request)
-        {
-            var completionSource = new TaskCompletionSource<bool>();
-            var popup = new ReviewConfirmationPopup()
-            {
-                BindingContext = new ReviewConfirmationViewModel(request, completionSource)
-            };
-
-            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
-
-            var isHandled = await completionSource.Task;
-
-            if (isHandled)
-            {
-                var key = GetKey(request);
-                SecureStorage.Remove(key);
-            }
-        }
-
-        private static string GetKey(ReviewConfirmationRequest request)
-            => $"{nameof(ReviewConfirmationRequest)}-{request.CheckPointId}";
     }
 }
