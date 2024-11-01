@@ -32,7 +32,7 @@
                                     TextColor="{StaticResource Primary}" />
 
                 <RefreshView Command="{Binding RefreshCommand}"
-                             IsRefreshing="{Binding IsRefreshing}"
+                             IsRefreshing="{Binding IsRefreshing, Mode=OneWay}"
                              RefreshColor="{StaticResource Primary}">
                     <CollectionView Margin="0"
                                     EmptyView="Tekshiruv uchun xaydovichlar topilmadi"

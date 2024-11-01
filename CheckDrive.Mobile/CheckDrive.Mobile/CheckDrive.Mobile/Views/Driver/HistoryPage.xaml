@@ -136,7 +136,7 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="4*" />
+                                                <ColumnDefinition Width="5*" />
                                             </Grid.ColumnDefinitions>
                                             <BoxView Grid.Column="1"
                                                      BackgroundColor="#F2F4F8"
@@ -158,13 +158,15 @@
                                                                 <Label.FormattedText>
                                                                     <FormattedString>
                                                                         <FormattedString.Spans>
-                                                                            <Span Text="{Binding Time}" />
+                                                                            <Span FontAttributes="Bold" Text="{Binding Time}" />
                                                                             <Span Text=" - " />
                                                                             <Span FontAttributes="Bold" Text="{Binding ReviewName}" />
                                                                             <Span Text=" " />
                                                                             <Span FontAttributes="Bold" Text="{Binding FormattedReviewerName}" />
                                                                             <Span Text="&#10;&#10;" />
-                                                                            <Span FontSize="Small" Text="{Binding Notes}" />
+                                                                            <Span FontAttributes="Italic"
+                                                                                  FontSize="Small"
+                                                                                  Text="{Binding Notes}" />
                                                                         </FormattedString.Spans>
                                                                     </FormattedString>
                                                                 </Label.FormattedText>

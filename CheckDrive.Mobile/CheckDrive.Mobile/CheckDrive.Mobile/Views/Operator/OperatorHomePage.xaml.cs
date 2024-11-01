@@ -9,6 +9,7 @@ namespace CheckDrive.Mobile.Views.Operator
     public partial class OperatorHomePage : ContentPage
     {
         private readonly OperatorHomeViewModel _viewModel;
+
         public OperatorHomePage()
         {
             InitializeComponent();
@@ -16,6 +17,12 @@ namespace CheckDrive.Mobile.Views.Operator
             _viewModel = new OperatorHomeViewModel();
 
             BindingContext = _viewModel;
+        }
+
+        protected override async void OnAppearing()
+        {
+            await _viewModel.LoadData();
+            base.OnAppearing();
         }
     }
 }

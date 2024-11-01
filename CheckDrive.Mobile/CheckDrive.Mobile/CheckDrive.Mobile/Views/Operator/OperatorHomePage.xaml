@@ -12,7 +12,7 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <RefreshView IsRefreshing="{Binding IsBusy}">
+        <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
             <StackLayout Padding="20" Spacing="15">
 
                 <Label Margin="0,10,0,20"
@@ -20,38 +20,31 @@
                        FontSize="Large"
                        HorizontalOptions="Center"
                        Text="{Binding CurrentDate, StringFormat='{0:MMMM dd, yyyy}'}"
-                       TextColor="{StaticResource Main}" />
+                       TextColor="{StaticResource Primary}" />
 
                 <mdc:MaterialSearch BackgroundColor="White"
-                                    BorderColor="{StaticResource Main}"
+                                    BorderColor="{StaticResource Primary}"
                                     FocusedBackgroundColor="White"
-                                    Placeholder="Search Drivers"
-                                    PlaceholderColor="{StaticResource Main}"
+                                    Placeholder="Haydovchilarni izlash"
+                                    PlaceholderColor="{StaticResource Primary}"
                                     SearchCommand="{Binding SearchCommand}"
-                                    Text="{Binding SearchText}"
-                                    TextColor="{StaticResource Main}" />
+                                    TextColor="{StaticResource Primary}" />
 
                 <CollectionView Margin="0"
                                 BackgroundColor="White"
-                                EmptyView="Tekshiruv uchun xaydovichlar topilmadi"
-                                ItemsSource="{Binding Drivers}"
+                                EmptyView="Tekshiruv uchun haydovichlar topilmadi"
+                                ItemsSource="{Binding FilteredCheckPoints}"
                                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Style="{StaticResource ListItemStyle}">
                                 <StackLayout Orientation="Horizontal">
                                     <Label FontSize="Medium"
-                                           Text="{Binding FirstName}"
-                                           TextColor="{StaticResource Main}"
+                                           Text="{Binding DriverName}"
+                                           TextColor="{StaticResource Primary}"
                                            VerticalOptions="Center" />
 
-                                    <Label Margin="10,0,0,0"
-                                           FontSize="Medium"
-                                           Text="{Binding LastName}"
-                                           TextColor="{StaticResource Main}"
-                                           VerticalOptions="Center" />
-
-                                    <mdc:MaterialButton BackgroundColor="{StaticResource Main}"
+                                    <mdc:MaterialButton BackgroundColor="{StaticResource Primary}"
                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"
                                                         CommandParameter="{Binding .}"
                                                         HorizontalOptions="EndAndExpand"

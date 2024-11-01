@@ -3,12 +3,50 @@
                  xmlns="http://xamarin.com/schemas/2014/forms"
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
-                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label HorizontalOptions="CenterAndExpand"
-                   Text="Welcome to Xamarin.Forms!"
-                   VerticalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+    <pages:PopupPage.Content>
+        <Frame Padding="0"
+               BackgroundColor="Transparent"
+               CornerRadius="15"
+               HasShadow="True"
+               HorizontalOptions="Center"
+               VerticalOptions="Center">
+            <mdc:MaterialCard BackgroundColor="White"
+                              CornerRadius="15"
+                              HasShadow="True"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center"
+                              WidthRequest="300">
+                <StackLayout Padding="20" Spacing="15">
+                    <Label FontAttributes="Bold"
+                           FontSize="Large"
+                           HorizontalOptions="Center"
+                           Text="Amalni tasdiqlash"
+                           TextColor="{StaticResource TextPrimary}" />
+                    <Label FontAttributes="Bold"
+                           FontSize="Medium"
+                           HorizontalOptions="StartAndExpand"
+                           Text="{Binding Message}"
+                           TextColor="#8c8c8c" />
+
+                    <Grid Margin="0,30,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="0.1*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <mdc:MaterialButton Grid.Column="0"
+                                            Command="{Binding RejectCommand}"
+                                            Style="{StaticResource RejectButton}"
+                                            Text="Rad etish" />
+                        <mdc:MaterialButton Grid.Column="2"
+                                            Command="{Binding AcceptCommand}"
+                                            Style="{StaticResource AcceptButton}"
+                                            Text="Tasdiqlash" />
+                    </Grid>
+                </StackLayout>
+            </mdc:MaterialCard>
+        </Frame>
+    </pages:PopupPage.Content>
 </pages:PopupPage>

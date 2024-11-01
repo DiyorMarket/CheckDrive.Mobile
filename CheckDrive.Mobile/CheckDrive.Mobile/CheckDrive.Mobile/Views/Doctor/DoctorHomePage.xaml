@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:doctor="clr-namespace:CheckDrive.Mobile.ViewModels.Doctor"
              xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
-             xmlns:models="clr-namespace:CheckDrive.Mobile.Models"
+             xmlns:models="clr-namespace:CheckDrive.Mobile.Models.Driver"
              x:DataType="doctor:DoctorHomeViewModel">
     <ContentPage.Content>
         <Grid>

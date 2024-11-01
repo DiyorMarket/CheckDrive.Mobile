@@ -91,7 +91,7 @@
                     <md:MaterialLabel Grid.Row="3"
                                       Margin="0,25,0,0"
                                       HorizontalTextAlignment="Center"
-                                      Text="{Binding Date}"
+                                      Text="{Binding CurrentDate}"
                                       TextColor="#878787"
                                       Type="TitleLarge"
                                       VerticalTextAlignment="Center" />
@@ -121,7 +121,7 @@
                                                FontAttributes="Bold"
                                                FontSize="Medium"
                                                HorizontalOptions="End"
-                                               Text="{Binding Time}"
+                                               Text="{Binding Date, StringFormat='{0:HH:mm}'}"
                                                VerticalOptions="Start" />
 
                                         <StackLayout Grid.Row="1"

@@ -19,7 +19,8 @@ namespace CheckDrive.Mobile.Views
 
         protected override async void OnAppearing()
         {
-            await _viewModel.LoadData();
+            await _viewModel.InitializeAsync();
+            await _viewModel.OnRefreshAsync();
             base.OnAppearing();
         }
     }
