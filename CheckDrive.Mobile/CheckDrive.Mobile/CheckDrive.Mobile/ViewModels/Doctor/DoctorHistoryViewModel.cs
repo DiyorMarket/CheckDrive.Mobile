@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using CheckDrive.Mobile.Views.Doctor;
 using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.ViewModels.Doctor.Popups;
 
 namespace CheckDrive.Mobile.ViewModels.Doctor
 {

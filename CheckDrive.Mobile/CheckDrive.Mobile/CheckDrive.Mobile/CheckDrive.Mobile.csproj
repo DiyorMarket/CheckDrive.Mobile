@@ -43,7 +43,7 @@
     <EmbeddedResource Update="Views\Dispatcher\Popups\DispatcherReviewPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Doctor\DoctorFiltersPopup.xaml">
+    <EmbeddedResource Update="Views\Doctor\Popups\DoctorFiltersPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\EditProfile.xaml">

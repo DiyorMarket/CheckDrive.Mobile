@@ -1,6 +1,7 @@
 ﻿using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Models.Review;
 using CheckDrive.Mobile.Stores.Doctor;
+using CheckDrive.Mobile.ViewModels.Doctor.Popups;
 using CheckDrive.Mobile.Views.Doctor;
 using System;
 using System.Collections.Generic;
