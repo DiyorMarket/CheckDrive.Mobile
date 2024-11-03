@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace CheckDrive.Mobile.ViewModels.Doctor
+namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
 {
     public class DoctorFiltersViewModel : BaseViewModel
     {

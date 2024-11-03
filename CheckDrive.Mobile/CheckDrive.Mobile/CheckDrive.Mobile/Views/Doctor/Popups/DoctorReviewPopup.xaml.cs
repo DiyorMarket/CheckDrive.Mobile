@@ -8,6 +8,8 @@ namespace CheckDrive.Mobile.Views.Doctor
         public DoctorReviewPopup()
         {
             InitializeComponent();
+            HasKeyboardOffset = false;
+            HasSystemPadding = false;
         }
     }
 }

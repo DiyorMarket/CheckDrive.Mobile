@@ -4,7 +4,7 @@ using CheckDrive.Mobile.Stores.Account;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace CheckDrive.Mobile.ViewModels.Doctor
+namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
 {
     public class DoctorReviewViewModel : BaseViewModel
     {
