@@ -46,6 +46,11 @@ namespace CheckDrive.Mobile.Services
                     MessagingCenter.Send(this, "MechanicAcceptanceConfirmation", request);
                 });
 
+                _hubConnection.On<ReviewDto>("NotifyDispatcherReview", request =>
+                {
+                    MessagingCenter.Send(this, "NotifyDispatcherReview", request);
+                });
+
                 await _hubConnection.StartAsync();
             }
             catch (Exception ex)

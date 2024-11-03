@@ -5,9 +5,12 @@ using CheckDrive.Mobile.Stores.Account;
 using CheckDrive.Mobile.Stores.Auth;
 using CheckDrive.Mobile.Stores.Car;
 using CheckDrive.Mobile.Stores.CheckPoint;
+using CheckDrive.Mobile.Stores.Dispatcher;
 using CheckDrive.Mobile.Stores.Doctor;
+using CheckDrive.Mobile.Stores.Driver;
 using CheckDrive.Mobile.Stores.History;
 using CheckDrive.Mobile.Stores.Mechanic;
+using CheckDrive.Mobile.Stores.Operator;
 using CheckDrive.Mobile.Stores.Review;
 using CheckDrive.Mobile.Views;
 using CheckDrive.Mobile.Views.Errors;
@@ -41,6 +44,7 @@ namespace CheckDrive.Mobile
                 {
                     var accountStore = DependencyService.Get<IAccountStore>();
                     var role = await accountStore.GetUserRoleAsync();
+
                     MainPage = new AppShell(role);
 
                     await Shell.Current.GoToAsync("//HomePage");
@@ -52,6 +56,7 @@ namespace CheckDrive.Mobile
             }
             catch (Exception ex)
             {
+                MainPage = new LoginPage();
                 Console.WriteLine($"Startup error: {ex.Message}.");
             }
         }
@@ -68,6 +73,7 @@ namespace CheckDrive.Mobile
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzQ4NzEyNUAzMjM1MmUzMDJlMzBKTkNydWx1REpPMnYrMDJ3RnhmaFNOU1JIWEw5d2Z5by9OQXhvQThrRnFjPQ==");
 
             DependencyService.Register<ApiClient>();
+            DependencyService.Register<SignalRService>();
 
             DependencyService.Register<IAuthStore, AuthStore>();
             DependencyService.Register<IAccountStore, AccountStore>();
@@ -75,8 +81,11 @@ namespace CheckDrive.Mobile
             DependencyService.Register<IHistoryStore, MockHistoryStore>();
             DependencyService.Register<IDoctorStore, DoctorStore>();
             DependencyService.Register<IMechanicStore, MechanicStore>();
-            DependencyService.Register<ICheckPointStore, MockCheckPointStore>();
-            DependencyService.Register<ICarStore, MockCarStore>();
+            DependencyService.Register<ICheckPointStore, CheckPointStore>();
+            DependencyService.Register<ICarStore, CarStore>();
+            DependencyService.Register<IDriverStore, DriverStore>();
+            DependencyService.Register<IOperatorStore, OperatorStore>();
+            DependencyService.Register<IDispatcherStore, DispatcherStore>();
 
             DependencyService.Register<INavigationService, NavigationService>();
         }

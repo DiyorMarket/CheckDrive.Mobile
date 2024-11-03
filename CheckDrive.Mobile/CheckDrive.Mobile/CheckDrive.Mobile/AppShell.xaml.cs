@@ -1,4 +1,5 @@
 ﻿using CheckDrive.Mobile.Views;
+using CheckDrive.Mobile.Views.Dispatcher;
 using CheckDrive.Mobile.Views.Doctor;
 using CheckDrive.Mobile.Views.Mechanic;
 using CheckDrive.Mobile.Views.Operator;
@@ -43,6 +44,10 @@ namespace CheckDrive.Mobile
                 case "driver":
                     HomePage.ContentTemplate = new DataTemplate(typeof(HomePage));
                     HistoryPage.ContentTemplate = new DataTemplate(typeof(HistoryPage));
+                    break;
+                case "dispatcher":
+                    HomePage.ContentTemplate = new DataTemplate(typeof(DispatcherHomePage));
+                    HistoryPage.ContentTemplate = new DataTemplate(typeof(DispatcherHistoryPage));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(role), $"Count not load pages for {role} role.");
