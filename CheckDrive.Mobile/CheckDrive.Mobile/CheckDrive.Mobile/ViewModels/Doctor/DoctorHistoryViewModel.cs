@@ -8,8 +8,6 @@ using Xamarin.Forms;
 using System.Linq;
 using System.Collections.Generic;
 using CheckDrive.Mobile.Views.Doctor;
-using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.ViewModels.Doctor.Popups;
 
 namespace CheckDrive.Mobile.ViewModels.Doctor
 {
@@ -20,9 +18,9 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
         private readonly List<DoctorHistory> _histories;
         public ObservableCollection<Grouping<DateTime, DoctorHistory>> Histories { get; set; }
 
-        public Command RefreshCommand { get; }
         public Command<string> SearchCommand { get; }
         public Command FilterCommand { get; }
+        public Command RefreshCommand { get; }
 
         private DoctorFilter _filters = null;
         public DoctorFilter Filters
@@ -45,7 +43,7 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
         public async Task LoadHistoryAsync()
         {
-            IsRefreshing = true;
+            IsBusy = true;
 
             try
             {
@@ -68,53 +66,45 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
             }
             catch (Exception ex)
             {
-                await DisplayErrorAsync("Tarixni yuklashda xato ro'y berdi. Iltimos, qayta urunib ko'ring yoki texnik yordam bilan bog'laning.", ex.Message);
+                await DisplayErrorAsync("Tarixni yuklashda xato ro'y berdi.", ex.Message);
             }
             finally
             {
-                IsRefreshing = false;
+                IsBusy = false;
             }
         }
 
         private void OnSearch(string searchText)
         {
-            List<DoctorHistory> histories = string.IsNullOrWhiteSpace(searchText)
+            searchText = searchText.ToLower().Trim();
+            var filteredHistories = string.IsNullOrWhiteSpace(searchText)
                 ? _histories
-                : _histories.Where(x => x.DriverName.ToLower().Contains(searchText.ToLower())).ToList();
+                : _histories.Where(x => x.DriverName.ToLower().Contains(searchText)).ToList();
 
-            UpdateHistories(histories);
+            UpdateHistories(filteredHistories);
         }
 
         private async Task OnFilterAsync()
         {
             var completionSource = new TaskCompletionSource<DoctorFilter>();
-            var popup = new DoctorFiltersPopup
-            {
-                BindingContext = new DoctorFiltersViewModel(_histories, completionSource, Filters)
-            };
+            var filterOptions = new DoctorFilterOptions(_histories);
+            var popup = new DoctorFiltersPopup(filterOptions, _filters, completionSource);
 
-            try
-            {
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup, true);
+            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup, true);
 
-                var result = await completionSource.Task;
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
+            var result = await completionSource.Task;
+            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
 
-                if (result != null)
-                {
-                    Filters = result;
-                    ApplyFilters(result);
-                }
-            }
-            catch (Exception ex)
+            if (result != null)
             {
-                await DisplayErrorAsync("Saralash modalni ochishda muammo ro'y berdi.", ex.Message);
+                Filters = result;
+                ApplyFilters(result);
             }
         }
 
         private void ApplyFilters(DoctorFilter filters)
         {
-            var query = _histories.AsQueryable();
+            var query = _histories.AsEnumerable();
 
             if (filters.SelectedDriverId.HasValue)
             {
@@ -123,7 +113,7 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
             if (filters.SelectedStatus.HasValue)
             {
-                query = query.Where(x => filters.SelectedStatus.Value == ReviewStatus.Approved ? x.IsApproved : !x.IsApproved);
+                query = query.Where(x => filters.SelectedStatus.Value == x.Status);
             }
 
             query = query.Where(x => x.Date.Date >= filters.StartDate.Date);
@@ -136,7 +126,6 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
         private void UpdateHistories(IEnumerable<DoctorHistory> histories)
         {
             var groupedHistory = histories
-                        .OrderByDescending(x => x.Date)
                         .GroupBy(d => d.Date.Date)
                         .Select(g => new Grouping<DateTime, DoctorHistory>(g.Key, g))
                         .ToList();
@@ -148,18 +137,18 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
             }
         }
 
-        private static IQueryable<DoctorHistory> SortHistory(IQueryable<DoctorHistory> query, string sortBy)
+        private static IEnumerable<DoctorHistory> SortHistory(IEnumerable<DoctorHistory> query, string sortBy)
         {
             switch (sortBy.ToLower().Trim())
             {
-                case "date_asc":
-                    return query.OrderBy(x => x.Date.Date);
                 case "name_asc":
                     return query.OrderBy(x => x.DriverName);
                 case "name_desc":
                     return query.OrderByDescending(x => x.DriverName);
+                case "date_asc":
+                    return query.OrderBy(x => x.Date);
                 default:
-                    return query.OrderByDescending(x => x.Date.Date);
+                    return query.OrderByDescending(x => x.Date);
             }
         }
     }

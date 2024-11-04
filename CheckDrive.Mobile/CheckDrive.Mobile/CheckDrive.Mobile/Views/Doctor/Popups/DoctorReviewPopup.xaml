@@ -25,41 +25,21 @@
                                 Style="{StaticResource Switch}"
                                 Text="Sog'lom" />
 
-            <!--<mdc:MaterialEditor Grid.Row="2"
-                                BackgroundColor="White"
-                                BorderColor="{StaticResource BorderDarkGray}"
-                                BorderWidth="2"
-                                CornerRadius="10"
-                                CursorColor="{StaticResource PrimaryLight}"
-                                FocusedBackgroundColor="White"
-                                FocusedBorderColor="{StaticResource BorderCharcoal}"
-                                FocusedLabelTextColor="{StaticResource TextPrimary}"
-                                HasBorder="True"
-                                HeightRequest="100"
-                                Keyboard="Text"
-                                LabelText="Izoh"
-                                Placeholder="Izoh qoldirish..."
-                                PlaceholderColor="{StaticResource TextSecondary}"
-                                TextColor="{StaticResource TextPrimary}"
-                                VerticalOptions="Fill" />-->
             <mdc:MaterialEditor Grid.Row="2"
                                 LabelText="Izoh"
-                                Placeholder="Izoh qoldirish..."
+                                Placeholder="Izohingizni kiriting..."
                                 Style="{StaticResource Editor}"
                                 Text="{Binding Notes}" />
 
-            <Grid Grid.Row="3" Margin="0,30,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <Grid Grid.Row="3"
+                  Margin="0,30,0,0"
+                  ColumnDefinitions="*,5,*">
                 <mdc:MaterialButton Grid.Column="0"
                                     Command="{Binding CancelCommand}"
                                     HorizontalOptions="FillAndExpand"
                                     Style="{StaticResource CancelButton}"
                                     Text="Yopish" />
-                <mdc:MaterialButton Grid.Column="1"
-                                    Margin="5,0,0,0"
+                <mdc:MaterialButton Grid.Column="2"
                                     Command="{Binding ApproveCommand}"
                                     HorizontalOptions="FillAndExpand"
                                     Style="{StaticResource AcceptButton}"

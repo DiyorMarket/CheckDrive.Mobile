@@ -1,7 +1,6 @@
 ﻿using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Models.Review;
 using CheckDrive.Mobile.Stores.Doctor;
-using CheckDrive.Mobile.ViewModels.Doctor.Popups;
 using CheckDrive.Mobile.Views.Doctor;
 using System;
 using System.Collections.Generic;
@@ -23,8 +22,7 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
         public Command RefreshCommand { get; }
         public Command<DriverDto> ShowReviewPopupCommand { get; }
 
-
-        public DateTime CurrentDate { get; }
+        public string CurrentDate { get; }
 
         public DoctorHomeViewModel()
         {
@@ -32,7 +30,7 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
             Drivers = new ObservableCollection<DriverDto>();
             _drivers = new List<DriverDto>();
-            CurrentDate = DateTime.Now;
+            CurrentDate = DateTime.Now.ToString("dd MMMM");
 
             SearchCommand = new Command<string>(OnSearch);
             RefreshCommand = new Command(async () => await LoadDriversAsync());
@@ -41,7 +39,7 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
         public async Task LoadDriversAsync()
         {
-            IsRefreshing = true;
+            IsBusy = true;
 
             try
             {
@@ -50,11 +48,7 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
                 _drivers.Clear();
                 _drivers.AddRange(drivers);
 
-                Drivers.Clear();
-                foreach (var driver in drivers)
-                {
-                    Drivers.Add(driver);
-                }
+                UpdateDrivers(drivers);
             }
             catch (Exception ex)
             {
@@ -62,43 +56,29 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
             }
             finally
             {
-                IsRefreshing = false;
+                IsBusy = false;
             }
         }
 
         private void OnSearch(string search)
         {
-            Drivers.Clear();
+            search = search.ToLower().Trim();
+            var filteredDrivers = string.IsNullOrEmpty(search)
+                ? _drivers
+                : _drivers.Where(x => x.FullName.ToLower().Contains(search));
 
-            if (string.IsNullOrWhiteSpace(search))
-            {
-                foreach (var driver in _drivers)
-                {
-                    Drivers.Add(driver);
-                }
-
-                return;
-            }
-
-            var filteredDrivers = _drivers.Where(x => x.FullName.ToLower().Contains(search.ToLower()));
-
-            foreach (var driver in filteredDrivers)
-            {
-                Drivers.Add(driver);
-            }
+            UpdateDrivers(filteredDrivers);
         }
 
         private async Task ShowReviewPopup(DriverDto driver)
         {
             var completionSource = new TaskCompletionSource<DoctorReview>();
-            var reviewPopup = new DoctorReviewPopup
-            {
-                BindingContext = new DoctorReviewViewModel(driver, completionSource)
-            };
+            var reviewPopup = new DoctorReviewPopup(driver, completionSource);
 
             await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(reviewPopup);
 
             var result = await completionSource.Task;
+
             await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
 
             if (result != null)
@@ -122,11 +102,21 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
             }
             catch (Exception ex)
             {
-                await DisplayErrorAsync($"{driverName} uchun tekshiruvni saqlashda kutilmagan xato ro'y berdi. Iltimos qayta urunib ko'ring yoki texnik yordam bilan bog'laning.", ex.Message);
+                await DisplayErrorAsync($"{driverName} uchun tekshiruvni saqlashda kutilmagan xato ro'y berdi.", ex.Message);
             }
             finally
             {
                 IsBusy = false;
+            }
+        }
+
+        private void UpdateDrivers(IEnumerable<DriverDto> drivers)
+        {
+            Drivers.Clear();
+
+            foreach (var driver in drivers)
+            {
+                Drivers.Add(driver);
             }
         }
     }

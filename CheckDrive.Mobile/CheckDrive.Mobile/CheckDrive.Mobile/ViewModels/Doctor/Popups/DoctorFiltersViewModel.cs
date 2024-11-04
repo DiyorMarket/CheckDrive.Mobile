@@ -3,7 +3,6 @@ using CheckDrive.Mobile.Models.Doctor;
 using CheckDrive.Mobile.Models.Enums;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -14,9 +13,9 @@ namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
     {
         private readonly TaskCompletionSource<DoctorFilter> _completionSource;
 
-        public ObservableCollection<PickerItem<int?>> Drivers { get; }
-        public ObservableCollection<PickerItem<ReviewStatus?>> Statuses { get; }
-        public ObservableCollection<PickerItem<string>> SortOptions { get; }
+        public List<PickerItem<int?>> Drivers { get; }
+        public List<PickerItem<ReviewStatus?>> Statuses { get; }
+        public List<PickerItem<string>> SortOptions { get; }
 
         public Command ApplyCommand { get; }
         public Command ResetCommand { get; }
@@ -70,22 +69,19 @@ namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
             set => SetProperty(ref _endDate, value);
         }
 
-        public DoctorFiltersViewModel(
-            List<DoctorHistory> histories,
-            TaskCompletionSource<DoctorFilter> completionSource,
-            DoctorFilter preSelectedFilter = null)
+        public DoctorFiltersViewModel(DoctorFilterOptions options, DoctorFilter preSelectedFilters, TaskCompletionSource<DoctorFilter> completionSource)
         {
             _completionSource = completionSource;
 
             ApplyCommand = new Command(OnApply);
             ResetCommand = new Command(OnReset);
 
-            Drivers = new ObservableCollection<PickerItem<int?>>();
-            Statuses = new ObservableCollection<PickerItem<ReviewStatus?>>();
-            SortOptions = new ObservableCollection<PickerItem<string>>();
+            Drivers = new List<PickerItem<int?>>();
+            Statuses = new List<PickerItem<ReviewStatus?>>();
+            SortOptions = new List<PickerItem<string>>();
 
-            SetupFilterValues(histories);
-            SetupPreSelectedValues(preSelectedFilter);
+            SetupFilterValues(options);
+            SetupPreSelectedValues(preSelectedFilters);
         }
 
         private void OnApply()
@@ -104,69 +100,33 @@ namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
 
         private void OnReset()
         {
-            var defaultFilters = GetDefaultFilters();
+            var defaultFilters = DoctorFilter.GetDefaultFilter(MinDate, MaxDate);
             _completionSource.SetResult(defaultFilters);
         }
 
-        private void SetupFilterValues(List<DoctorHistory> histories)
+        private void SetupFilterValues(DoctorFilterOptions options)
         {
-            var drivers = histories.Select(x => new PickerItem<int?>(x.DriverId, x.DriverName)).ToList();
-            drivers.Insert(0, new PickerItem<int?>(null, "Barcha haydovchilar"));
-
-            var statuses = new List<PickerItem<ReviewStatus?>>
-            {
-                new PickerItem<ReviewStatus?>(null, "Barchasi"),
-                new PickerItem<ReviewStatus?>(ReviewStatus.Approved, "Tasdiqlangan"),
-                new PickerItem<ReviewStatus?>(ReviewStatus.RejectedByReviewer, "Rad etilgan"),
-            };
-
-            var sortOptions = new List<PickerItem<string>>()
-            {
-                new PickerItem<string>("date_desc", "Tekshiruv sanasi (tushish)"),
-                new PickerItem<string>("date_asc", "Tekshiruv sanasi (ko'tarilish)"),
-                new PickerItem<string>("name_desc", "Haydovchilarni ismi (tushish)"),
-                new PickerItem<string>("name_asc", "Haydovchilarni ismi (ko'tarilish)"),
-            };
-
-            foreach (var driver in drivers)
-            {
-                Drivers.Add(driver);
-            }
-
-            foreach (var status in statuses)
-            {
-                Statuses.Add(status);
-            }
-
-            foreach (var sortOption in sortOptions)
-            {
-                SortOptions.Add(sortOption);
-            }
-
-            MinDate = histories.Any()
-                ? histories.Min(x => x.Date)
-                : DateTime.Today;
-            MaxDate = histories.Any()
-                ? histories.Max(x => x.Date)
-                : DateTime.Today;
+            Drivers.AddRange(options.Drivers);
+            Statuses.AddRange(DoctorFilterOptions.Statuses);
+            SortOptions.AddRange(DoctorFilterOptions.SortOptions);
+            MinDate = options.MinDate;
+            MaxDate = options.MaxDate;
         }
 
-        private void SetupPreSelectedValues(DoctorFilter preSelectedFilter = null)
+        private void SetupPreSelectedValues(DoctorFilter preSelectedFilters = null)
         {
-            if (preSelectedFilter is null)
+            if (preSelectedFilters is null)
             {
                 SetupDefaultSelectedValues();
                 return;
             }
 
-            var selectedDriver = Drivers.FirstOrDefault(x => x.Value == preSelectedFilter.SelectedDriverId);
-            SelectedDriver = selectedDriver is null
-                ? Drivers.First(x => x.Value == null)
-                : selectedDriver;
-            SelectedStatus = Statuses.First(x => x.Value == preSelectedFilter.SelectedStatus);
-            SelectedSort = SortOptions.First(x => x.Value == preSelectedFilter.SortBy);
-            StartDate = preSelectedFilter.StartDate;
-            EndDate = preSelectedFilter.EndDate;
+            var selectedDriver = Drivers.Find(x => x.Value == preSelectedFilters.SelectedDriverId);
+            SelectedDriver = selectedDriver is null ? Drivers.First(x => x.Value == null) : selectedDriver;
+            SelectedStatus = Statuses.First(x => x.Value == preSelectedFilters.SelectedStatus);
+            SelectedSort = SortOptions.First(x => x.Value == preSelectedFilters.SortBy);
+            StartDate = preSelectedFilters.StartDate;
+            EndDate = preSelectedFilters.EndDate;
         }
 
         private void SetupDefaultSelectedValues()
@@ -176,20 +136,6 @@ namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
             SelectedSort = SortOptions.First(x => x.Value == "date_desc");
             StartDate = MinDate;
             EndDate = MaxDate;
-        }
-
-        private DoctorFilter GetDefaultFilters()
-        {
-            var filter = new DoctorFilter()
-            {
-                SelectedDriverId = null,
-                SelectedStatus = null,
-                SortBy = "date_desc",
-                StartDate = StartDate,
-                EndDate = EndDate,
-            };
-
-            return filter;
         }
     }
 }

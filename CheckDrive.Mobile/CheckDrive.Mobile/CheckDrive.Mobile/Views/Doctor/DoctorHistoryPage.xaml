@@ -47,11 +47,11 @@
             </StackLayout>
 
             <RefreshView Grid.Row="1"
-                         Margin="25"
+                         Margin="25,0"
                          BackgroundColor="White"
                          Command="{Binding RefreshCommand}"
                          HorizontalOptions="FillAndExpand"
-                         IsRefreshing="{Binding IsRefreshing, Mode=OneWay}"
+                         IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                          RefreshColor="#1C375C"
                          VerticalOptions="FillAndExpand">
                 <CollectionView BackgroundColor="White"
@@ -102,31 +102,17 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <Label Grid.Row="0"
-                                               Grid.Column="0"
+                                        <Label Grid.Column="0"
                                                FontSize="Medium"
                                                HorizontalTextAlignment="Start"
                                                Text="{Binding DriverName}"
                                                TextColor="Black"
                                                VerticalTextAlignment="Center" />
-                                        <Label Grid.Row="0"
-                                               Grid.Column="1"
+                                        <Label Grid.Column="1"
                                                FontAttributes="Bold"
                                                FontSize="Medium"
                                                HorizontalTextAlignment="End"
                                                Text="{Binding Date, StringFormat='{0:HH:mm}'}"
-                                               TextColor="Black"
-                                               VerticalTextAlignment="Center" />
-                                        <Label Grid.Row="1"
-                                               Grid.ColumnSpan="2"
-                                               FontAttributes="Bold"
-                                               FontSize="Medium"
-                                               HorizontalTextAlignment="Start"
-                                               Text="{Binding Type}"
                                                TextColor="Black"
                                                VerticalTextAlignment="Center" />
                                     </Grid>
