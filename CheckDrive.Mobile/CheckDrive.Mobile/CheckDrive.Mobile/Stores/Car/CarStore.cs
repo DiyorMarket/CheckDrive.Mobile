@@ -1,4 +1,5 @@
 ﻿using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace CheckDrive.Mobile.Stores.Car
 
         public async Task<List<CarDto>> GetAvailableCarsAsync()
         {
-            var cars = await _client.GetAsync<List<CarDto>>("cars");
+            var cars = await _client.GetAsync<List<CarDto>>($"cars?Status={CarStatus.Free}");
             return cars;
         }
     }
