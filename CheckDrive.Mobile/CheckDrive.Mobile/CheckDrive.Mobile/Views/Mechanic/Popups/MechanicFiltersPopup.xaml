@@ -1,31 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Mechanic.Popups.MechanicHistoryFilterPopup"
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Mechanic.Popups.MechanicFiltersPopup"
                  xmlns="http://xamarin.com/schemas/2014/forms"
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
                  xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                  xmlns:popups="clr-namespace:CheckDrive.Mobile.ViewModels.Mechanic.Popups"
-                 x:DataType="popups:MechanicHistoryFilterViewModel">
-    <mdc:MaterialCard Padding="25"
-                      BackgroundColor="#FFFFFF"
-                      CornerRadius="15"
-                      HasShadow="True"
-                      HorizontalOptions="Center"
-                      ShadowColor="#000000"
-                      VerticalOptions="Center"
-                      WidthRequest="320">
+                 x:DataType="popups:MechanicFiltersViewModel">
+    <mdc:MaterialCard Margin="25,0"
+                      BackgroundColor="White"
+                      CornerRadius="10"
+                      VerticalOptions="Center">
         <StackLayout>
-            <!--  Header  -->
             <mdc:MaterialLabel FontSize="Large"
                                Style="{StaticResource Title}"
                                Text="Tarixni saralash" />
 
-            <!--  Filter by Driver  -->
-            <mdc:MaterialLabel Margin="5,0,0,0"
+            <mdc:MaterialLabel Margin="5,20,0,0"
                                FontAttributes="Bold"
                                FontSize="Medium"
                                Text="Saralash"
-                               TextColor="#4a4a4a" />
+                               TextColor="{StaticResource TextPrimary}" />
             <mdc:MaterialPicker ItemsSource="{Binding Drivers}"
                                 LabelText="Haydovchi bo'yicha saralash"
                                 SelectedItem="{Binding SelectedDriver}"
@@ -33,19 +27,10 @@
 
             <mdc:MaterialPicker Margin="0,20,0,0"
                                 ItemsSource="{Binding Cars}"
-                                LabelText="Haydovchi bo'yicha saralash"
+                                LabelText="Avtomobil bo'yicha saralash"
                                 SelectedItem="{Binding SelectedCar}"
                                 Style="{StaticResource Picker}" />
 
-            <!--  Filter by Status  -->
-            <mdc:MaterialPicker Margin="0,20,0,0"
-                                ItemsSource="{Binding Statuses}"
-                                LabelText="Status bo'yicha saralash"
-                                LabelTextColor="#242424"
-                                SelectedItem="{Binding SelectedStatus}"
-                                Style="{StaticResource Picker}" />
-
-            <!--  Date Filters  -->
             <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -66,7 +51,6 @@
                                         Style="{StaticResource DatePicker}" />
             </Grid>
 
-            <!--  Sorting Options  -->
             <mdc:MaterialLabel Margin="5,20,0,0"
                                FontAttributes="Bold"
                                FontSize="Medium"
@@ -78,8 +62,7 @@
                                 SelectedItem="{Binding SelectedSort}"
                                 Style="{StaticResource Picker}" />
 
-            <!--  Buttons  -->
-            <Grid Margin="0,30,0,0">
+            <Grid Margin="0,30,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="0.1*" />

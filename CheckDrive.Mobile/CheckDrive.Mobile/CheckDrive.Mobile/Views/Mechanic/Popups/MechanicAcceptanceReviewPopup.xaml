@@ -4,121 +4,66 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                  xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
                  xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:popups="clr-namespace:CheckDrive.Mobile.ViewModels.Mechanic.Popups"
+                 x:DataType="popups:MechanicAcceptanceReviewViewModel"
                  CloseWhenBackgroundIsClicked="False">
-    <mdc:MaterialCard BackgroundColor="White"
+    <mdc:MaterialCard Margin="25,0"
+                      BackgroundColor="White"
                       CornerRadius="10"
                       HorizontalOptions="Center"
-                      VerticalOptions="Center"
-                      WidthRequest="300">
-        <StackLayout Padding="20">
-            <mdc:MaterialLabel FontAttributes="Bold"
-                               FontSize="Large"
-                               HorizontalOptions="Center"
-                               Text="{Binding DriverName}" />
+                      VerticalOptions="Center">
+        <StackLayout Margin="10">
+            <StackLayout>
+                <mdc:MaterialLabel FontAttributes="Bold"
+                                   FontSize="Large"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding DriverName}" />
 
-            <mdc:MaterialLabel Margin="0,25,0,0"
-                               FontAttributes="Bold"
-                               FontSize="Large"
-                               HorizontalOptions="Center"
-                               Text="{Binding Car}" />
-
-            <StackLayout Margin="0,15,0,0"
-                         Orientation="Horizontal"
-                         Spacing="10">
-                <mdc:MaterialEntry Margin="0,15,0,0"
-                                   BackgroundColor="White"
-                                   BorderColor="DarkGray"
-                                   CornerRadius="10"
-                                   FocusedBackgroundColor="White"
-                                   FocusedBorderColor="{StaticResource Primary}"
-                                   FocusedLabelTextColor="{StaticResource Primary}"
-                                   HasBorder="True"
-                                   HorizontalOptions="FillAndExpand"
-                                   Keyboard="Numeric"
-                                   LabelText="Avtomobilning yakuniy kilometri"
-                                   LabelTextColor="DarkGray"
-                                   Text="{Binding FinalMileage}"
-                                   TextColor="DarkGray"
-                                   WidthRequest="145" />
-
-                <mdc:MaterialEntry Margin="0,15,0,0"
-                                   BackgroundColor="White"
-                                   BorderColor="DarkGray"
-                                   CornerRadius="10"
-                                   FocusedBackgroundColor="White"
-                                   FocusedBorderColor="{StaticResource Primary}"
-                                   FocusedLabelTextColor="{StaticResource Primary}"
-                                   HasBorder="True"
-                                   HorizontalOptions="FillAndExpand"
-                                   Keyboard="Numeric"
-                                   LabelText="Yoqilg'i qoldig'i"
-                                   LabelTextColor="DarkGray"
-                                   Text="{Binding RemainingFuelAmount}"
-                                   TextColor="DarkGray"
-                                   WidthRequest="145" />
+                <mdc:MaterialLabel FontSize="Medium"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Car}" />
             </StackLayout>
 
-            <!--<mdc:MaterialSwitch AnimateError="False"
-                                BackgroundOnSelectedColor="#00897B"
-                                BackgroundOnUnselectedColor="#bd3e3e"
-                                BorderOnSelectedColor="#00897B"
-                                BorderOnUnselectedColor="#bd3e3e"
-                                HeightRequest="30"
-                                IsToggled="{Binding IsApproved}"
-                                Text="Topshirish"
-                                TextSide="Right"
-                                ThumbSelectedColor="#fafafa"
-                                ThumbUnselectedColor="#fafafa" />-->
-            <mdc:MaterialSwitch Margin="0,15,0,0"
-                                AnimateError="False"
-                                BackgroundOnSelectedColor="#00897B"
-                                BackgroundOnUnselectedColor="#bd3e3e"
-                                BorderOnSelectedColor="#00897B"
-                                BorderOnUnselectedColor="#bd3e3e"
-                                HeightRequest="40"
-                                IsToggled="{Binding IsApproved}"
-                                Text="Qabul qilish"
-                                TextColor="#0d1a26"
-                                ThumbSelectedColor="#fafafa"
-                                ThumbUnselectedColor="#fafafa" />
+            <StackLayout Margin="0,15,0,0">
+                <mdc:MaterialLabel FontSize="Small"
+                                   HorizontalTextAlignment="Start"
+                                   Text="{Binding FinalMileageErrorMessage}"
+                                   TextColor="{StaticResource Danger}" />
 
-            <Frame Margin="0,15,0,0"
-                   Padding="15,10"
-                   BorderColor="Gray"
-                   CornerRadius="10"
-                   HasShadow="False">
-                <StackLayout>
-                    <Editor BackgroundColor="Transparent"
-                            HeightRequest="100"
-                            Placeholder="Izoh qoldirish"
-                            Text="{Binding Notes}"
-                            TextColor="{StaticResource Primary}"
-                            Visual="Material" />
-                </StackLayout>
-            </Frame>
+                <mdc:MaterialEntry HorizontalOptions="FillAndExpand"
+                                   LabelText="Avtomobilning yakuniy kilometri"
+                                   Style="{StaticResource NumericInput}"
+                                   Text="{Binding FinalMileage}" />
+            </StackLayout>
 
-            <Grid Margin="0,30,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <mdc:MaterialSwitch Margin="0,10,0,0"
+                                IsToggled="{Binding IsCarInGoodCondition}"
+                                Style="{StaticResource Switch}"
+                                Text="{Binding SwitchText}" />
+
+            <StackLayout>
+                <mdc:MaterialLabel FontSize="Small"
+                                   HorizontalTextAlignment="Start"
+                                   Text="{Binding NotesErrorMessage}"
+                                   TextColor="{StaticResource Danger}" />
+
+                <mdc:MaterialEditor LabelText="Izoh"
+                                    Placeholder="Izohingizni kiriting..."
+                                    Style="{StaticResource Editor}"
+                                    Text="{Binding Notes}" />
+            </StackLayout>
+
+            <Grid Margin="0,25,0,0" ColumnDefinitions="*,5,*">
                 <mdc:MaterialButton Grid.Column="0"
-                                    BackgroundColor="Transparent"
-                                    BorderColor="#1C375C"
-                                    ButtonType="Outlined"
                                     Command="{Binding CancelCommand}"
-                                    CornerRadius="20"
                                     HorizontalOptions="FillAndExpand"
-                                    Text="Yopish"
-                                    TextColor="#1C375C" />
-                <mdc:MaterialButton Grid.Column="1"
-                                    Margin="5,0,0,0"
-                                    BackgroundColor="#1C375C"
+                                    Style="{StaticResource CancelButton}"
+                                    Text="Yopish" />
+                <mdc:MaterialButton Grid.Column="2"
                                     Command="{Binding ApproveCommand}"
-                                    CornerRadius="20"
                                     HorizontalOptions="FillAndExpand"
-                                    Text="Tasdiqlash"
-                                    TextColor="White" />
+                                    Style="{StaticResource AcceptButton}"
+                                    Text="Tasdiqlash" />
             </Grid>
         </StackLayout>
     </mdc:MaterialCard>
