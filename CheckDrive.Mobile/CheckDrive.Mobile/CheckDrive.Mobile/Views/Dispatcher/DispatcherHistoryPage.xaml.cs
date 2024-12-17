@@ -18,5 +18,11 @@ namespace CheckDrive.Mobile.Views.Dispatcher
 
             BindingContext = _viewModel;
         }
+
+        protected override async void OnAppearing()
+        {
+            await _viewModel.LoadHistoryAsync();
+            base.OnAppearing();
+        }
     }
 }
