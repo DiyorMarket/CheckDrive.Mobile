@@ -1,10 +1,10 @@
 ﻿using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Models.Mechanic;
-using CheckDrive.Mobile.Models.Review;
+using CheckDrive.Mobile.Models.Mechanic.Acceptance;
+using CheckDrive.Mobile.Models.Mechanic.Handover;
 using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Stores.Account;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -22,16 +22,15 @@ namespace CheckDrive.Mobile.Stores.Mechanic
             _accountStore = DependencyService.Get<IAccountStore>();
         }
 
-        public async Task CreateReviewAsync(MechanicHandoverReview review)
+        public async Task CreateReviewAsync(MechanicHandoverRequest request)
         {
-            var userId = await _accountStore.GetUserIdAsync();
-            var response = await _client.PostAsync<MechanicHandoverReview>($"reviews/mechanics/{userId}/handover", review);
+            var response = await _client.PostAsync($"reviews/mechanics/{request.MechanicId}/handover", request);
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task CreateReviewAsync(MechanicAcceptanceReview review)
+        public async Task CreateReviewAsync(MechanicAcceptanceRequest request)
         {
-            var response = await _client.PostAsync($"reviews/mechanics/{review.ReviewerId}/acceptance", review);
+            var response = await _client.PostAsync($"reviews/mechanics/{request.MechanicId}/acceptance", request);
             response.EnsureSuccessStatusCode();
         }
 
@@ -49,9 +48,12 @@ namespace CheckDrive.Mobile.Stores.Mechanic
             return drivers;
         }
 
-        public Task<List<MechanicHistoryDto>> GetHistoriesAsync()
+        public async Task<List<MechanicHistoryDto>> GetHistoriesAsync()
         {
-            throw new NotImplementedException();
+            var mechanicId = await _accountStore.GetUserIdAsync();
+            var histories = await _client.GetAsync<List<MechanicHistoryDto>>($"reviews/histories/mechanics/{mechanicId}");
+
+            return histories;
         }
     }
 }

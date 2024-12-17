@@ -1,7 +1,8 @@
 ﻿using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Models.Mechanic;
-using CheckDrive.Mobile.Models.Review;
+using CheckDrive.Mobile.Models.Mechanic.Acceptance;
+using CheckDrive.Mobile.Models.Mechanic.Handover;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -47,6 +48,16 @@ namespace CheckDrive.Mobile.Stores.Mechanic
         }
 
         public Task<List<DriverDto>> GetDriversForAcceptanceReviewAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateReviewAsync(MechanicHandoverRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateReviewAsync(MechanicAcceptanceRequest request)
         {
             throw new NotImplementedException();
         }
