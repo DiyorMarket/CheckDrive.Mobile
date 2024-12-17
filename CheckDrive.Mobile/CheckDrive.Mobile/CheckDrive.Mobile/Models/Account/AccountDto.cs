@@ -17,5 +17,6 @@ namespace CheckDrive.Mobile.Models.Account
         public string Address { get; set; }
         public DateTime Birthdate { get; set; }
         public EmployeePosition Position { get; set; }
+        public CarDto AssignedCar { get; set; }
     }
 }

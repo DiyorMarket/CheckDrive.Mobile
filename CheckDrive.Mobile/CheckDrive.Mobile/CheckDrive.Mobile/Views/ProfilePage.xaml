@@ -1,17 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage x:Class="CheckDrive.Mobile.Views.ProfilePage"
              xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <ContentPage.Content>
-        <ScrollView>
-            <StackLayout Padding="20" Spacing="15">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+             xmlns:viewmodels="clr-namespace:CheckDrive.Mobile.ViewModels"
+             x:DataType="viewmodels:ProfileViewModel">
+    <Grid Padding="20" RowDefinitions="*, Auto">
+        <ScrollView Grid.Row="0">
+            <StackLayout Spacing="15">
                 <!--  Profile Header  -->
                 <StackLayout HorizontalOptions="CenterAndExpand" Spacing="5">
-                    <Image Aspect="AspectFill"
-                           BackgroundColor="LightGray"
+                    <Frame Padding="10"
+                           CornerRadius="100"
                            HeightRequest="100"
-                           Source="profile_image.png"
-                           WidthRequest="100" />
+                           HorizontalOptions="Center"
+                           IsClippedToBounds="True"
+                           WidthRequest="100">
+                        <Image Aspect="AspectFill" Source="profile_image.png" />
+                    </Frame>
                     <Label FontAttributes="Bold"
                            FontSize="Large"
                            HorizontalTextAlignment="Center"
@@ -22,6 +28,33 @@
                            TextColor="Gray" />
                 </StackLayout>
 
+                <!--  Personal Information  -->
+                <Frame Padding="10"
+                       BorderColor="LightGray"
+                       CornerRadius="10">
+                    <StackLayout Spacing="15">
+                        <Label FontAttributes="Bold"
+                               FontSize="Medium"
+                               Text="Shaxsiy ma'lumotlar" />
+                        <Grid ColumnDefinitions="*,2*"
+                              RowDefinitions="Auto,Auto"
+                              RowSpacing="5">
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="Tug'ilgan sana:" />
+                            <Label Grid.Row="0"
+                                   Grid.Column="1"
+                                   Text="{Binding Birthdate}" />
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Text="Pasport:" />
+                            <Label Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding Passport}" />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+
                 <!--  Contact Information  -->
                 <Frame Padding="10"
                        BorderColor="LightGray"
@@ -29,31 +62,28 @@
                     <StackLayout Spacing="10">
                         <Label FontAttributes="Bold"
                                FontSize="Medium"
-                               Text="Kontakt ma'lumotlari" />
-                        <Grid ColumnDefinitions="*,2*" RowSpacing="5">
-                            <Label Grid.Column="0" Text="Telefon:" />
-                            <Label Grid.Column="1" Text="{Binding PhoneNumber}" />
-                            <Label Grid.Column="0" Text="Email:" />
-                            <Label Grid.Column="1" Text="{Binding Email}" />
-                            <Label Grid.Column="0" Text="Manzil:" />
-                            <Label Grid.Column="1" Text="{Binding Address}" />
-                        </Grid>
-                    </StackLayout>
-                </Frame>
-
-                <!--  Personal Information  -->
-                <Frame Padding="10"
-                       BorderColor="LightGray"
-                       CornerRadius="10">
-                    <StackLayout Spacing="10">
-                        <Label FontAttributes="Bold"
-                               FontSize="Medium"
-                               Text="Shaxsiy ma'lumotlari" />
-                        <Grid ColumnDefinitions="*,2*" RowSpacing="5">
-                            <Label Grid.Column="0" Text="Tug'ilgan sana:" />
-                            <Label Grid.Column="1" Text="{Binding Birthdate, StringFormat='{}{0:dd MMMM yyyy}'}" />
-                            <Label Grid.Column="0" Text="Pasport:" />
-                            <Label Grid.Column="1" Text="{Binding Passport}" />
+                               Text="Kontakt ma'lumotlar" />
+                        <Grid ColumnDefinitions="*,2*"
+                              RowDefinitions="Auto,Auto,Auto"
+                              RowSpacing="5">
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="Telefon:" />
+                            <Label Grid.Row="0"
+                                   Grid.Column="1"
+                                   Text="{Binding PhoneNumber}" />
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Text="Email:" />
+                            <Label Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding Email}" />
+                            <Label Grid.Row="2"
+                                   Grid.Column="0"
+                                   Text="Manzil:" />
+                            <Label Grid.Row="2"
+                                   Grid.Column="1"
+                                   Text="{Binding Address}" />
                         </Grid>
                     </StackLayout>
                 </Frame>
@@ -65,14 +95,42 @@
                     <StackLayout Spacing="10">
                         <Label FontAttributes="Bold"
                                FontSize="Medium"
-                               Text="Hisob ma'lumotlari" />
-                        <Grid ColumnDefinitions="*,2*" RowSpacing="5">
-                            <Label Grid.Column="0" Text="Login:" />
-                            <Label Grid.Column="1" Text="{Binding UserName}" />
+                               Text="Hisob ma'lumotlar" />
+                        <Grid ColumnDefinitions="*,2*"
+                              RowDefinitions="Auto"
+                              RowSpacing="5">
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="Login:" />
+                            <Label Grid.Row="0"
+                                   Grid.Column="1"
+                                   Text="{Binding UserName}" />
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Text="Avtomobil:" />
+                            <Label Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding AssignedCar}" />
                         </Grid>
                     </StackLayout>
                 </Frame>
+
             </StackLayout>
         </ScrollView>
-    </ContentPage.Content>
+
+        <mdc:MaterialButton Grid.Row="1"
+                            BackgroundColor="{StaticResource Danger}"
+                            Command="{Binding LogoutCommand}"
+                            CornerRadius="5"
+                            FontSize="20"
+                            HeightRequest="50"
+                            Text="Tizimdan chiqish"
+                            TextColor="White"
+                            TrailingIcon="exit.png" />
+
+        <mdc:MaterialProgressIndicator HorizontalOptions="Center"
+                                       IndicatorColor="{StaticResource Primary}"
+                                       IsVisible="{Binding IsBusy}"
+                                       VerticalOptions="Center" />
+    </Grid>
 </ContentPage>

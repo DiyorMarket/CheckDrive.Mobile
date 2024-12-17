@@ -4,7 +4,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
                     xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
-    <!--  Define your styles, colors, and other resources here  -->
 
     <!--  Colors  -->
     <Color x:Key="Primary">#1C375C</Color>
