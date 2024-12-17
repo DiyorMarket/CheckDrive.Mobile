@@ -1,18 +1,46 @@
-﻿using CheckDrive.Mobile.Models.Review;
-using CheckDrive.Mobile.Models;
+﻿using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Stores.Account;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using CheckDrive.Mobile.Models.Dispatcher;
+using Rg.Plugins.Popup.Services;
 
 namespace CheckDrive.Mobile.ViewModels.Dispatcher.Popups
 {
     public class DispatcherReviewViewModel : BaseViewModel
     {
-        private readonly TaskCompletionSource<DispatcherReview> _completionSource;
+        private readonly TaskCompletionSource<DispatcherReviewRequest> _completionSource;
         private readonly IAccountStore _accountStore;
         private readonly CheckPointDto _checkPoint;
+        private readonly CarDto _car;
+        private readonly int _minFinalMileage;
 
-        public string DriverName { get; }
+        private int _finalMileage;
+        public int FinalMileage
+        {
+            get => _finalMileage;
+            set
+            {
+                SetProperty(ref _finalMileage, value);
+
+                ValidateFinalMileage();
+                UpdateFuelConsumptionAmount();
+            }
+        }
+
+        private decimal _fuelConsumptionAmount;
+        public decimal FuelConsumptionAmount
+        {
+            get => _fuelConsumptionAmount;
+            set => SetProperty(ref _fuelConsumptionAmount, value);
+        }
+
+        private decimal _remainingFuelAmount;
+        public decimal RemainingFuelAmount
+        {
+            get => _remainingFuelAmount;
+            set => SetProperty(ref _remainingFuelAmount, value);
+        }
 
         private string _notes;
         public string Notes
@@ -21,63 +49,90 @@ namespace CheckDrive.Mobile.ViewModels.Dispatcher.Popups
             set => SetProperty(ref _notes, value);
         }
 
-        public decimal FuelConsumptionAdjustment { get; set; }
-        public int FinalMileageAdjustment { get; set; }
+        private string _finalMileageErrorMessage;
+        public string FinalMileageErrorMessage
+        {
+            get => _finalMileageErrorMessage;
+            set => SetProperty(ref _finalMileageErrorMessage, value);
+        }
+
+        public string DriverName { get; }
+        public string Car { get; }
+        public int InitialMileageByMechanic { get; }
+        public int FinalMileageByMechanic { get; }
 
         public Command ApproveCommand { get; }
-        public Command RejectCommand { get; }
+        public Command CancelCommand { get; }
 
-        public DispatcherReviewViewModel(CheckPointDto checkPoint, TaskCompletionSource<DispatcherReview> completionSource)
+        public DispatcherReviewViewModel(CheckPointDto checkPoint, TaskCompletionSource<DispatcherReviewRequest> completionSource)
         {
             _completionSource = completionSource;
             _accountStore = DependencyService.Get<IAccountStore>();
             _checkPoint = checkPoint;
+            _car = checkPoint.Car;
+            _minFinalMileage = checkPoint.MechanicHandover.InitialMileage;
 
             DriverName = checkPoint.DriverName;
-            FuelConsumptionAdjustment = checkPoint.MechanicAcceptance.RemainingFuelAmount;
-            FinalMileageAdjustment = checkPoint.MechanicAcceptance.FinalMileage;
+            Car = checkPoint.Car.ToString();
+            InitialMileageByMechanic = checkPoint.MechanicHandover.InitialMileage;
+            FinalMileageByMechanic = checkPoint.MechanicAcceptance.FinalMileage;
+            FinalMileage = checkPoint.MechanicAcceptance.FinalMileage;
 
-            ApproveCommand = new Command(async () => await OnApprove());
-            RejectCommand = new Command(async () => await OnReject());
+            ApproveCommand = new Command(async () => await OnApproveAsync(), CanApprove);
+            CancelCommand = new Command(async () => await OnRejectAsync());
         }
 
-        private async Task OnApprove()
+        private async Task OnApproveAsync()
         {
-            var reviewerId = await _accountStore.GetUserIdAsync();
+            var dispatcherId = await _accountStore.GetUserIdAsync();
+            var result = new DispatcherReviewRequest(
+                checkPointId: _checkPoint.Id,
+                dispatcherId: dispatcherId,
+                notes: Notes,
+                finalMileage: FinalMileage,
+                fuelConsumptionAmount: FuelConsumptionAmount,
+                remainingFuelAmount: RemainingFuelAmount);
 
-            var review = new DispatcherReview(
-                _checkPoint.Id,
-                reviewerId,
-                Notes,
-                true,
-                null,
-                null);
+            await PopupNavigation.Instance.PopAsync();
 
-            if (FuelConsumptionAdjustment != _checkPoint.MechanicAcceptance.RemainingFuelAmount)
-            {
-                review.FuelConsumptionAdjustment = FuelConsumptionAdjustment;
-            }
-
-            if (FinalMileageAdjustment != _checkPoint.MechanicAcceptance.FinalMileage)
-            {
-                review.DistanceTravelledAdjustment = FinalMileageAdjustment;
-            }
-
-            _completionSource.SetResult(review);
+            _completionSource.SetResult(result);
         }
 
-        private async Task OnReject()
+        private async Task OnRejectAsync()
         {
-            var reviewerId = await _accountStore.GetUserIdAsync();
-            var review = new DispatcherReview(
-                _checkPoint.Id,
-                reviewerId,
-                Notes,
-                false,
-                null,
-                null);
+            await PopupNavigation.Instance.PopAsync();
 
-            _completionSource.SetResult(review);
+            _completionSource.SetResult(null);
+        }
+
+        private bool CanApprove() => IsFinalMileageValid();
+
+        private void ValidateFinalMileage()
+        {
+            if (!IsFinalMileageValid())
+            {
+                FinalMileageErrorMessage = $"Masofa ({_minFinalMileage} km)dan ko'p bo'lishi kerak";
+            }
+            else
+            {
+                FinalMileageErrorMessage = string.Empty;
+            }
+        }
+
+        private bool IsFinalMileageValid() => _finalMileage >= _minFinalMileage;
+
+        private void UpdateFuelConsumptionAmount()
+        {
+            var distance = FinalMileage - _checkPoint.MechanicHandover.InitialMileage;
+
+            if (distance > 0)
+            {
+                FuelConsumptionAmount = (_car.AverageFuelConsumption * distance) / 100;
+            }
+            else
+            {
+                FuelConsumptionAmount = 0;
+            }
         }
     }
 }

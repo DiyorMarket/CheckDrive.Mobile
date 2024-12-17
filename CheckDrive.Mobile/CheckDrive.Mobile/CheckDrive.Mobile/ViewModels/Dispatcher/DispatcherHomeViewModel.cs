@@ -1,10 +1,10 @@
 ﻿using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Dispatcher;
 using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.Models.Review;
 using CheckDrive.Mobile.Stores.CheckPoint;
 using CheckDrive.Mobile.Stores.Dispatcher;
-using CheckDrive.Mobile.ViewModels.Dispatcher.Popups;
 using CheckDrive.Mobile.Views.Dispatcher.Popups;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,14 +26,14 @@ namespace CheckDrive.Mobile.ViewModels.Dispatcher
         public Command<string> SearchCommand { get; }
         public Command RefreshCommand { get; }
 
-        public DateTime CurrentDate { get; }
+        public string CurrentDate { get; }
 
         public DispatcherHomeViewModel()
         {
             _checkPointStore = DependencyService.Get<ICheckPointStore>();
             _dispatcherStore = DependencyService.Get<IDispatcherStore>();
 
-            CurrentDate = DateTime.Now;
+            CurrentDate = DateTime.Now.ToString("dd MMMM");
 
             _allCheckPoints = new List<CheckPointDto>();
             FilteredCheckPoints = new ObservableCollection<CheckPointDto>();
@@ -100,22 +100,21 @@ namespace CheckDrive.Mobile.ViewModels.Dispatcher
 
         private async Task OnShowReviewAsync(CheckPointDto checkPoint)
         {
+            if (PopupNavigation.Instance.PopupStack.Count > 0)
+            {
+                return;
+            }
+
             try
             {
-                var completionSource = new TaskCompletionSource<DispatcherReview>();
-                var reviewPopup = new DispatcherReviewPopup
-                {
-                    BindingContext = new DispatcherReviewViewModel(checkPoint, completionSource)
-                };
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(reviewPopup);
+                var completionSource = new TaskCompletionSource<DispatcherReviewRequest>();
+                var reviewPopup = new DispatcherReviewPopup(checkPoint, completionSource);
+
+                await PopupNavigation.Instance.PushAsync(reviewPopup);
 
                 var result = await completionSource.Task;
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
 
-                if (result != null)
-                {
-                    await SendReviewAsync(result);
-                }
+                await SendReviewAsync(result);
             }
             catch (Exception ex)
             {
@@ -123,17 +122,28 @@ namespace CheckDrive.Mobile.ViewModels.Dispatcher
             }
         }
 
-        private async Task SendReviewAsync(DispatcherReview review)
+        private async Task SendReviewAsync(DispatcherReviewRequest request)
         {
+            if (request is null)
+            {
+                return;
+            }
+
             IsBusy = true;
 
             try
             {
-                await _dispatcherStore.CreateReveiwAsync(review);
+                await _dispatcherStore.CreateReveiwAsync(request);
+
+                await DisplayReviewSuccessAsync();
+
+                var checkPointToRemove = _allCheckPoints.Find(x => x.Id == request.CheckPointId);
+                _allCheckPoints.Remove(checkPointToRemove);
+                FilteredCheckPoints.Remove(checkPointToRemove);
             }
             catch (Exception ex)
             {
-                await DisplayErrorAsync("Tekshiruvni saqlashda xato ro'y berdi.", ex.Message);
+                await DisplayReviewErrorAsync(ex.Message);
             }
             finally
             {
