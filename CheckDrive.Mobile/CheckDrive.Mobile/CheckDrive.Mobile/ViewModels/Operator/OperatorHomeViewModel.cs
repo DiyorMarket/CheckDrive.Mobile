@@ -1,15 +1,16 @@
-﻿using CheckDrive.Mobile.Models;
-using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.Models.Review;
-using CheckDrive.Mobile.Stores.CheckPoint;
-using CheckDrive.Mobile.Stores.Operator;
-using CheckDrive.Mobile.Views.Operator;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using CheckDrive.Mobile.Models;
+using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.Models.Operator;
+using CheckDrive.Mobile.Stores.CheckPoint;
+using CheckDrive.Mobile.Stores.Operator;
+using CheckDrive.Mobile.Views.Operator;
+using Rg.Plugins.Popup.Services;
 
 namespace CheckDrive.Mobile.ViewModels.Operator
 {
@@ -26,7 +27,7 @@ namespace CheckDrive.Mobile.ViewModels.Operator
         public Command<string> SearchCommand { get; }
         public Command RefreshCommand { get; }
 
-        public DateTime CurrentDate { get; }
+        public string CurrentDate { get; }
 
         public OperatorHomeViewModel()
         {
@@ -37,14 +38,14 @@ namespace CheckDrive.Mobile.ViewModels.Operator
             FilteredCheckPoints = new ObservableCollection<CheckPointDto>();
             OilMarks = new List<OilMark>();
 
-            CurrentDate = DateTime.Now;
+            CurrentDate = DateTime.Now.ToString("dd MMMM");
 
-            ShowReviewPopupCommand = new Command<CheckPointDto>(async (checkPoint) => await ShowReviewPopup(checkPoint));
+            ShowReviewPopupCommand = new Command<CheckPointDto>(async (checkPoint) => await OnShowReviewPopupAsync(checkPoint));
             SearchCommand = new Command<string>(OnSearch);
-            RefreshCommand = new Command(async () => await LoadData());
+            RefreshCommand = new Command(async () => await LoadDataAsync());
         }
 
-        public async Task LoadData()
+        public async Task LoadDataAsync()
         {
             IsBusy = true;
 
@@ -56,13 +57,10 @@ namespace CheckDrive.Mobile.ViewModels.Operator
                 _allCheckPoints.Clear();
                 _allCheckPoints.AddRange(checkPoints);
 
-                foreach (var checkPoint in checkPoints)
-                {
-                    FilteredCheckPoints.Add(checkPoint);
-                }
-
                 OilMarks.Clear();
                 OilMarks.AddRange(oilMarks);
+
+                UpdateCheckPoints(checkPoints);
             }
             catch (Exception ex)
             {
@@ -74,30 +72,24 @@ namespace CheckDrive.Mobile.ViewModels.Operator
             }
         }
 
-        private async Task ShowReviewPopup(CheckPointDto checkPoint)
+        private async Task OnShowReviewPopupAsync(CheckPointDto checkPoint)
         {
             if (!OilMarks.Any())
             {
-                await DisplayErrorAsync("Yoqilg'i markalari topilmadi.", "");
+                await DisplayErrorAsync("Yoqilg'i markalari topilmadi.", "Cannot perform operator review without oil marks.");
                 return;
             }
 
             try
             {
-                var completionSource = new TaskCompletionSource<OperatorReview>();
-                var reviewPopup = new OperatorReviewPopup
-                {
-                    BindingContext = new OperatorReviewViewModel(checkPoint, OilMarks, completionSource)
-                };
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(reviewPopup);
+                var completionSource = new TaskCompletionSource<OperatorReviewRequest>();
+                var reviewPopup = new OperatorReviewPopup(checkPoint, OilMarks, completionSource);
+
+                await PopupNavigation.Instance.PushAsync(reviewPopup);
 
                 var result = await completionSource.Task;
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
 
-                if (result != null)
-                {
-                    await SendReviewAsync(result);
-                }
+                await SendReviewAsync(result);
             }
             catch (Exception ex)
             {
@@ -108,44 +100,31 @@ namespace CheckDrive.Mobile.ViewModels.Operator
         private void OnSearch(string searchText)
         {
             searchText = searchText.Trim().ToLower();
+            var filteredCheckPoints = string.IsNullOrEmpty(searchText)
+                ? _allCheckPoints
+                : _allCheckPoints.Where(x => x.DriverName.ToLower().Contains(searchText));
 
-            FilteredCheckPoints.Clear();
-            if (string.IsNullOrEmpty(searchText))
-            {
-                foreach (var checkPoint in _allCheckPoints)
-                {
-                    FilteredCheckPoints.Add(checkPoint);
-                }
-            }
-
-            var filteredCheckPoints = _allCheckPoints
-                .Where(x => x.DriverName.ToLower().Contains(searchText))
-                .OrderBy(x => x.DriverName);
-
-            foreach (var checkPoint in filteredCheckPoints)
-            {
-                FilteredCheckPoints.Add(checkPoint);
-            }
+            UpdateCheckPoints(filteredCheckPoints);
         }
 
-        private async Task SendReviewAsync(OperatorReview review)
+        private async Task SendReviewAsync(OperatorReviewRequest request)
         {
-            if (review == null)
+            if (request == null)
             {
-                throw new ArgumentNullException(nameof(review));
+                return;
             }
 
             IsBusy = true;
+
             try
             {
-                await _operatorStore.CreateReviewAsync(review);
-                await DisplaySuccessAsync($"Haydovchiga yoqilg'i quyish so'rovi muvaffaqiyatli yuborildi.");
+                await _operatorStore.CreateReviewAsync(request);
 
-                var checkPointToDelete = _allCheckPoints.First(x => x.Id == review.CheckPointId);
-                _allCheckPoints.Remove(checkPointToDelete);
+                await DisplayReviewSuccessAsync();
 
-                checkPointToDelete = FilteredCheckPoints.First(x => x.Id == review.CheckPointId);
-                FilteredCheckPoints.Remove(checkPointToDelete);
+                var checkPointToRemove = _allCheckPoints.Find(x => x.Id == request.CheckPointId);
+                _allCheckPoints.Remove(checkPointToRemove);
+                FilteredCheckPoints.Remove(checkPointToRemove);
             }
             catch (Exception ex)
             {
@@ -154,6 +133,16 @@ namespace CheckDrive.Mobile.ViewModels.Operator
             finally
             {
                 IsBusy = false;
+            }
+        }
+
+        private void UpdateCheckPoints(IEnumerable<CheckPointDto> checkPoints)
+        {
+            FilteredCheckPoints.Clear();
+
+            foreach (var checkPoint in checkPoints)
+            {
+                FilteredCheckPoints.Add(checkPoint);
             }
         }
     }
