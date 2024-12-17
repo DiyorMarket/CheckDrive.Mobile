@@ -1,5 +1,7 @@
 ﻿using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.Models.Review;
+using CheckDrive.Mobile.Models.Mechanic.Acceptance;
+using CheckDrive.Mobile.Models.Mechanic.Handover;
+using CheckDrive.Mobile.Models.Operator;
 using System;
 using System.Collections.Generic;
 
@@ -12,9 +14,9 @@ namespace CheckDrive.Mobile.Models
         public CheckPointStage Stage { get; set; }
         public CheckPointStatus Status { get; set; }
         public DoctorReviewDto DoctorReview { get; set; }
-        public MechanicHandoverReviewDto MechanicHandover { get; set; }
-        public OperatorReviewDto OperatorReview { get; set; }
-        public MechanicAcceptanceDto MechanicAcceptance { get; set; }
+        public MechanicHandoverReview MechanicHandover { get; set; }
+        public OperatorReview OperatorReview { get; set; }
+        public MechanicAcceptanceReview MechanicAcceptance { get; set; }
 
         // UI Properties
         public List<ReviewDto> Reviews { get; set; }
@@ -65,8 +67,8 @@ namespace CheckDrive.Mobile.Models
                     CheckPointId = Id,
                     Date = MechanicHandover.Date,
                     Notes = MechanicHandover.Notes,
-                    ReviewerName = MechanicHandover.ReviewerName,
-                    Status = MechanicHandover.Status,
+                    ReviewerName = MechanicHandover.MechanicName,
+                    // Status = MechanicHandover.Status,
                     Type = ReviewType.MechanicHandover
                 };
                 Reviews.Add(review);
@@ -79,8 +81,8 @@ namespace CheckDrive.Mobile.Models
                     CheckPointId = Id,
                     Date = OperatorReview.Date,
                     Notes = OperatorReview.Notes,
-                    ReviewerName = OperatorReview.ReviewerName,
-                    Status = OperatorReview.Status,
+                    ReviewerName = OperatorReview.OperatorName,
+                    // Status = OperatorReview.Status,
                     Type = ReviewType.OperatorReview
                 };
                 Reviews.Add(review);
@@ -93,8 +95,8 @@ namespace CheckDrive.Mobile.Models
                     CheckPointId = Id,
                     Date = MechanicAcceptance.Date,
                     Notes = MechanicAcceptance.Notes,
-                    ReviewerName = MechanicAcceptance.ReviewerName,
-                    Status = MechanicAcceptance.Status,
+                    ReviewerName = MechanicAcceptance.MechanicName,
+                    // Status = MechanicAcceptance.Status,
                     Type = ReviewType.MechanicAcceptance
                 };
                 Reviews.Add(review);
@@ -107,7 +109,7 @@ namespace CheckDrive.Mobile.Models
             RideDetail = new RideDetailDto
             {
                 DistanceTravelled = MechanicAcceptance.FinalMileage - MechanicHandover.InitialMileage,
-                FuelConsumption = OperatorReview.InitialOilAmount - MechanicAcceptance.RemainingFuelAmount
+                FuelConsumption = OperatorReview.InitialOilAmount - MechanicAcceptance.FinalMileage,
             };
         }
 

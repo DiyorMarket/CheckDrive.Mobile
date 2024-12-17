@@ -5,6 +5,7 @@ namespace CheckDrive.Mobile.Models
     public class CarDto
     {
         public int Id { get; set; }
+        public int? OilMarkId { get; set; }
         public string Model { get; set; }
         public string Color { get; set; }
         public string Number { get; set; }
@@ -22,7 +23,7 @@ namespace CheckDrive.Mobile.Models
 
         public override string ToString()
         {
-            return $"{Color} {Model} ({Number})";
+            return $"{Model} ({Number})";
         }
     }
 }

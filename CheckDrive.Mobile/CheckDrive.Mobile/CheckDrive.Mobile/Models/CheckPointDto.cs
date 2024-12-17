@@ -1,5 +1,10 @@
-﻿using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.Models.Review;
+﻿using CheckDrive.Mobile.Models.Dispatcher;
+using CheckDrive.Mobile.Models.Doctor;
+using CheckDrive.Mobile.Models.Driver;
+using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.Models.Mechanic.Acceptance;
+using CheckDrive.Mobile.Models.Mechanic.Handover;
+using CheckDrive.Mobile.Models.Operator;
 using System;
 using System.Collections.Generic;
 
@@ -11,13 +16,16 @@ namespace CheckDrive.Mobile.Models
         public DateTime StartDate { get; set; }
         public CheckPointStage Stage { get; set; }
         public CheckPointStatus Status { get; set; }
-        public DoctorReviewDto DoctorReview { get; set; }
-        public MechanicHandoverReviewDto MechanicHandover { get; set; }
-        public OperatorReviewDto OperatorReview { get; set; }
-        public MechanicAcceptanceDto MechanicAcceptance { get; set; }
+        public DoctorReview DoctorReview { get; set; }
+        public MechanicHandoverReview MechanicHandover { get; set; }
+        public OperatorReview OperatorReview { get; set; }
+        public MechanicAcceptanceReview MechanicAcceptance { get; set; }
+        public DispatcherReview DispatcherReview { get; set; }
 
-        public string DriverName => DoctorReview?.DriverName;
-        public CarDto Car => MechanicHandover?.Car;
+        public CarDto Car { get; set; }
+        public DriverDto Driver { get; set; }
+
+        public string DriverName => Driver?.FullName ?? "";
         public List<ReviewDto> Reviews { get; set; }
 
         public CheckPointDto()
@@ -36,8 +44,8 @@ namespace CheckDrive.Mobile.Models
                     CheckPointId = Id,
                     Date = DoctorReview.Date,
                     Notes = DoctorReview.Notes,
-                    ReviewerName = DoctorReview.ReviewerName,
-                    Status = DoctorReview.Status,
+                    ReviewerName = DoctorReview.DriverName,
+                    Status = DoctorReview.IsHealthy ? ReviewStatus.Approved : ReviewStatus.Rejected,
                     Type = ReviewType.DoctorReview
                 };
                 Reviews.Add(review);
@@ -50,7 +58,7 @@ namespace CheckDrive.Mobile.Models
                     CheckPointId = Id,
                     Date = MechanicHandover.Date,
                     Notes = MechanicHandover.Notes,
-                    ReviewerName = MechanicHandover.ReviewerName,
+                    ReviewerName = MechanicHandover.MechanicName,
                     Status = MechanicHandover.Status,
                     Type = ReviewType.MechanicHandover
                 };
@@ -64,9 +72,9 @@ namespace CheckDrive.Mobile.Models
                     CheckPointId = Id,
                     Date = OperatorReview.Date,
                     Notes = OperatorReview.Notes,
-                    ReviewerName = OperatorReview.ReviewerName,
+                    ReviewerName = OperatorReview.OperatorName,
                     Status = OperatorReview.Status,
-                    Type = ReviewType.OperatorReview
+                    Type = ReviewType.OperatorReview,
                 };
                 Reviews.Add(review);
             }
@@ -78,9 +86,23 @@ namespace CheckDrive.Mobile.Models
                     CheckPointId = Id,
                     Date = MechanicAcceptance.Date,
                     Notes = MechanicAcceptance.Notes,
-                    ReviewerName = MechanicAcceptance.ReviewerName,
+                    ReviewerName = MechanicAcceptance.MechanicName,
                     Status = MechanicAcceptance.Status,
                     Type = ReviewType.MechanicAcceptance
+                };
+                Reviews.Add(review);
+            }
+
+            if (DispatcherReview != null)
+            {
+                var review = new ReviewDto()
+                {
+                    CheckPointId = Id,
+                    Date = DispatcherReview.Date,
+                    Notes = DispatcherReview.Notes,
+                    ReviewerName = DispatcherReview.DispatcherName,
+                    Status = ReviewStatus.Approved,
+                    Type = ReviewType.DispatcherReview
                 };
                 Reviews.Add(review);
             }
