@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Driver.Popups.MechanicAcceptanceConfirmationPopup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:popups="clr-namespace:CheckDrive.Mobile.ViewModels.Driver.Popups"
+                 x:DataType="popups:MechanicAcceptanceConfirmationViewModel">
+    <pages:PopupPage.Content>
+        <mdc:MaterialCard Margin="25,0"
+                          BackgroundColor="White"
+                          CornerRadius="12"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center">
+            <StackLayout Margin="10">
+                <mdc:MaterialLabel FontSize="Large"
+                                   Style="{StaticResource Title}"
+                                   Text="Avtomobil topshirish" />
+
+                <Grid Margin="0,20,0,0"
+                      ColumnDefinitions="Auto, *"
+                      RowSpacing="10">
+                    <Label Grid.Row="0"
+                           Grid.Column="0"
+                           FontSize="Medium"
+                           Text="Mexanik:"
+                           TextColor="{StaticResource TextSecondary}" />
+                    <Label Grid.Row="0"
+                           Grid.Column="1"
+                           FontSize="Medium"
+                           Text="{Binding MechanicName}"
+                           TextColor="{StaticResource TextSecondary}" />
+
+                    <Label Grid.Row="1"
+                           Grid.Column="0"
+                           FontSize="Medium"
+                           Text="Masofa:"
+                           TextColor="{StaticResource TextSecondary}" />
+                    <Label Grid.Row="1"
+                           Grid.Column="1"
+                           FontSize="Medium"
+                           Text="{Binding FinalMileage, StringFormat='{}{0:#,##0} km'}"
+                           TextColor="{StaticResource TextSecondary}" />
+
+                    <Label Grid.Row="2"
+                           FontSize="Medium"
+                           Text="Holati:"
+                           TextColor="{StaticResource TextSecondary}" />
+                    <Label Grid.Row="2"
+                           Grid.Column="1"
+                           FontSize="Medium"
+                           Text="{Binding CarState}"
+                           TextColor="{StaticResource TextSecondary}" />
+                </Grid>
+
+                <mdc:MaterialEditor Margin="0,20,0,0"
+                                    LabelText="Izoh"
+                                    Placeholder="Izohingizni kiriting..."
+                                    Style="{StaticResource Editor}"
+                                    Text="{Binding Notes}" />
+
+                <Grid Margin="0,30,0,10" ColumnDefinitions="*,5,*">
+                    <mdc:MaterialButton Grid.Column="0"
+                                        Command="{Binding RejectCommand}"
+                                        HorizontalOptions="FillAndExpand"
+                                        Style="{StaticResource RejectButton}"
+                                        Text="Rad etish" />
+                    <mdc:MaterialButton Grid.Column="2"
+                                        Command="{Binding AcceptCommand}"
+                                        HorizontalOptions="FillAndExpand"
+                                        Style="{StaticResource AcceptButton}"
+                                        Text="Tasdiqlash" />
+                </Grid>
+            </StackLayout>
+        </mdc:MaterialCard>
+    </pages:PopupPage.Content>
+</pages:PopupPage>
