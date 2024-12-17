@@ -15,9 +15,10 @@ namespace CheckDrive.Mobile.Converter
                 {
                     case ReviewStatus.Approved:
                         return "icon_success.png";
-                    case ReviewStatus.RejectedByDriver:
-                    case ReviewStatus.RejectedByReviewer:
+                    case ReviewStatus.Rejected:
                         return "icon_error.png";
+                    case ReviewStatus.Pending:
+                        return "icon_warning.png";
                     case ReviewStatus.NotStarted:
                         return "icon_circle.png";
                     default:
