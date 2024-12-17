@@ -1,11 +1,9 @@
 ﻿using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.Models.Review;
 using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Stores.Driver;
-using CheckDrive.Mobile.ViewModels.Driver.Popups;
-using CheckDrive.Mobile.Views.Driver.Popups;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -21,10 +19,6 @@ namespace CheckDrive.Mobile.ViewModels.Driver
         private readonly IDriverStore _driverStore;
 
         public ObservableCollection<ReviewDto> Reviews { get; }
-
-        public Command RefreshCommand { get; }
-
-        public string CurrentDate { get; }
 
         private decimal _monthlyDistanceLimit;
         public decimal MonthlyDistanceLimit
@@ -47,12 +41,19 @@ namespace CheckDrive.Mobile.ViewModels.Driver
             set => SetProperty(ref _mileageLimitProgress, value);
         }
 
+        public string CurrentDate { get; }
+        public CheckPointDto CheckPoint { get; private set; }
+
+        public Command RefreshCommand { get; }
+        public Command<ReviewDto> ShowConfirmationPopupCommand { get; }
+
         public HomeViewModel()
         {
             _signalRService = DependencyService.Get<SignalRService>();
             _driverStore = DependencyService.Get<IDriverStore>();
 
-            RefreshCommand = new Command(async () => await OnRefreshAsync(true));
+            RefreshCommand = new Command(async () => await OnRefreshAsync());
+            ShowConfirmationPopupCommand = new Command<ReviewDto>(async (review) => await OnShowConfirmationPopupAsync(review));
 
             CurrentDate = DateTime.Now.ToLocalTime().ToString("dddd, dd MMMM");
             Reviews = new ObservableCollection<ReviewDto>();
@@ -66,16 +67,23 @@ namespace CheckDrive.Mobile.ViewModels.Driver
             SubscribeToCheckPointProgressUpdates();
         }
 
-        public async Task OnRefreshAsync(bool forceRefresh = false)
+        public async Task OnRefreshAsync()
         {
+            if (IsBusy)
+            {
+                return;
+            }
+
             IsBusy = true;
 
             try
             {
                 var checkPoint = await _driverStore.GetCurrentCheckPointAsync();
+                CheckPoint = checkPoint;
 
                 UpdateReviews(checkPoint);
-                UpdateCar(checkPoint.Car);
+                UpdateCar(checkPoint);
+                // await CheckPendingReviews(checkPoint);
             }
             catch (HttpRequestException ex)
             {
@@ -128,8 +136,9 @@ namespace CheckDrive.Mobile.ViewModels.Driver
             }
         }
 
-        private void UpdateCar(CarDto car)
+        private void UpdateCar(CheckPointDto checkPoint)
         {
+            var car = checkPoint.Car;
             if (car == null)
             {
                 return;
@@ -142,57 +151,40 @@ namespace CheckDrive.Mobile.ViewModels.Driver
 
         private void SubscribeToCheckPointProgressUpdates()
         {
-            MessagingCenter.Subscribe<SignalRService, ReviewDto>(this, "NotifyDoctorReview", (sender, request) =>
+            MessagingCenter.Subscribe<SignalRService>(this, "CheckPointProgressUpdated", async _ =>
             {
-                var reviewToUpdate = Reviews.First(x => x.Type == request.Type);
-                reviewToUpdate.Update(request);
-                var mechanicHandover = Reviews.First(x => x.Type == ReviewType.MechanicHandover);
-                mechanicHandover.Update(ReviewStatus.InProgress);
-            });
-
-            MessagingCenter.Subscribe<SignalRService, MechanicHandoverReview>(this, "MechanicHandoverConfirmation", async (sender, request) =>
-            {
-                await HandleConfirmationAsync(request.GetReviewConfirmationMessage(), request.CheckPointId, ReviewType.MechanicHandover);
-            });
-
-            MessagingCenter.Subscribe<SignalRService, OperatorReview>(this, "OperatorReviewConfirmation", async (sender, request) =>
-            {
-                await HandleConfirmationAsync(request.GetReviewConfirmationMessage(), request.CheckPointId, ReviewType.OperatorReview);
-            });
-
-            MessagingCenter.Subscribe<SignalRService, MechanicAcceptanceReview>(this, "MechanicAcceptanceConfirmation", async (sender, request) =>
-            {
-                await HandleConfirmationAsync(request.GetReviewConfirmationMessage(), request.CheckPointId, ReviewType.MechanicAcceptance);
+                await OnRefreshAsync();
             });
         }
 
-        private async Task HandleConfirmationAsync(string message, int checkPointId, ReviewType reviewType)
+        private async Task OnShowConfirmationPopupAsync(ReviewDto review)
         {
-            IsBusy = true;
+            if (review.Status != ReviewStatus.Pending)
+            {
+                return;
+            }
 
+            if (PopupNavigation.Instance.PopupStack.Count > 0)
+            {
+                return;
+            }
+
+            await DisplayReviewConfirmationAsync(review, CheckPoint);
+        }
+
+        private async Task DisplayReviewConfirmationAsync(ReviewDto reviewToUpdate, CheckPointDto checkPoint)
+        {
             try
             {
-                var completionSource = new TaskCompletionSource<bool>();
-                var popup = new ReviewConfirmationPopup()
-                {
-                    BindingContext = new ReviewConfirmationViewModel(message, completionSource)
-                };
+                var completionSource = new TaskCompletionSource<ReviewConfirmationRequest>();
+                var popup = ReviewConfirmationFactory.GetConfirmationPopup(completionSource, checkPoint, reviewToUpdate.Type);
 
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
+                await PopupNavigation.Instance.PushAsync(popup);
 
-                var isAccepted = await completionSource.Task;
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
+                var request = await completionSource.Task;
 
-                var confirmation = new DriverReviewResponse
-                {
-                    CheckPointId = checkPointId,
-                    IsAcceptedByDriver = isAccepted,
-                    Notes = "",
-                    ReviewType = reviewType,
-                };
-
-                await _driverStore.SendReviewConfirmationAsync(confirmation);
-                await OnRefreshAsync(true);
+                await _driverStore.SendReviewConfirmationAsync(request);
+                await OnRefreshAsync();
             }
             catch (Exception ex)
             {

@@ -76,7 +76,7 @@ namespace CheckDrive.Mobile.ViewModels
 
                 if (!success)
                 {
-                    ShowError("Invalid login attempt.");
+                    ShowError("Foydalanuvchi ismi yoki parol noto'g'ri.");
                     return;
                 }
 
@@ -106,6 +106,7 @@ namespace CheckDrive.Mobile.ViewModels
                 return false;
             }
 
+            ErrorMessage = string.Empty;
             return true;
         }
 
