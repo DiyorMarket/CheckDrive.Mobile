@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string FullName { get; set; }
-        public int? CheckPointId { get; set; }
+        public int? AssignedCarId { get; set; }
 
         public DriverDto()
         {
