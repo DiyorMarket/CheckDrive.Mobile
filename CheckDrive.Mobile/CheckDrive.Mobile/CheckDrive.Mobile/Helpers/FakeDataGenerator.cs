@@ -41,7 +41,7 @@ namespace CheckDrive.Mobile.Helpers
             .RuleFor(x => x.ReviewerName, f => f.Person.FullName)
             .RuleFor(x => x.DriverId, f => f.Random.Number())
             .RuleFor(x => x.DriverName, f => f.Person.FullName)
-            .RuleFor(x => x.IsApproved, f => f.Random.Bool())
+            .RuleFor(x => x.IsHealthy, f => f.Random.Bool())
             .Generate();
 
         public static CheckPointDto GetCheckPoint()
@@ -99,7 +99,7 @@ namespace CheckDrive.Mobile.Helpers
                     checkPoint.Status = CheckPointStatus.InProgress;
                     checkPoint.Stage = GetStage(review.Type);
                 }
-                else if (review.Status == ReviewStatus.RejectedByDriver || review.Status == ReviewStatus.RejectedByReviewer)
+                else if (review.Status == ReviewStatus.Rejected)
                 {
                     checkPoint.Status = CheckPointStatus.InterruptedWithRejection;
                     checkPoint.Stage = GetStage(review.Type);
@@ -195,12 +195,12 @@ namespace CheckDrive.Mobile.Helpers
 
             if (statusRandom < 90)
             {
-                return ReviewStatus.RejectedByReviewer;
+                return ReviewStatus.Rejected;
             }
 
             if (statusRandom < 95)
             {
-                return ReviewStatus.RejectedByDriver;
+                return ReviewStatus.Rejected;
             }
 
             return ReviewStatus.InProgress;
