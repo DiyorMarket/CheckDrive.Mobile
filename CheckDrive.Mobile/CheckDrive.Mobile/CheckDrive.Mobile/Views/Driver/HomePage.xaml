@@ -17,7 +17,7 @@
     <ContentPage.Content>
         <RefreshView Command="{Binding RefreshCommand}"
                      IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                     RefreshColor="#1C375C">
+                     RefreshColor="{StaticResource Primary}">
             <ScrollView>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -90,14 +90,12 @@
 
                     <md:MaterialLabel Grid.Row="3"
                                       Margin="0,25,0,0"
-                                      HorizontalTextAlignment="Center"
-                                      Text="{Binding CurrentDate}"
-                                      TextColor="#878787"
-                                      Type="TitleLarge"
-                                      VerticalTextAlignment="Center" />
+                                      FontSize="Large"
+                                      Style="{StaticResource Title}"
+                                      Text="{Binding CurrentDate}" />
 
                     <StackLayout Grid.Row="4"
-                                 Margin="25,10,25,10"
+                                 Margin="25,10"
                                  HorizontalOptions="StartAndExpand">
 
                         <!--  Step Progress Bar (Vertical Alignment)  -->
@@ -110,7 +108,7 @@
                                 <DataTemplate>
                                     <Grid Margin="0"
                                           Padding="0"
-                                          ColumnDefinitions="*, *, 3*"
+                                          ColumnDefinitions="*,*,4*"
                                           ColumnSpacing="0"
                                           RowDefinitions="Auto, Auto"
                                           RowSpacing="0">
@@ -136,13 +134,12 @@
 
                                             <!--  Vertical Line Below Step (only visible if not last step)  -->
                                             <BoxView BackgroundColor="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
-                                                     HeightRequest="75"
+                                                     HeightRequest="100"
                                                      HorizontalOptions="Center"
                                                      IsVisible="{Binding Type, Converter={StaticResource ShowLineBelowConverter}}"
                                                      VerticalOptions="Fill"
-                                                     WidthRequest="2" />
+                                                     WidthRequest="3" />
                                         </StackLayout>
-
 
                                         <!--  Title and Notes on the right side of the circle  -->
                                         <StackLayout Grid.Row="1"
@@ -152,13 +149,16 @@
                                             <Label FontAttributes="Bold"
                                                    FontSize="Medium"
                                                    Text="{Binding ReviewName}" />
-                                            <Label FontAttributes="Bold"
+                                            <Label FontSize="Medium" Text="{Binding ReviewerName}" />
+                                            <Label FontAttributes="Italic"
                                                    FontSize="Small"
-                                                   Text="{Binding ReviewerName}" />
-                                            <Label FontSize="Small"
                                                    Text="{Binding Notes}"
                                                    TextColor="Gray" />
                                         </StackLayout>
+
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowConfirmationPopupCommand}" CommandParameter="{Binding .}" />
+                                        </Grid.GestureRecognizers>
                                     </Grid>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
