@@ -6,46 +6,28 @@
                  xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
                  xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                  x:DataType="doctor:DoctorFiltersViewModel">
-    <mdc:MaterialCard Padding="25"
-                      BackgroundColor="#FFFFFF"
-                      CornerRadius="15"
-                      HasShadow="True"
+    <mdc:MaterialCard Margin="25,0"
+                      BackgroundColor="White"
+                      CornerRadius="10"
                       HorizontalOptions="Center"
-                      ShadowColor="#000000"
-                      VerticalOptions="Center"
-                      WidthRequest="320">
+                      VerticalOptions="Center">
         <StackLayout>
-            <!--  Header  -->
             <mdc:MaterialLabel FontSize="Large"
                                Style="{StaticResource Title}"
                                Text="Tarixni saralash" />
 
-            <!--  Filter by Driver  -->
-            <mdc:MaterialLabel Margin="5,0,0,0"
+            <mdc:MaterialLabel Margin="5,20,0,0"
                                FontAttributes="Bold"
                                FontSize="Medium"
                                Text="Saralash"
-                               TextColor="#4a4a4a" />
+                               TextColor="{StaticResource TextPrimary}" />
+
             <mdc:MaterialPicker ItemsSource="{Binding Drivers}"
                                 LabelText="Haydovchi bo'yicha saralash"
                                 SelectedItem="{Binding SelectedDriver}"
                                 Style="{StaticResource Picker}" />
 
-            <!--  Filter by Status  -->
-            <mdc:MaterialPicker Margin="0,20,0,0"
-                                ItemsSource="{Binding Statuses}"
-                                LabelText="Status bo'yicha saralash"
-                                LabelTextColor="#242424"
-                                SelectedItem="{Binding SelectedStatus}"
-                                Style="{StaticResource Picker}" />
-
-            <!--  Date Filters  -->
-            <Grid Margin="0,20,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="0.1*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <Grid Margin="0,20,0,0" ColumnDefinitions="*,5,*">
                 <mdc:MaterialDatePicker Grid.Column="0"
                                         Date="{Binding StartDate}"
                                         LabelText="Boshlanish sanasi"
@@ -60,25 +42,18 @@
                                         Style="{StaticResource DatePicker}" />
             </Grid>
 
-            <!--  Sorting Options  -->
             <mdc:MaterialLabel Margin="5,20,0,0"
                                FontAttributes="Bold"
                                FontSize="Medium"
                                Text="Tartiblash"
-                               TextColor="#4a4a4a"
+                               TextColor="{StaticResource TextPrimary}"
                                VerticalTextAlignment="End" />
             <mdc:MaterialPicker ItemsSource="{Binding SortOptions}"
                                 LabelText="Tartiblash uslubini tanlang"
                                 SelectedItem="{Binding SelectedSort}"
                                 Style="{StaticResource Picker}" />
 
-            <!--  Buttons  -->
-            <Grid Margin="0,30,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="0.1*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <Grid Margin="0,30,0,10" ColumnDefinitions="*,5,*">
                 <mdc:MaterialButton Grid.Column="0"
                                     Command="{Binding ResetCommand}"
                                     Style="{StaticResource CancelButton}"
@@ -90,5 +65,4 @@
             </Grid>
         </StackLayout>
     </mdc:MaterialCard>
-
 </pages:PopupPage>

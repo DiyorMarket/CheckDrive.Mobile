@@ -7,44 +7,45 @@
                  xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                  x:DataType="doctor:DoctorReviewViewModel"
                  CloseWhenBackgroundIsClicked="False">
-    <mdc:MaterialCard BackgroundColor="White"
-                      CornerRadius="10"
-                      HeightRequest="350"
-                      HorizontalOptions="Center"
-                      VerticalOptions="Center"
-                      WidthRequest="300">
-        <Grid Padding="20" RowDefinitions="Auto, Auto, *, Auto">
-            <mdc:MaterialLabel Grid.Row="0"
-                               FontSize="Large"
-                               Style="{StaticResource Title}"
-                               Text="{Binding FullName}" />
+    <pages:PopupPage.Content>
+        <mdc:MaterialCard Margin="25,0"
+                          BackgroundColor="White"
+                          CornerRadius="10"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center">
+            <StackLayout Margin="10">
+                <mdc:MaterialLabel FontSize="Large"
+                                   Style="{StaticResource Title}"
+                                   Text="{Binding FullName}" />
 
-            <mdc:MaterialSwitch Grid.Row="1"
-                                Margin="0,15,0,0"
-                                IsToggled="{Binding IsHealthy}"
-                                Style="{StaticResource Switch}"
-                                Text="Sog'lom" />
+                <mdc:MaterialSwitch Margin="0,20,0,0"
+                                    IsToggled="{Binding IsHealthy}"
+                                    Style="{StaticResource Switch}"
+                                    Text="{Binding SwitchText}" />
 
-            <mdc:MaterialEditor Grid.Row="2"
-                                LabelText="Izoh"
-                                Placeholder="Izohingizni kiriting..."
-                                Style="{StaticResource Editor}"
-                                Text="{Binding Notes}" />
+                <mdc:MaterialLabel FontSize="Small"
+                                   HorizontalTextAlignment="Start"
+                                   Text="{Binding NotesErrorMessage}"
+                                   TextColor="{StaticResource Danger}" />
 
-            <Grid Grid.Row="3"
-                  Margin="0,30,0,0"
-                  ColumnDefinitions="*,5,*">
-                <mdc:MaterialButton Grid.Column="0"
-                                    Command="{Binding CancelCommand}"
-                                    HorizontalOptions="FillAndExpand"
-                                    Style="{StaticResource CancelButton}"
-                                    Text="Yopish" />
-                <mdc:MaterialButton Grid.Column="2"
-                                    Command="{Binding ApproveCommand}"
-                                    HorizontalOptions="FillAndExpand"
-                                    Style="{StaticResource AcceptButton}"
-                                    Text="Tasdiqlash" />
-            </Grid>
-        </Grid>
-    </mdc:MaterialCard>
+                <mdc:MaterialEditor LabelText="Izoh"
+                                    Placeholder="Izohingizni kiriting..."
+                                    Style="{StaticResource Editor}"
+                                    Text="{Binding Notes}" />
+
+                <Grid Margin="0,30,0,10" ColumnDefinitions="*,5,*">
+                    <mdc:MaterialButton Grid.Column="0"
+                                        Command="{Binding CancelCommand}"
+                                        HorizontalOptions="FillAndExpand"
+                                        Style="{StaticResource CancelButton}"
+                                        Text="Yopish" />
+                    <mdc:MaterialButton Grid.Column="2"
+                                        Command="{Binding ApproveCommand}"
+                                        HorizontalOptions="FillAndExpand"
+                                        Style="{StaticResource AcceptButton}"
+                                        Text="Tasdiqlash" />
+                </Grid>
+            </StackLayout>
+        </mdc:MaterialCard>
+    </pages:PopupPage.Content>
 </pages:PopupPage>

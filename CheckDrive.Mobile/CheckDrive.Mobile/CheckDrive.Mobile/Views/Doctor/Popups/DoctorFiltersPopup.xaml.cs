@@ -10,12 +10,17 @@ namespace CheckDrive.Mobile.Views.Doctor
     {
         private readonly DoctorFiltersViewModel _viewModel;
 
-        public DoctorFiltersPopup(DoctorFilterOptions options, DoctorFilter preSelectedFilters, TaskCompletionSource<DoctorFilter> completionSource)
+        public DoctorFiltersPopup(
+            DoctorFilterOptions options,
+            DoctorFilter preSelectedFilters,
+            TaskCompletionSource<DoctorFilter> completionSource)
         {
             InitializeComponent();
 
-            _viewModel = new DoctorFiltersViewModel(options, preSelectedFilters, completionSource);
+            HasKeyboardOffset = false;
+            HasSystemPadding = false;
 
+            _viewModel = new DoctorFiltersViewModel(options, preSelectedFilters, completionSource);
             BindingContext = _viewModel;
         }
     }
