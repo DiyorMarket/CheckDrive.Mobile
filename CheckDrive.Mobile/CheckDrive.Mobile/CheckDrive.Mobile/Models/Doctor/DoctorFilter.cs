@@ -1,12 +1,10 @@
-﻿using CheckDrive.Mobile.Models.Enums;
-using System;
+﻿using System;
 
 namespace CheckDrive.Mobile.Models.Doctor
 {
     public class DoctorFilter
     {
         public int? SelectedDriverId { get; set; }
-        public ReviewStatus? SelectedStatus { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string SortBy { get; set; } = "date_desc";
@@ -15,7 +13,6 @@ namespace CheckDrive.Mobile.Models.Doctor
             new DoctorFilter()
             {
                 SelectedDriverId = null,
-                SelectedStatus = null,
                 SortBy = "date_desc",
                 StartDate = minDate,
                 EndDate = maxDate,

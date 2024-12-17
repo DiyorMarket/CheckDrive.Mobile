@@ -14,7 +14,7 @@ namespace CheckDrive.Mobile.Models.Doctor
         public static List<PickerItem<ReviewStatus?>> Statuses => GetStatuses();
         public static List<PickerItem<string>> SortOptions => GetSortOptions();
 
-        public DoctorFilterOptions(List<DoctorHistory> histories)
+        public DoctorFilterOptions(List<DoctorReview> histories)
         {
             Drivers = histories.Select(x => new PickerItem<int?>(x.DriverId, x.DriverName)).ToList();
             Drivers.Insert(0, new PickerItem<int?>(null, "Barcha haydovchilar"));
@@ -32,7 +32,7 @@ namespace CheckDrive.Mobile.Models.Doctor
             {
                 new PickerItem<ReviewStatus?>(null, "Barchasi"),
                 new PickerItem<ReviewStatus?>(ReviewStatus.Approved, "Tasdiqlangan"),
-                new PickerItem<ReviewStatus?>(ReviewStatus.RejectedByReviewer, "Rad etilgan")
+                new PickerItem<ReviewStatus?>(ReviewStatus.Rejected, "Rad etilgan")
             };
 
         private static List<PickerItem<string>> GetSortOptions() =>

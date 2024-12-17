@@ -7,7 +7,7 @@ namespace CheckDrive.Mobile.Models
     {
         public DateTime Date { get; set; }
         public string Notes { get; set; }
-        public bool IsApproved { get; set; }
+        public bool IsHealthy { get; set; }
         public int ReviewerId { get; set; }
         public string ReviewerName { get; set; }
         public int DriverId { get; set; }
