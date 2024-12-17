@@ -1,7 +1,5 @@
 ﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.Models.Review;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Threading.Tasks;
@@ -26,29 +24,9 @@ namespace CheckDrive.Mobile.Services
                     })
                     .Build();
 
-                _hubConnection.On<ReviewDto>("NotifyDoctorReview", request =>
+                _hubConnection.On<int>("CheckPointProgressUpdated", checkPointId =>
                 {
-                    MessagingCenter.Send(this, "NotifyDoctorReview", request);
-                });
-
-                _hubConnection.On<MechanicHandoverReview>("MechanicHandoverConfirmation", request =>
-                {
-                    MessagingCenter.Send(this, "MechanicHandoverConfirmation", request);
-                });
-
-                _hubConnection.On<OperatorReview>("OperatorReviewConfirmation", request =>
-                {
-                    MessagingCenter.Send(this, "OperatorReviewConfirmation", request);
-                });
-
-                _hubConnection.On<MechanicAcceptanceReview>("MechanicAcceptanceConfirmation", request =>
-                {
-                    MessagingCenter.Send(this, "MechanicAcceptanceConfirmation", request);
-                });
-
-                _hubConnection.On<ReviewDto>("NotifyDispatcherReview", request =>
-                {
-                    MessagingCenter.Send(this, "NotifyDispatcherReview", request);
+                    MessagingCenter.Send(this, "CheckPointProgressUpdated");
                 });
 
                 await _hubConnection.StartAsync();
