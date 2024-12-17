@@ -1,11 +1,11 @@
-﻿using CheckDrive.Mobile.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Xamarin.Forms;
+using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Stores.Account;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.Stores.Driver
 {
@@ -20,6 +20,13 @@ namespace CheckDrive.Mobile.Stores.Driver
             _accountStore = DependencyService.Get<IAccountStore>();
         }
 
+        public async Task<List<DriverDto>> GetDriversAsync(DriverStatus status = DriverStatus.Available)
+        {
+            var drivers = await _client.GetAsync<List<DriverDto>>($"drivers?Status={status}");
+
+            return drivers;
+        }
+
         public async Task<CheckPointDto> GetCurrentCheckPointAsync()
         {
             var driverId = await _accountStore.GetUserIdAsync();
@@ -28,16 +35,9 @@ namespace CheckDrive.Mobile.Stores.Driver
             return checkPoint;
         }
 
-        public async Task<List<DriverDto>> GetDriversForReviewAsync(CheckPointStage stage)
+        public async Task SendReviewConfirmationAsync(ReviewConfirmationRequest request)
         {
-            var drivers = await _client.GetAsync<List<DriverDto>>($"drivers?Stage={stage}");
-
-            return drivers;
-        }
-
-        public async Task SendReviewConfirmationAsync(DriverReviewResponse confirmation)
-        {
-            await _client.PostAsync("drivers/reviews", confirmation);
+            await _client.PostAsync("drivers/reviews", request);
         }
 
         public async Task<List<CheckPointHistoryDto>> GetHistoriesAsync()

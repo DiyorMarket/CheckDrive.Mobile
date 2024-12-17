@@ -8,9 +8,9 @@ namespace CheckDrive.Mobile.Stores.Driver
 {
     public interface IDriverStore
     {
+        Task<List<DriverDto>> GetDriversAsync(DriverStatus status = DriverStatus.Available);
         Task<CheckPointDto> GetCurrentCheckPointAsync();
-        Task<List<DriverDto>> GetDriversForReviewAsync(CheckPointStage stage);
-        Task SendReviewConfirmationAsync(DriverReviewResponse confirmation);
+        Task SendReviewConfirmationAsync(ReviewConfirmationRequest request);
         Task<List<CheckPointHistoryDto>> GetHistoriesAsync();
     }
 }
