@@ -3,7 +3,6 @@ using CheckDrive.Mobile.Models.Doctor;
 using CheckDrive.Mobile.Models.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -17,21 +16,11 @@ namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
         public List<PickerItem<ReviewStatus?>> Statuses { get; }
         public List<PickerItem<string>> SortOptions { get; }
 
-        public Command ApplyCommand { get; }
-        public Command ResetCommand { get; }
-
         private PickerItem<int?> _selectedDriver;
         public PickerItem<int?> SelectedDriver
         {
             get => _selectedDriver;
             set => SetProperty(ref _selectedDriver, value);
-        }
-
-        private PickerItem<ReviewStatus?> _selectedStatus;
-        public PickerItem<ReviewStatus?> SelectedStatus
-        {
-            get => _selectedStatus;
-            set => SetProperty(ref _selectedStatus, value);
         }
 
         private PickerItem<string> _selectedSort;
@@ -69,7 +58,13 @@ namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
             set => SetProperty(ref _endDate, value);
         }
 
-        public DoctorFiltersViewModel(DoctorFilterOptions options, DoctorFilter preSelectedFilters, TaskCompletionSource<DoctorFilter> completionSource)
+        public Command ApplyCommand { get; }
+        public Command ResetCommand { get; }
+
+        public DoctorFiltersViewModel(
+            DoctorFilterOptions options,
+            DoctorFilter preSelectedFilters,
+            TaskCompletionSource<DoctorFilter> completionSource)
         {
             _completionSource = completionSource;
 
@@ -89,7 +84,6 @@ namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
             var filter = new DoctorFilter()
             {
                 SelectedDriverId = SelectedDriver.Value,
-                SelectedStatus = SelectedStatus.Value,
                 SortBy = SelectedSort.Value,
                 StartDate = StartDate,
                 EndDate = EndDate,
@@ -122,18 +116,16 @@ namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
             }
 
             var selectedDriver = Drivers.Find(x => x.Value == preSelectedFilters.SelectedDriverId);
-            SelectedDriver = selectedDriver is null ? Drivers.First(x => x.Value == null) : selectedDriver;
-            SelectedStatus = Statuses.First(x => x.Value == preSelectedFilters.SelectedStatus);
-            SelectedSort = SortOptions.First(x => x.Value == preSelectedFilters.SortBy);
+            SelectedDriver = selectedDriver is null ? Drivers.Find(x => x.Value == null) : selectedDriver;
+            SelectedSort = SortOptions.Find(x => x.Value == preSelectedFilters.SortBy);
             StartDate = preSelectedFilters.StartDate;
             EndDate = preSelectedFilters.EndDate;
         }
 
         private void SetupDefaultSelectedValues()
         {
-            SelectedDriver = Drivers.First(x => x.Value == null);
-            SelectedStatus = Statuses.First(x => x.Value == null);
-            SelectedSort = SortOptions.First(x => x.Value == "date_desc");
+            SelectedDriver = Drivers.Find(x => x.Value == null);
+            SelectedSort = SortOptions.Find(x => x.Value == "date_desc");
             StartDate = MinDate;
             EndDate = MaxDate;
         }

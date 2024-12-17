@@ -15,8 +15,8 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
     {
         private readonly IDoctorStore _doctorStore;
 
-        private readonly List<DoctorHistory> _histories;
-        public ObservableCollection<Grouping<DateTime, DoctorHistory>> Histories { get; set; }
+        private readonly List<DoctorReview> _histories;
+        public ObservableCollection<Grouping<DateTime, DoctorReview>> Histories { get; set; }
 
         public Command<string> SearchCommand { get; }
         public Command FilterCommand { get; }
@@ -33,8 +33,8 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
         {
             _doctorStore = DependencyService.Get<IDoctorStore>();
 
-            _histories = new List<DoctorHistory>();
-            Histories = new ObservableCollection<Grouping<DateTime, DoctorHistory>>();
+            _histories = new List<DoctorReview>();
+            Histories = new ObservableCollection<Grouping<DateTime, DoctorReview>>();
 
             RefreshCommand = new Command(async () => await LoadHistoryAsync());
             SearchCommand = new Command<string>(OnSearch);
@@ -47,19 +47,19 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
             try
             {
-                var reviewHistories = await _doctorStore.GetReviewHistoryAsync();
-                var groupedHistory = reviewHistories
+                var reviews = await _doctorStore.GetReviews();
+                var groupedReviews = reviews
                     .OrderByDescending(x => x.Date)
                     .GroupBy(d => d.Date.Date)
-                    .Select(g => new Grouping<DateTime, DoctorHistory>(g.Key, g))
+                    .Select(g => new Grouping<DateTime, DoctorReview>(g.Key, g))
                     .ToList();
 
                 _histories.Clear();
-                _histories.AddRange(reviewHistories);
+                _histories.AddRange(reviews);
 
                 Histories.Clear();
 
-                foreach (var history in groupedHistory)
+                foreach (var history in groupedReviews)
                 {
                     Histories.Add(history);
                 }
@@ -77,6 +77,7 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
         private void OnSearch(string searchText)
         {
             searchText = searchText.ToLower().Trim();
+
             var filteredHistories = string.IsNullOrWhiteSpace(searchText)
                 ? _histories
                 : _histories.Where(x => x.DriverName.ToLower().Contains(searchText)).ToList();
@@ -111,11 +112,6 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
                 query = query.Where(x => x.DriverId == filters.SelectedDriverId.Value);
             }
 
-            if (filters.SelectedStatus.HasValue)
-            {
-                query = query.Where(x => filters.SelectedStatus.Value == x.Status);
-            }
-
             query = query.Where(x => x.Date.Date >= filters.StartDate.Date);
             query = query.Where(x => x.Date.Date <= filters.EndDate.Date);
             query = SortHistory(query, filters.SortBy);
@@ -123,11 +119,11 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
             UpdateHistories(query);
         }
 
-        private void UpdateHistories(IEnumerable<DoctorHistory> histories)
+        private void UpdateHistories(IEnumerable<DoctorReview> histories)
         {
             var groupedHistory = histories
                         .GroupBy(d => d.Date.Date)
-                        .Select(g => new Grouping<DateTime, DoctorHistory>(g.Key, g))
+                        .Select(g => new Grouping<DateTime, DoctorReview>(g.Key, g))
                         .ToList();
 
             Histories.Clear();
@@ -137,7 +133,7 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
             }
         }
 
-        private static IEnumerable<DoctorHistory> SortHistory(IEnumerable<DoctorHistory> query, string sortBy)
+        private static IEnumerable<DoctorReview> SortHistory(IEnumerable<DoctorReview> query, string sortBy)
         {
             switch (sortBy.ToLower().Trim())
             {

@@ -1,6 +1,7 @@
-﻿using CheckDrive.Mobile.Models.Driver;
-using CheckDrive.Mobile.Models.Review;
+﻿using CheckDrive.Mobile.Models.Doctor;
+using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Stores.Account;
+using Rg.Plugins.Popup.Services;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -9,46 +10,91 @@ namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
     public class DoctorReviewViewModel : BaseViewModel
     {
         private readonly IAccountStore _accountStore;
-        private readonly TaskCompletionSource<DoctorReview> _completionSource;
+        private readonly TaskCompletionSource<DoctorReviewRequest> _completionSource;
 
         public string FullName { get; }
         public int DriverId { get; set; }
 
-        private bool _isHealthy = false;
+        private bool _isHealthy;
         public bool IsHealthy
         {
             get => _isHealthy;
-            set => SetProperty(ref _isHealthy, value);
+            set
+            {
+                SetProperty(ref _isHealthy, value);
+
+                if (_isHealthy)
+                {
+                    NotesErrorMessage = string.Empty;
+                    SwitchText = "Sog'lom";
+                }
+                else
+                {
+                    NotesErrorMessage = "Sababni ko'rsatish majburiy";
+                    SwitchText = "Sog'lom emas";
+                }
+            }
         }
 
-        public string Notes { get; set; }
+        private string _notes;
+        public string Notes
+        {
+            get => _notes;
+            set => SetProperty(ref _notes, value);
+        }
+
+        private string _notesErrorMessage;
+        public string NotesErrorMessage
+        {
+            get => _notesErrorMessage;
+            set => SetProperty(ref _notesErrorMessage, value);
+        }
+
+        private string _switchText;
+        public string SwitchText
+        {
+            get => _switchText;
+            set => SetProperty(ref _switchText, value);
+        }
 
         public Command ApproveCommand { get; }
         public Command CancelCommand { get; }
 
-        public DoctorReviewViewModel(DriverDto driver, TaskCompletionSource<DoctorReview> completionSource)
+        public DoctorReviewViewModel(DriverDto driver, TaskCompletionSource<DoctorReviewRequest> completionSource)
         {
             _accountStore = DependencyService.Get<IAccountStore>();
             _completionSource = completionSource;
 
             FullName = driver.FullName;
             DriverId = driver.Id;
+            IsHealthy = true;
 
-            ApproveCommand = new Command(OnApprove);
-            CancelCommand = new Command(OnCancel);
+            ApproveCommand = new Command(async () => await OnApproveAsync(), CanApprove);
+            CancelCommand = new Command(async () => await OnCancelAsync());
         }
 
-        private async void OnApprove()
+        private async Task OnApproveAsync()
         {
             var reviewerId = await _accountStore.GetUserIdAsync();
-            var review = new DoctorReview(reviewerId, Notes, IsHealthy, DriverId);
+            var review = new DoctorReviewRequest(
+                driverId: DriverId,
+                doctorId: reviewerId,
+                isHealthy: IsHealthy,
+                notes: Notes);
+
+            await PopupNavigation.Instance.PopAsync();
 
             _completionSource.SetResult(review);
         }
 
-        private async void OnCancel()
+        private async Task OnCancelAsync()
         {
-            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
+            await PopupNavigation.Instance.PopAsync();
+
+            _completionSource.SetResult(null);
         }
+
+        private bool CanApprove()
+            => IsHealthy || !string.IsNullOrWhiteSpace(Notes);
     }
 }
