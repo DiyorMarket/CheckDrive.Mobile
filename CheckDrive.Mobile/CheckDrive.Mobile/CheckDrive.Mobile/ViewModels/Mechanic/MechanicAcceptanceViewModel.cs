@@ -1,5 +1,4 @@
 ﻿using CheckDrive.Mobile.Models.Enums;
-using CheckDrive.Mobile.Models.Review;
 using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Stores.CheckPoint;
 using CheckDrive.Mobile.Stores.Mechanic;
@@ -10,7 +9,8 @@ using System.Threading.Tasks;
 using System;
 using Xamarin.Forms;
 using System.Linq;
-using CheckDrive.Mobile.ViewModels.Mechanic.Popups;
+using CheckDrive.Mobile.Models.Mechanic.Acceptance;
+using Rg.Plugins.Popup.Services;
 
 namespace CheckDrive.Mobile.ViewModels.Mechanic
 {
@@ -26,7 +26,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
         public Command RefreshCommand { get; }
         public Command<CheckPointDto> ShowReviewPopupCommand { get; }
 
-        public DateTime CurrentDate { get; }
+        public string CurrentDate { get; }
 
         public MechanicAcceptanceViewModel()
         {
@@ -36,7 +36,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             _allCheckPoints = new List<CheckPointDto>();
             FilteredCheckPoints = new ObservableCollection<CheckPointDto>();
 
-            CurrentDate = DateTime.Now;
+            CurrentDate = DateTime.Now.ToString("dd MMMM");
 
             SearchCommand = new Command<string>(OnSearch);
             RefreshCommand = new Command(async () => await LoadDriversAsync());
@@ -45,18 +45,19 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
 
         public async Task LoadDriversAsync()
         {
-            IsRefreshing = true;
+            if (IsBusy)
+            {
+                return;
+            }
+
+            IsBusy = true;
 
             try
             {
                 var checkPoints = await _checkPointStore.GetCheckPointsAsync(CheckPointStage.OperatorReview);
 
                 _allCheckPoints.AddRange(checkPoints);
-                FilteredCheckPoints.Clear();
-                foreach (var checkPoint in checkPoints)
-                {
-                    FilteredCheckPoints.Add(checkPoint);
-                }
+                UpdateCheckPoints(checkPoints);
             }
             catch (Exception ex)
             {
@@ -64,69 +65,80 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             }
             finally
             {
-                IsRefreshing = false;
+                IsBusy = false;
             }
         }
 
         private void OnSearch(string search)
         {
-            FilteredCheckPoints.Clear();
+            var searchText = search.ToLower().Trim();
+            var filteredCheckPoints = string.IsNullOrWhiteSpace(searchText)
+                ? _allCheckPoints
+                : _allCheckPoints.Where(x => x.DriverName.Contains(searchText));
 
-            if (string.IsNullOrWhiteSpace(search))
-            {
-                foreach (var checkPoint in _allCheckPoints)
-                {
-                    FilteredCheckPoints.Add(checkPoint);
-                }
-
-                return;
-            }
-
-            var filteredCheckPoints = _allCheckPoints
-                .Where(x => x.DriverName.ToLower().Contains(search.ToLower()))
-                .OrderBy(x => x.DriverName);
-
-            foreach (var checkPoint in filteredCheckPoints)
-            {
-                FilteredCheckPoints.Add(checkPoint);
-            }
+            UpdateCheckPoints(filteredCheckPoints);
         }
 
         private async Task ShowReviewPopup(CheckPointDto checkPoint)
         {
-            var completionSource = new TaskCompletionSource<MechanicAcceptanceReview>();
-            var reviewPopup = new MechanicAcceptanceReviewPopup
+            if (PopupNavigation.Instance.PopupStack.Count > 0)
             {
-                BindingContext = new MechanicAcceptanceReviewViewModel(checkPoint, completionSource)
-            };
+                return;
+            }
 
-            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(reviewPopup);
-
-            var result = await completionSource.Task;
-            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
-
-            if (result != null)
+            try
             {
-                await SendReviewAsync(result, checkPoint.DriverName, checkPoint.Car.ToString());
+                var completionSource = new TaskCompletionSource<MechanicAcceptanceRequest>();
+                var reviewPopup = new MechanicAcceptanceReviewPopup(checkPoint, completionSource);
+
+                await PopupNavigation.Instance.PushAsync(reviewPopup);
+
+                var result = await completionSource.Task;
+
+                await SendReviewAsync(result);
+            }
+            catch (Exception ex)
+            {
+                await DisplayErrorAsync("Tekshiruv oynasini ochishda xato ro'y berdi.", ex.Message);
             }
         }
 
-        private async Task SendReviewAsync(MechanicAcceptanceReview review, string driverName, string carName)
+        private async Task SendReviewAsync(MechanicAcceptanceRequest request)
         {
+            if (request is null)
+            {
+                return;
+            }
+
             IsBusy = true;
 
             try
             {
-                await _mechanicStore.CreateReviewAsync(review);
-                await DisplaySuccessAsync($"{driverName}dan {carName} qabul qilish so'rovi muvaffaqiyatli yuborildi.");
+                await _mechanicStore.CreateReviewAsync(request);
+
+                await DisplayReviewSuccessAsync();
+
+                var checkPointToRemove = _allCheckPoints.Find(x => x.Id == request.CheckPointId);
+                _allCheckPoints.Remove(checkPointToRemove);
+                FilteredCheckPoints.Remove(checkPointToRemove);
             }
             catch (Exception ex)
             {
-                await DisplayErrorAsync($"{driverName} uchun tekshiruvni saqlashda kutilmagan xato ro'y berdi. Iltimos qayta urunib ko'ring yoki texnik yordam bilan bog'laning.", ex.Message);
+                await DisplayReviewErrorAsync(ex.Message);
             }
             finally
             {
                 IsBusy = false;
+            }
+        }
+
+        private void UpdateCheckPoints(IEnumerable<CheckPointDto> checkPoints)
+        {
+            FilteredCheckPoints.Clear();
+
+            foreach (var checkPoint in checkPoints)
+            {
+                FilteredCheckPoints.Add(checkPoint);
             }
         }
     }

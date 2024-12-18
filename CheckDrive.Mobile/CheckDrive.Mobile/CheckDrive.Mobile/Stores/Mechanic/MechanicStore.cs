@@ -1,49 +1,59 @@
-﻿using CheckDrive.Mobile.Helpers;
-using CheckDrive.Mobile.Models.Driver;
+﻿using CheckDrive.Mobile.Models.Driver;
+using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Models.Mechanic;
-using CheckDrive.Mobile.Models.Review;
-using System;
+using CheckDrive.Mobile.Models.Mechanic.Acceptance;
+using CheckDrive.Mobile.Models.Mechanic.Handover;
+using CheckDrive.Mobile.Services;
+using CheckDrive.Mobile.Stores.Account;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.Stores.Mechanic
 {
     public class MechanicStore : IMechanicStore
     {
-        public async Task CreateReviewAsync(MechanicHandoverReview review)
-        {
-            if (new Random().Next(0, 100) % 2 == 0)
-            {
-                throw new Exception("Random exception");
-            }
+        private readonly ApiClient _client;
+        private readonly IAccountStore _accountStore;
 
-            await Task.Delay(1500);
+        public MechanicStore()
+        {
+            _client = DependencyService.Get<ApiClient>();
+            _accountStore = DependencyService.Get<IAccountStore>();
         }
 
-        public async Task CreateReviewAsync(MechanicAcceptanceReview review)
+        public async Task CreateReviewAsync(MechanicHandoverRequest request)
         {
-            if (new Random().Next(0, 100) % 2 == 0)
-            {
-                throw new Exception("Random exception");
-            }
+            var response = await _client.PostAsync($"reviews/mechanics/{request.MechanicId}/handover", request);
+            response.EnsureSuccessStatusCode();
+        }
 
-            await Task.Delay(1500);
+        public async Task CreateReviewAsync(MechanicAcceptanceRequest request)
+        {
+            var response = await _client.PostAsync($"reviews/mechanics/{request.MechanicId}/acceptance", request);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<List<DriverDto>> GetDriversForAcceptanceReviewAsync()
+        {
+            var drivers = await _client.GetAsync<List<DriverDto>>($"drivers?=Stage={CheckPointStage.OperatorReview}");
+
+            return drivers;
+        }
+
+        public async Task<List<DriverDto>> GetDriversForHandoverReviewAsync()
+        {
+            var drivers = await _client.GetAsync<List<DriverDto>>($"drivers?Stage={CheckPointStage.DoctorReview}");
+
+            return drivers;
         }
 
         public async Task<List<MechanicHistoryDto>> GetHistoriesAsync()
         {
-            var count = new Random().Next(5, 20);
-            var generator = FakeDataGenerator.GetMechanicHistory();
-            var histories = generator.Generate(count);
-
-            await Task.Delay(1000);
+            var mechanicId = await _accountStore.GetUserIdAsync();
+            var histories = await _client.GetAsync<List<MechanicHistoryDto>>($"reviews/histories/mechanics/{mechanicId}");
 
             return histories;
-        }
-
-        public Task<List<DriverDto>> GetDriversForReviewAsync()
-        {
-            throw new NotImplementedException();
         }
     }
 }

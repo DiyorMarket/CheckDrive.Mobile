@@ -27,7 +27,6 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
         public Command FilterCommand { get; }
         public Command RefreshCommand { get; }
 
-        public string Search { get; set; }
         public MechanicFilter Filters { get; set; }
 
         public MechanicHistoryViewModel()
@@ -41,13 +40,12 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
 
             SearchCommand = new Command<string>(OnSearch);
             FilterCommand = new Command(async () => await OnFilterAsync());
-            RefreshCommand = new Command(async () => await OnRefreshAsync());
+            RefreshCommand = new Command(async () => await LoadDataAsync());
         }
 
         public async Task LoadDataAsync()
         {
             IsBusy = true;
-            IsRefreshing = true;
 
             try
             {
@@ -56,9 +54,11 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
 
                 await Task.WhenAll(carsTask, historiesTask);
 
+                _cars.Clear();
                 _cars.AddRange(carsTask.Result);
-
+                _allHistory.Clear();
                 _allHistory.AddRange(historiesTask.Result);
+
                 var sortedHistories = historiesTask.Result.OrderByDescending(x => x.Date.Date);
                 UpdateHistories(sortedHistories);
             }
@@ -69,38 +69,16 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             finally
             {
                 IsBusy = false;
-                IsRefreshing = false;
             }
         }
 
-        private async Task OnRefreshAsync()
+        private void OnSearch(string searchText)
         {
-            IsBusy = true;
-            IsRefreshing = true;
+            searchText = searchText.ToLower().Trim();
 
-            try
-            {
-                var histories = await _mechanicStore.GetHistoriesAsync();
-                var sortedHistories = histories.OrderByDescending(x => x.Date.Date);
-
-                UpdateHistories(sortedHistories);
-            }
-            catch (Exception ex)
-            {
-                await DisplayErrorAsync("Tarixni yuklashda xato ro'y berdi.", ex.Message);
-            }
-            finally
-            {
-                IsBusy = false;
-                IsRefreshing = false;
-            }
-        }
-
-        private void OnSearch(string search)
-        {
-            var filteredHistory = string.IsNullOrWhiteSpace(search)
+            var filteredHistory = string.IsNullOrWhiteSpace(searchText)
                 ? _allHistory
-                : _allHistory.Where(x => x.DriverName.ToLower().Contains(search) || x.CarDetails.ToLower().Contains(search));
+                : _allHistory.Where(x => x.DriverName.ToLower().Contains(searchText));
 
             var sortedHistory = filteredHistory.OrderByDescending(x => x.Date.Date).ToList();
             UpdateHistories(sortedHistory);
@@ -109,27 +87,21 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
         private async Task OnFilterAsync()
         {
             var completionSource = new TaskCompletionSource<MechanicFilter>();
-            var popup = new MechanicHistoryFilterPopup()
+            var options = new MechanicFilterOptions(_allHistory, _cars);
+            var popup = new MechanicFiltersPopup()
             {
-                BindingContext = new MechanicHistoryFilterViewModel(_allHistory, completionSource, Filters)
+                BindingContext = new MechanicFiltersViewModel(options, Filters, completionSource)
             };
 
-            try
-            {
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
+            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
 
-                var result = await completionSource.Task;
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
+            var result = await completionSource.Task;
+            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
 
-                if (result != null)
-                {
-                    Filters = result;
-                    ApplyFilters(result);
-                }
-            }
-            catch (Exception ex)
+            if (result != null)
             {
-                await DisplayErrorAsync("Saralash modalni ochishda muammo ro'y berdi.", ex.Message);
+                Filters = result;
+                ApplyFilters(result);
             }
         }
 
@@ -157,8 +129,8 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
                 query = query.Where(x => x.Status == filter.Status);
             }
 
-            query = query.Where(x => x.Date.Date >= filter.StartDate);
-            query = query.Where(x => x.Date.Date <= filter.EndDate);
+            query = query.Where(x => x.Date.Date >= filter.StartDate.Date);
+            query = query.Where(x => x.Date.Date <= filter.EndDate.Date);
             query = ApplySort(filter.SortBy, query);
 
             UpdateHistories(query);

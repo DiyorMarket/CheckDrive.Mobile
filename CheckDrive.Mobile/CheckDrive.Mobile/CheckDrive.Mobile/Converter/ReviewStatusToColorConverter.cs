@@ -17,13 +17,14 @@ namespace CheckDrive.Mobile.Converter
                         return Color.FromHex("#04aa6d");
                     case ReviewStatus.Approved:
                         return Color.FromHex("#04aa6d");
-                    case ReviewStatus.RejectedByReviewer:
-                    case ReviewStatus.RejectedByDriver:
+                    case ReviewStatus.Rejected:
                         return Color.FromHex("#bd3e3e");
+                    case ReviewStatus.Pending:
+                        return Color.FromHex("#fda838");
                     case ReviewStatus.NotStarted:
-                        return Color.FromHex("#6b6b6b");
+                        return Color.FromHex("#1f2121");
                     default:
-                        return Color.Transparent;
+                        return Color.Black;
                 }
             }
 

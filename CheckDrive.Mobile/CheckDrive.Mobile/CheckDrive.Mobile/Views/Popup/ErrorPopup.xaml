@@ -69,7 +69,7 @@
                                         HorizontalOptions="Center"
                                         Text="Yopish"
                                         TextColor="White"
-                                        WidthRequest="150" />
+                                        WidthRequest="250" />
                 </StackLayout>
             </mdc:MaterialCard>
         </Frame>

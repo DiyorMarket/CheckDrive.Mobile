@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Linq;
 using CheckDrive.Mobile.Stores.Car;
-using CheckDrive.Mobile.ViewModels.Mechanic.Popups;
-using CheckDrive.Mobile.Models.Review;
 using CheckDrive.Mobile.Stores.CheckPoint;
-using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Views.Mechanic.Popups;
+using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.Models.Mechanic.Handover;
+using Rg.Plugins.Popup.Services;
 
 namespace CheckDrive.Mobile.ViewModels.Mechanic
 {
@@ -29,7 +29,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
         public Command RefreshCommand { get; }
         public Command<CheckPointDto> ShowReviewPopupCommand { get; }
 
-        public DateTime CurrentDate { get; }
+        public string CurrentDate { get; }
 
         public MechanicHandoverViewModel()
         {
@@ -41,33 +41,36 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             _allCheckPoints = new List<CheckPointDto>();
             FilteredCheckPoints = new ObservableCollection<CheckPointDto>();
 
-            CurrentDate = DateTime.Now;
+            CurrentDate = DateTime.Now.ToString("dd MMMM");
 
             SearchCommand = new Command<string>(OnSearch);
             RefreshCommand = new Command(async () => await LoadDriversAsync());
-            ShowReviewPopupCommand = new Command<CheckPointDto>(async (checkPoint) => await ShowReviewPopup(checkPoint));
+            ShowReviewPopupCommand = new Command<CheckPointDto>(async (driver) => await ShowReviewPopup(driver));
         }
 
         public async Task LoadDriversAsync()
         {
-            IsRefreshing = true;
+            if (IsBusy)
+            {
+                return;
+            }
+
+            IsBusy = true;
 
             try
             {
-                var checkPointsTask = _checkPointStore.GetCheckPointsAsync(CheckPointStage.DoctorReview);
-                var carsTask = _carStore.GetAvailableCarsAsync();
+                var checkPoints = await _checkPointStore.GetCheckPointsAsync(CheckPointStage.DoctorReview);
+                var cars = await _carStore.GetAvailableCarsAsync();
 
-                await Task.WhenAll(checkPointsTask, carsTask);
-
-                _allCheckPoints.AddRange(checkPointsTask.Result);
+                _allCheckPoints.AddRange(checkPoints);
                 FilteredCheckPoints.Clear();
-                foreach (var checkPoint in checkPointsTask.Result)
+                foreach (var checkPoint in checkPoints)
                 {
                     FilteredCheckPoints.Add(checkPoint);
                 }
 
                 _cars.Clear();
-                _cars.AddRange(carsTask.Result);
+                _cars.AddRange(cars);
             }
             catch (Exception ex)
             {
@@ -75,29 +78,25 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             }
             finally
             {
-                IsRefreshing = false;
+                IsBusy = false;
             }
         }
 
         private void OnSearch(string search)
         {
+            var searchText = search.ToLower().Trim();
+            var filteredCheckPoints = string.IsNullOrEmpty(searchText)
+                ? _allCheckPoints
+                : _allCheckPoints.Where(x => x.DriverName.Contains(search));
+
+            UpdateCheckPoints(filteredCheckPoints);
+        }
+
+        private void UpdateCheckPoints(IEnumerable<CheckPointDto> checkPoints)
+        {
             FilteredCheckPoints.Clear();
 
-            if (string.IsNullOrWhiteSpace(search))
-            {
-                foreach (var checkPoint in _allCheckPoints)
-                {
-                    FilteredCheckPoints.Add(checkPoint);
-                }
-
-                return;
-            }
-
-            var filteredCheckPoints = _allCheckPoints
-                .Where(x => x.DriverName.ToLower().Contains(search.ToLower()))
-                .OrderBy(x => x.DriverName);
-
-            foreach (var checkPoint in filteredCheckPoints)
+            foreach (var checkPoint in checkPoints)
             {
                 FilteredCheckPoints.Add(checkPoint);
             }
@@ -105,46 +104,60 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
 
         private async Task ShowReviewPopup(CheckPointDto checkPoint)
         {
-            if (!_cars.Any())
+            if (!CanShowReviewPopup())
             {
-                await DisplayErrorAsync("Topshirish uchun bo'sh avtomobil topilmadi", "No avialable car for handover.");
                 return;
             }
 
-            var completionSource = new TaskCompletionSource<MechanicHandoverReview>();
-            var reviewPopup = new MechanicHandoverReviewPopup
+            var completionSource = new TaskCompletionSource<MechanicHandoverRequest>();
+            var reviewPopup = new MechanicHandoverReviewPopup(checkPoint, _cars, completionSource);
+
+            MechanicHandoverRequest result = null;
+
+            try
             {
-                BindingContext = new MechanicHandoverReviewViewModel(checkPoint, _cars, completionSource)
-            };
+                await PopupNavigation.Instance.PushAsync(reviewPopup);
 
-            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(reviewPopup);
+                result = await completionSource.Task;
 
-            var result = await completionSource.Task;
-            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
+                await PopupNavigation.Instance.PopAsync();
+            }
+            catch (Exception ex)
+            {
+                await DisplayErrorAsync("Tekshiruv oynasini ochishda muammo ro'y berdi.", ex.Message);
+            }
 
             if (result != null)
             {
-                await SendReviewAsync(result, checkPoint.DriverName);
+                await SendReviewAsync(result);
             }
         }
 
-        private async Task SendReviewAsync(MechanicHandoverReview review, string driverName)
+        private async Task SendReviewAsync(MechanicHandoverRequest request)
         {
             IsBusy = true;
 
             try
             {
-                await _mechanicStore.CreateReviewAsync(review);
-                await DisplaySuccessAsync($"{driverName}ga {review.Car} topshirish so'rovi muvaffaqiyatli yuborildi.");
+                await _mechanicStore.CreateReviewAsync(request);
+
+                await DisplayReviewSuccessAsync();
+
+                var checkPointToRemove = _allCheckPoints.Find(x => x.Id == request.CheckPointId);
+                _allCheckPoints.Remove(checkPointToRemove);
+                FilteredCheckPoints.Remove(checkPointToRemove);
             }
             catch (Exception ex)
             {
-                await DisplayErrorAsync($"{driverName} uchun tekshiruvni saqlashda kutilmagan xato ro'y berdi. Iltimos qayta urunib ko'ring yoki texnik yordam bilan bog'laning.", ex.Message);
+                await DisplayReviewErrorAsync(ex.Message);
             }
             finally
             {
                 IsBusy = false;
             }
         }
+
+        private bool CanShowReviewPopup()
+            => _cars.Any() && PopupNavigation.Instance.PopupStack.Count == 0;
     }
 }

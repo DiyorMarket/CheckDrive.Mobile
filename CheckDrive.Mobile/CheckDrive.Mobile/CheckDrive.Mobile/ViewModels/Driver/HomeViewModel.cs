@@ -1,27 +1,24 @@
 ﻿using CheckDrive.Mobile.Models;
-using CheckDrive.Mobile.Stores.Review;
+using CheckDrive.Mobile.Models.Driver;
+using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.Services;
+using CheckDrive.Mobile.Stores.Driver;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.ViewModels.Driver
 {
     public class HomeViewModel : BaseViewModel
     {
-        private readonly IReviewStore _reviewStore;
+        private readonly SignalRService _signalRService;
+        private readonly IDriverStore _driverStore;
 
-        public ICommand RefreshCommand { get; }
-
-        public string Date { get; }
-
-        private CheckPointDto _checkPoint;
-        public CheckPointDto CheckPoint
-        {
-            get => _checkPoint;
-            set => SetProperty(ref _checkPoint, value);
-        }
+        public ObservableCollection<ReviewDto> Reviews { get; }
 
         private decimal _monthlyDistanceLimit;
         public decimal MonthlyDistanceLimit
@@ -37,25 +34,40 @@ namespace CheckDrive.Mobile.ViewModels.Driver
             set => SetProperty(ref _currentMonthMileage, value);
         }
 
-        private int _mileageLimitProgress;
-        public int MileageLimitProgress
+        private decimal _mileageLimitProgress;
+        public decimal MileageLimitProgress
         {
             get => _mileageLimitProgress;
             set => SetProperty(ref _mileageLimitProgress, value);
         }
 
-        public ObservableCollection<ReviewDto> Reviews { get; private set; }
+        public string CurrentDate { get; }
+        public CheckPointDto CheckPoint { get; private set; }
+
+        public Command RefreshCommand { get; }
+        public Command<ReviewDto> ShowConfirmationPopupCommand { get; }
 
         public HomeViewModel()
         {
-            _reviewStore = DependencyService.Get<IReviewStore>();
-            RefreshCommand = new Command(async () => await LoadData(true));
+            _signalRService = DependencyService.Get<SignalRService>();
+            _driverStore = DependencyService.Get<IDriverStore>();
 
-            Date = DateTime.Now.ToLocalTime().ToString("dddd, dd MMMM");
+            RefreshCommand = new Command(async () => await OnRefreshAsync());
+            ShowConfirmationPopupCommand = new Command<ReviewDto>(async (review) => await OnShowConfirmationPopupAsync(review));
+
+            CurrentDate = DateTime.Now.ToLocalTime().ToString("dddd, dd MMMM");
             Reviews = new ObservableCollection<ReviewDto>();
+
+            SetupReviews();
         }
 
-        public async Task LoadData(bool forceRefresh = false)
+        public async Task InitializeAsync()
+        {
+            await _signalRService.StartConnectionAsync();
+            SubscribeToCheckPointProgressUpdates();
+        }
+
+        public async Task OnRefreshAsync()
         {
             if (IsBusy)
             {
@@ -63,20 +75,19 @@ namespace CheckDrive.Mobile.ViewModels.Driver
             }
 
             IsBusy = true;
-            Reviews.Clear();
 
             try
             {
-                var checkPoint = await _reviewStore.GetCheckPointAsync(forceRefresh);
-
+                var checkPoint = await _driverStore.GetCurrentCheckPointAsync();
                 CheckPoint = checkPoint;
-                SetCarProperties(checkPoint.Car);
 
-                foreach (var review in checkPoint.Reviews)
-                {
-                    await Task.Delay(250);
-                    Reviews.Add(review);
-                }
+                UpdateReviews(checkPoint);
+                UpdateCar(checkPoint);
+                // await CheckPendingReviews(checkPoint);
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             catch (Exception ex)
             {
@@ -88,8 +99,47 @@ namespace CheckDrive.Mobile.ViewModels.Driver
             }
         }
 
-        private void SetCarProperties(CarDto car)
+        private void SetupReviews()
         {
+            foreach (var type in Enum.GetValues(typeof(ReviewType)))
+            {
+                var review = new ReviewDto
+                {
+                    Type = (ReviewType)type,
+                    Status = (ReviewType)type == ReviewType.DoctorReview ? ReviewStatus.InProgress : ReviewStatus.NotStarted,
+                };
+
+                Reviews.Add(review);
+            }
+        }
+
+        private void UpdateReviews(CheckPointDto checkPoint)
+        {
+            // TODO: if null then reset?
+            if (checkPoint is null)
+            {
+                return;
+            }
+
+            checkPoint.SetupReviews();
+            var reviewDictionary = checkPoint.Reviews.ToDictionary(r => r.Type);
+
+            for (int i = 0; i < Reviews.Count; i++)
+            {
+                if (reviewDictionary.TryGetValue(Reviews[i].Type, out var reviewToUpdate))
+                {
+                    Reviews[i].Update(reviewToUpdate);
+                }
+                else if (i > 0 && Reviews[i - 1].Status == ReviewStatus.Approved)
+                {
+                    Reviews[i].Update(ReviewStatus.InProgress);
+                }
+            }
+        }
+
+        private void UpdateCar(CheckPointDto checkPoint)
+        {
+            var car = checkPoint.Car;
             if (car == null)
             {
                 return;
@@ -97,7 +147,62 @@ namespace CheckDrive.Mobile.ViewModels.Driver
 
             MonthlyDistanceLimit = car.MonthlyDistanceLimit;
             CurrentMonthMileage = car.CurrentMonthMileage;
-            MileageLimitProgress = (int)(car.CurrentMonthMileage * 100 / car.MonthlyDistanceLimit);
+            MileageLimitProgress = car.MileageLimitProgress;
+        }
+
+        private void SubscribeToCheckPointProgressUpdates()
+        {
+            MessagingCenter.Subscribe<SignalRService>(this, "CheckPointProgressUpdated", async _ =>
+            {
+                await OnRefreshAsync();
+                await CheckPendingReviewsAsync();
+            });
+        }
+
+        private async Task CheckPendingReviewsAsync()
+        {
+            foreach (var review in Reviews)
+            {
+                if (review.Status == ReviewStatus.Pending)
+                {
+                    await OnShowConfirmationPopupAsync(review);
+                }
+            }
+        }
+
+        private async Task OnShowConfirmationPopupAsync(ReviewDto review)
+        {
+            if (review.Status != ReviewStatus.Pending)
+            {
+                return;
+            }
+
+            if (PopupNavigation.Instance.PopupStack.Count > 0)
+            {
+                return;
+            }
+
+            await DisplayReviewConfirmationAsync(review, CheckPoint);
+        }
+
+        private async Task DisplayReviewConfirmationAsync(ReviewDto reviewToUpdate, CheckPointDto checkPoint)
+        {
+            try
+            {
+                var completionSource = new TaskCompletionSource<ReviewConfirmationRequest>();
+                var popup = ReviewConfirmationFactory.GetConfirmationPopup(completionSource, checkPoint, reviewToUpdate.Type);
+
+                await PopupNavigation.Instance.PushAsync(popup);
+
+                var request = await completionSource.Task;
+
+                await _driverStore.SendReviewConfirmationAsync(request);
+                await OnRefreshAsync();
+            }
+            catch (Exception ex)
+            {
+                await DisplayErrorAsync("So'rovni tasdiqlashda xato ro'y berdi.", ex.Message);
+            }
         }
     }
 }

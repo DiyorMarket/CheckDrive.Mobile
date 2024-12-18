@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Operator.OperatorReviewPopup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:popups="clr-namespace:CheckDrive.Mobile.ViewModels.Operator.Popups"
+                 x:DataType="popups:OperatorReviewViewModel"
+                 CloseWhenBackgroundIsClicked="False">
+    <mdc:MaterialCard Margin="25,0"
+                      BackgroundColor="White"
+                      CornerRadius="10"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center">
+        <StackLayout Margin="10">
+            <mdc:MaterialLabel FontAttributes="Bold"
+                               FontSize="Large"
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding DriverName}" />
+
+            <mdc:MaterialLabel FontSize="Medium"
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding Car}" />
+
+            <mdc:MaterialPicker Margin="0,20,0,0"
+                                ItemsSource="{Binding OilMarks}"
+                                LabelText="Yoqilg'i markalari"
+                                SelectedItem="{Binding SelectedOilMark}"
+                                Style="{StaticResource Picker}"
+                                SupportingText="{Binding OilMarkErrorMessage}" />
+
+            <mdc:MaterialLabel FontSize="Small"
+                               HorizontalTextAlignment="Start"
+                               Text="{Binding TotalOilAmountErrorMessage}"
+                               TextColor="{StaticResource Danger}" />
+
+            <Grid ColumnDefinitions="*,5,*">
+                <mdc:MaterialEntry Grid.Column="0"
+                                   LabelText="Boshlang'ich yoqilg'i"
+                                   Style="{StaticResource NumericInput}"
+                                   Text="{Binding InitialOilAmount}" />
+                <mdc:MaterialEntry Grid.Column="2"
+                                   LabelText="Quyilgan yoqilg'i"
+                                   Style="{StaticResource NumericInput}"
+                                   Text="{Binding OilRefillAmount}" />
+            </Grid>
+
+            <mdc:MaterialEditor Margin="0,20,0,0"
+                                LabelText="Izoh"
+                                Placeholder="Izohingizni kiriting..."
+                                Style="{StaticResource Editor}"
+                                Text="{Binding Notes}" />
+
+            <Grid Margin="0,30,0,10" ColumnDefinitions="*,5,*">
+                <mdc:MaterialButton Grid.Column="0"
+                                    Command="{Binding CancelCommand}"
+                                    HorizontalOptions="FillAndExpand"
+                                    Style="{StaticResource CancelButton}"
+                                    Text="Yopish" />
+                <mdc:MaterialButton Grid.Column="2"
+                                    Command="{Binding ApproveCommand}"
+                                    HorizontalOptions="FillAndExpand"
+                                    Style="{StaticResource AcceptButton}"
+                                    Text="Tasdiqlash" />
+            </Grid>
+        </StackLayout>
+    </mdc:MaterialCard>
+</pages:PopupPage>

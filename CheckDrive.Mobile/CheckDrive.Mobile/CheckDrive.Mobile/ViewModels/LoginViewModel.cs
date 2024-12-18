@@ -1,4 +1,5 @@
 ﻿using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Stores.Account;
 using CheckDrive.Mobile.Stores.Auth;
 using System;
@@ -12,6 +13,7 @@ namespace CheckDrive.Mobile.ViewModels
     {
         private readonly IAuthStore _authStore;
         private readonly IAccountStore _accountDataStore;
+        private readonly SignalRService _signalRService;
 
         public ICommand LoginCommand { get; }
         public ICommand TogglePasswordVisibilityCommand { get; }
@@ -51,6 +53,7 @@ namespace CheckDrive.Mobile.ViewModels
         {
             _authStore = DependencyService.Get<IAuthStore>();
             _accountDataStore = DependencyService.Get<IAccountStore>();
+            _signalRService = DependencyService.Get<SignalRService>();
 
             LoginCommand = new Command(async () => await ExecuteLoginCommand());
             TogglePasswordVisibilityCommand = new Command(TogglePasswordVisibility);
@@ -73,10 +76,11 @@ namespace CheckDrive.Mobile.ViewModels
 
                 if (!success)
                 {
-                    ShowError("Invalid login attempt.");
+                    ShowError("Foydalanuvchi ismi yoki parol noto'g'ri.");
                     return;
                 }
 
+                await _signalRService.StartConnectionAsync();
                 var role = await _accountDataStore.GetUserRoleAsync();
 
                 Application.Current.MainPage = new AppShell(role);
@@ -102,6 +106,7 @@ namespace CheckDrive.Mobile.ViewModels
                 return false;
             }
 
+            ErrorMessage = string.Empty;
             return true;
         }
 

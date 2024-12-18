@@ -1,5 +1,5 @@
 ﻿using CheckDrive.Mobile.Models;
-using CheckDrive.Mobile.Stores.History;
+using CheckDrive.Mobile.Stores.Driver;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -10,7 +10,7 @@ namespace CheckDrive.Mobile.ViewModels.Driver
 {
     public class HistoryViewModel : BaseViewModel
     {
-        private readonly IHistoryStore _historyStore;
+        private readonly IDriverStore _driverStore;
 
         public ICommand RefreshCommand { get; }
 
@@ -25,7 +25,7 @@ namespace CheckDrive.Mobile.ViewModels.Driver
 
         public HistoryViewModel()
         {
-            _historyStore = DependencyService.Get<IHistoryStore>();
+            _driverStore = DependencyService.Get<IDriverStore>();
 
             RefreshCommand = new Command(async () => await LoadHistories());
 
@@ -44,7 +44,7 @@ namespace CheckDrive.Mobile.ViewModels.Driver
 
             try
             {
-                var histories = await _historyStore.GetHistoriesAsync();
+                var histories = await _driverStore.GetHistoriesAsync();
 
                 foreach (var history in histories)
                 {

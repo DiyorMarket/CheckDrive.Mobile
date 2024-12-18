@@ -85,9 +85,9 @@
                       ContentTemplate="{DataTemplate views:ProfilePage}"
                       Icon="icon_user.png"
                       Route="ProfilePage" />
-        <ShellContent Title="Test"
+        <!--<ShellContent Title="Test"
                       ContentTemplate="{DataTemplate views:TestPage}"
                       Icon="icon_warning.png"
-                      Route="TestPage" />
+                      Route="TestPage" />-->
     </TabBar>
 </Shell>

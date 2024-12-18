@@ -1,7 +1,6 @@
 ﻿using CheckDrive.Mobile.Helpers;
 using CheckDrive.Mobile.Models.Doctor;
 using CheckDrive.Mobile.Models.Driver;
-using CheckDrive.Mobile.Models.Review;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +17,11 @@ namespace CheckDrive.Mobile.Stores.Doctor
                 throw new Exception();
             }
             await Task.Delay(1250);
+        }
+
+        public Task CreateAsync(DoctorReviewRequest request)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<List<DriverDto>> GetDriversAsync()
@@ -42,6 +46,11 @@ namespace CheckDrive.Mobile.Stores.Doctor
             await Task.Delay(1250);
 
             return histories;
+        }
+
+        public Task<List<DoctorReview>> GetReviews(bool forceRefresh = false)
+        {
+            throw new NotImplementedException();
         }
     }
 }

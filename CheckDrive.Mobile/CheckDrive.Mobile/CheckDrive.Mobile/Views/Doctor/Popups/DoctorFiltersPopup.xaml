@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Doctor.DoctorFiltersPopup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:doctor="clr-namespace:CheckDrive.Mobile.ViewModels.Doctor.Popups"
+                 xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 x:DataType="doctor:DoctorFiltersViewModel">
+    <mdc:MaterialCard Margin="25,0"
+                      BackgroundColor="White"
+                      CornerRadius="10"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center">
+        <StackLayout>
+            <mdc:MaterialLabel FontSize="Large"
+                               Style="{StaticResource Title}"
+                               Text="Tarixni saralash" />
+
+            <mdc:MaterialLabel Margin="5,20,0,0"
+                               FontAttributes="Bold"
+                               FontSize="Medium"
+                               Text="Saralash"
+                               TextColor="{StaticResource TextPrimary}" />
+
+            <mdc:MaterialPicker ItemsSource="{Binding Drivers}"
+                                LabelText="Haydovchi bo'yicha saralash"
+                                SelectedItem="{Binding SelectedDriver}"
+                                Style="{StaticResource Picker}" />
+
+            <Grid Margin="0,20,0,0" ColumnDefinitions="*,5,*">
+                <mdc:MaterialDatePicker Grid.Column="0"
+                                        Date="{Binding StartDate}"
+                                        LabelText="Boshlanish sanasi"
+                                        MaximumDate="{Binding MaxDate}"
+                                        MinimumDate="{Binding MinDate}"
+                                        Style="{StaticResource DatePicker}" />
+                <mdc:MaterialDatePicker Grid.Column="2"
+                                        Date="{Binding EndDate}"
+                                        LabelText="Tugash sanasi"
+                                        MaximumDate="{Binding MaxDate}"
+                                        MinimumDate="{Binding MinDate}"
+                                        Style="{StaticResource DatePicker}" />
+            </Grid>
+
+            <mdc:MaterialLabel Margin="5,20,0,0"
+                               FontAttributes="Bold"
+                               FontSize="Medium"
+                               Text="Tartiblash"
+                               TextColor="{StaticResource TextPrimary}"
+                               VerticalTextAlignment="End" />
+            <mdc:MaterialPicker ItemsSource="{Binding SortOptions}"
+                                LabelText="Tartiblash uslubini tanlang"
+                                SelectedItem="{Binding SelectedSort}"
+                                Style="{StaticResource Picker}" />
+
+            <Grid Margin="0,30,0,10" ColumnDefinitions="*,5,*">
+                <mdc:MaterialButton Grid.Column="0"
+                                    Command="{Binding ResetCommand}"
+                                    Style="{StaticResource CancelButton}"
+                                    Text="Asl holatni tiklash" />
+                <mdc:MaterialButton Grid.Column="2"
+                                    Command="{Binding ApplyCommand}"
+                                    Style="{StaticResource AcceptButton}"
+                                    Text="Qo'llash" />
+            </Grid>
+        </StackLayout>
+    </mdc:MaterialCard>
+</pages:PopupPage>

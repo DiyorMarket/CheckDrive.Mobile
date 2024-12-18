@@ -2,66 +2,49 @@
 <ContentPage x:Class="CheckDrive.Mobile.Views.Operator.OperatorHomePage"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls">
-    <ContentPage.Resources>
-        <Style x:Key="ListItemStyle" TargetType="StackLayout">
-            <Setter Property="BackgroundColor" Value="White" />
-            <Setter Property="Margin" Value="10,5" />
-            <Setter Property="Padding" Value="15" />
-        </Style>
-    </ContentPage.Resources>
-
+             xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+             xmlns:models="clr-namespace:CheckDrive.Mobile.Models"
+             xmlns:operator="clr-namespace:CheckDrive.Mobile.ViewModels.Operator"
+             x:DataType="operator:OperatorHomeViewModel">
     <ContentPage.Content>
-        <RefreshView IsRefreshing="{Binding IsBusy}">
-            <StackLayout Padding="20" Spacing="15">
+        <StackLayout Margin="20,20,20,0" Spacing="15">
+            <mdc:MaterialLabel FontSize="Large"
+                               Style="{StaticResource Title}"
+                               Text="{Binding CurrentDate}" />
 
-                <Label Margin="0,10,0,20"
-                       FontAttributes="Bold"
-                       FontSize="Large"
-                       HorizontalOptions="Center"
-                       Text="{Binding CurrentDate, StringFormat='{0:MMMM dd, yyyy}'}"
-                       TextColor="{StaticResource Main}" />
+            <mdc:MaterialSearch Placeholder="Haydovchilarni izlash..."
+                                SearchCommand="{Binding SearchCommand}"
+                                Style="{StaticResource Search}" />
 
-                <mdc:MaterialSearch BackgroundColor="White"
-                                    BorderColor="{StaticResource Main}"
-                                    FocusedBackgroundColor="White"
-                                    Placeholder="Search Drivers"
-                                    PlaceholderColor="{StaticResource Main}"
-                                    SearchCommand="{Binding SearchCommand}"
-                                    Text="{Binding SearchText}"
-                                    TextColor="{StaticResource Main}" />
-
-                <CollectionView Margin="0"
-                                BackgroundColor="White"
-                                EmptyView="Tekshiruv uchun xaydovichlar topilmadi"
-                                ItemsSource="{Binding Drivers}"
+            <RefreshView Command="{Binding RefreshCommand}"
+                         IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         RefreshColor="{StaticResource Primary}">
+                <CollectionView EmptyView="Tekshiruv uchun haydovichlar topilmadi"
+                                ItemsSource="{Binding FilteredCheckPoints}"
                                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Style="{StaticResource ListItemStyle}">
-                                <StackLayout Orientation="Horizontal">
-                                    <Label FontSize="Medium"
-                                           Text="{Binding FirstName}"
-                                           TextColor="{StaticResource Main}"
-                                           VerticalOptions="Center" />
+                        <DataTemplate x:DataType="models:CheckPointDto">
+                            <StackLayout Padding="0,10"
+                                         BackgroundColor="White"
+                                         Orientation="Horizontal">
+                                <Label FontSize="Medium"
+                                       Text="{Binding DriverName}"
+                                       TextColor="{StaticResource Primary}"
+                                       VerticalOptions="StartAndExpand" />
 
-                                    <Label Margin="10,0,0,0"
-                                           FontSize="Medium"
-                                           Text="{Binding LastName}"
-                                           TextColor="{StaticResource Main}"
-                                           VerticalOptions="Center" />
+                                <mdc:MaterialButton Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Style="{StaticResource ReviewButton}" />
 
-                                    <mdc:MaterialButton BackgroundColor="{StaticResource Main}"
-                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"
-                                                        CommandParameter="{Binding .}"
-                                                        HorizontalOptions="EndAndExpand"
-                                                        Text="Tekshirish" />
-                                </StackLayout>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}" CommandParameter="{Binding .}" />
+                                </StackLayout.GestureRecognizers>
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </StackLayout>
-        </RefreshView>
+            </RefreshView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
