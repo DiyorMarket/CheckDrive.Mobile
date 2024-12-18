@@ -1,8 +1,9 @@
 ﻿using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Driver;
-using CheckDrive.Mobile.Models.Review;
+using CheckDrive.Mobile.Models.Mechanic.Handover;
 using CheckDrive.Mobile.Stores.Account;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -12,7 +13,8 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic.Popups
     {
         private readonly CheckPointDto _checkPoint;
         private readonly IAccountStore _accountStore;
-        private readonly TaskCompletionSource<MechanicHandoverReview> _completionSource;
+        private readonly TaskCompletionSource<MechanicHandoverRequest> _completionSource;
+        private int _minMileage;
 
         public DriverDto Driver { get; }
         public List<CarDto> Cars { get; }
@@ -24,7 +26,13 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic.Popups
             set
             {
                 SetProperty(ref _selectedCar, value);
-                InitialMileage = value.Mileage;
+                _minMileage = value?.Mileage ?? 0;
+                InitialMileage = value?.Mileage ?? 0;
+
+                if (value is null)
+                {
+                    CarErrorMessage = "Avtomobilni tanlash majburiy";
+                }
             }
         }
 
@@ -35,18 +43,23 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic.Popups
             set => SetProperty(ref _notes, value);
         }
 
-        private bool _isApproved;
-        public bool IsApproved
-        {
-            get => _isApproved;
-            set => SetProperty(ref _isApproved, value);
-        }
-
         private int _initialMileage;
         public int InitialMileage
         {
             get => _initialMileage;
-            set => SetProperty(ref _initialMileage, value);
+            set
+            {
+                SetProperty(ref _initialMileage, value);
+
+                if (IsInitialMileageValid())
+                {
+                    InitialMileageErrorMessage = string.Empty;
+                }
+                else
+                {
+                    InitialMileageErrorMessage = $"Masofa ({_minMileage} km)dan katta bo'lishi kerak";
+                }
+            }
         }
 
         private string _driverName;
@@ -56,32 +69,64 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic.Popups
             private set => SetProperty(ref _driverName, value);
         }
 
+        private string _initialMileageErrorMessage;
+        public string InitialMileageErrorMessage
+        {
+            get => _initialMileageErrorMessage;
+            set => SetProperty(ref _initialMileageErrorMessage, value);
+        }
+
+        private string _carErrorMessage;
+        public string CarErrorMessage
+        {
+            get => _carErrorMessage;
+            set => SetProperty(ref _carErrorMessage, value);
+        }
+
         public Command ApproveCommand { get; }
         public Command CancelCommand { get; }
 
         public MechanicHandoverReviewViewModel(
             CheckPointDto checkPoint,
             List<CarDto> cars,
-            TaskCompletionSource<MechanicHandoverReview> taskCompletionSource)
+            TaskCompletionSource<MechanicHandoverRequest> taskCompletionSource)
         {
             _checkPoint = checkPoint;
             _accountStore = DependencyService.Get<IAccountStore>();
-
             _completionSource = taskCompletionSource;
-            DriverName = checkPoint.DriverName;
-            Cars = new List<CarDto>(cars);
-            SelectedCar = cars[0];
-            InitialMileage = SelectedCar.Mileage;
-            IsApproved = false;
 
-            ApproveCommand = new Command(async () => await OnApprove());
+            ApproveCommand = new Command(async () => await OnApprove(), CanApprove);
             CancelCommand = new Command(async () => await OnCancel());
+
+            Cars = new List<CarDto>(cars);
+
+            SetupInitialValues(checkPoint, cars);
+        }
+
+        private void SetupInitialValues(CheckPointDto checkPoint, List<CarDto> cars)
+        {
+            var driver = checkPoint.Driver;
+
+            DriverName = driver.FullName;
+            var assignedCar = driver.AssignedCarId.HasValue
+                ? cars.Find(x => x != null && x.Id == driver.AssignedCarId.Value)
+                : cars.FirstOrDefault();
+            SelectedCar = assignedCar is null
+                ? cars.FirstOrDefault()
+                : assignedCar;
+            InitialMileage = SelectedCar?.Mileage ?? 0;
+            _minMileage = InitialMileage;
         }
 
         private async Task OnApprove()
         {
             var reviewerId = await _accountStore.GetUserIdAsync();
-            var review = new MechanicHandoverReview(reviewerId, Notes, IsApproved, SelectedCar.Id, InitialMileage, _checkPoint.Id, SelectedCar);
+            var review = new MechanicHandoverRequest(
+                checkPointId: _checkPoint.Id,
+                mechanicId: reviewerId,
+                carId: SelectedCar.Id,
+                initialMileage: InitialMileage,
+                notes: Notes);
 
             _completionSource.SetResult(review);
         }
@@ -91,5 +136,10 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic.Popups
             _completionSource.SetResult(null);
             await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync();
         }
+
+        private bool CanApprove()
+            => IsInitialMileageValid();
+
+        private bool IsInitialMileageValid() => _initialMileage >= _minMileage;
     }
 }

@@ -1,49 +1,64 @@
 ﻿using CheckDrive.Mobile.Models.Enums;
-using Syncfusion.XForms.ProgressBar;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace CheckDrive.Mobile.Models
 {
-    public class ReviewDto
+    public class ReviewDto : INotifyPropertyChanged
     {
         public int Id { get; set; }
-        public string Notes { get; set; }
+        public int CheckPointId { get; set; }
+
+        private string _notes;
+        public string Notes
+        {
+            get => _notes;
+            set => SetProperty(ref _notes, value);
+        }
+
         public string ReviewName => GetReviewName(Type);
-        public string ReviewerName { get; set; }
+
+        private string _reviewerName;
+        public string ReviewerName
+        {
+            get => _reviewerName;
+            set => SetProperty(ref _reviewerName, value);
+        }
+
         public string FormattedReviewerName => string.IsNullOrWhiteSpace(ReviewerName)
             ? string.Empty
             : $"({ReviewerName})";
-        public DateTime Date { get; set; }
-        public string Time => Date.ToString("HH:mm");
-        public StepStatus StepStatus => GetStepStatus(Status);
-        public int ProgressValue => GetProgressValue(Status);
-        public ReviewType Type { get; set; }
-        public ReviewStatus Status { get; set; }
 
-        public static StepStatus GetStepStatus(ReviewStatus status)
+        private DateTime _date;
+        public DateTime Date
         {
-            switch (status)
-            {
-                case ReviewStatus.Approved:
-                    return StepStatus.Completed;
-                case ReviewStatus.InProgress:
-                    return StepStatus.InProgress;
-                default:
-                    return StepStatus.NotStarted;
-            }
+            get => _date;
+            set => SetProperty(ref _date, value);
+        }
+        public string Time => Date.ToString("HH:mm");
+        public ReviewType Type { get; set; }
+
+        private ReviewStatus _status;
+        public ReviewStatus Status
+        {
+            get => _status;
+            set => SetProperty(ref _status, value);
         }
 
-        public static int GetProgressValue(ReviewStatus status)
+        public void Update(ReviewDto dto)
         {
-            switch (status)
-            {
-                case ReviewStatus.Approved:
-                    return 100;
-                case ReviewStatus.InProgress:
-                    return 50;
-                default:
-                    return 0;
-            }
+            Id = dto.Id;
+            Notes = dto.Notes;
+            ReviewerName = dto.ReviewerName;
+            Date = dto.Date;
+            Status = dto.Status;
+        }
+
+        public void Update(ReviewStatus status)
+        {
+            Status = status;
         }
 
         public static string GetReviewName(ReviewType type)
@@ -64,5 +79,32 @@ namespace CheckDrive.Mobile.Models
                     return "";
             }
         }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            var changed = PropertyChanged;
+            if (changed == null)
+                return;
+
+            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T backingStore, T value,
+            Action onChanged = null,
+            [CallerMemberName] string propertyName = "")
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
+            onChanged?.Invoke();
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        #endregion
     }
 }

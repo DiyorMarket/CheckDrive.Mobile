@@ -1,5 +1,6 @@
 ﻿using CheckDrive.Mobile.Services.Navigation;
 using CheckDrive.Mobile.Views.Popup;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -55,17 +56,27 @@ namespace CheckDrive.Mobile.ViewModels
 
         protected static async Task DisplayErrorAsync(string message, string details)
         {
-            message += " Iltimios, qayta urunib ko'ring yoki texnik yordam bilan bog'laning.";
+            message += "Iltimios, qayta urunib ko'ring yoki texnik yordam bilan bog'laning.";
             var popup = new ErrorPopup(message, details);
 
-            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
+            await PopupNavigation.Instance.PushAsync(popup);
         }
 
-        protected async Task DisplaySuccessAsync(string message)
+        protected static async Task DisplayReviewErrorAsync(string details)
+        {
+            await DisplayErrorAsync("Tekshiruvni saqlashda xato ro'y berdi.", details);
+        }
+
+        protected static async Task DisplaySuccessAsync(string message)
         {
             var popup = new SuccessPopup(message);
 
-            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
+            await PopupNavigation.Instance.PushAsync(popup);
+        }
+
+        protected static async Task DisplayReviewSuccessAsync()
+        {
+            await DisplaySuccessAsync("Tekshiruv muvaffaqiyatli saqlandi");
         }
 
         protected bool SetProperty<T>(ref T backingStore, T value,

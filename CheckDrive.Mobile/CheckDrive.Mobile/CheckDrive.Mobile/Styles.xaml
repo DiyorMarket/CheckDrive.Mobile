@@ -4,7 +4,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
                     xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
-    <!--  Define your styles, colors, and other resources here  -->
 
     <!--  Colors  -->
     <Color x:Key="Primary">#1C375C</Color>
@@ -58,6 +57,7 @@
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="FontSize" Value="Large" />
     </Style>
 
     <Style x:Key="Switch" TargetType="mdc:MaterialSwitch">
@@ -77,19 +77,62 @@
     <!--  Buttons  -->
     <Style x:Key="AcceptButton" TargetType="mdc:MaterialButton">
         <Setter Property="BackgroundColor" Value="{StaticResource PrimaryLight}" />
-        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="CornerRadius" Value="15" />
         <Setter Property="TextColor" Value="{StaticResource TextLight}" />
+        <Setter Property="HeightRequest" Value="45" />
     </Style>
 
     <Style x:Key="CancelButton" TargetType="mdc:MaterialButton">
         <Setter Property="BackgroundColor" Value="White" />
-        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="CornerRadius" Value="15" />
         <Setter Property="ButtonType" Value="Outlined" />
         <Setter Property="BorderColor" Value="{StaticResource PrimaryLight}" />
         <Setter Property="TextColor" Value="{StaticResource PrimaryLight}" />
+        <Setter Property="HeightRequest" Value="45" />
+    </Style>
+
+    <Style x:Key="RejectButton" TargetType="mdc:MaterialButton">
+        <Setter Property="BackgroundColor" Value="{StaticResource Danger}" />
+        <Setter Property="CornerRadius" Value="15" />
+        <Setter Property="TextColor" Value="{StaticResource TextLight}" />
+        <Setter Property="HeightRequest" Value="45" />
+    </Style>
+
+    <Style x:Key="ReviewButton" TargetType="mdc:MaterialButton">
+        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Text" Value="Tekshirish" />
     </Style>
 
     <!--  Inputs  -->
+    <Style x:Key="Entry" TargetType="mdc:MaterialEntry">
+        <Setter Property="BackgroundColor" Value="White" />
+        <Setter Property="FocusedBackgroundColor" Value="White" />
+        <Setter Property="HasBorder" Value="True" />
+        <Setter Property="BorderColor" Value="{StaticResource BorderDarkGray}" />
+        <Setter Property="FocusedBorderColor" Value="{StaticResource BorderCharcoal}" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="LabelTextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="FocusedLabelTextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="CursorColor" Value="{StaticResource BorderCharcoal}" />
+        <Setter Property="AnimateError" Value="False" />
+    </Style>
+
+    <Style x:Key="NumericInput"
+           BasedOn="{StaticResource Entry}"
+           TargetType="mdc:MaterialEntry">
+        <Setter Property="Keyboard" Value="Numeric" />
+    </Style>
+
+    <Style x:Key="PasswordInput"
+           BasedOn="{StaticResource Entry}"
+           TargetType="mdc:MaterialEntry">
+        <Setter Property="IsPassword" Value="True" />
+    </Style>
+
     <Style x:Key="Editor" TargetType="mdc:MaterialEditor">
         <Setter Property="BackgroundColor" Value="White" />
         <Setter Property="FocusedBackgroundColor" Value="White" />
@@ -105,6 +148,7 @@
         <Setter Property="CursorColor" Value="{StaticResource BorderCharcoal}" />
         <Setter Property="Keyboard" Value="Text" />
         <Setter Property="HeightRequest" Value="100" />
+        <Setter Property="AnimateError" Value="False" />
     </Style>
 
     <Style x:Key="Picker" TargetType="mdc:MaterialPicker">

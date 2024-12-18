@@ -18,7 +18,7 @@ namespace CheckDrive.Mobile.Stores.Account
 
         public async Task<AccountDto> GetAccountAsync(string accountId)
         {
-            var account = await _client.GetAsync<AccountDto>($"accounts/{accountId}");
+            var account = await _client.GetAsync<AccountDto>($"employees/{accountId}");
 
             await LocalStorage.SaveAsync(account, LocalStorageKey.Account);
 

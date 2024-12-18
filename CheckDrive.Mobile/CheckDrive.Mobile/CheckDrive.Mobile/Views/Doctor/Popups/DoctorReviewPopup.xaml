@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage x:Class="CheckDrive.Mobile.Views.Doctor.DoctorReviewPopup"
+                 xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:doctor="clr-namespace:CheckDrive.Mobile.ViewModels.Doctor.Popups"
+                 xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 x:DataType="doctor:DoctorReviewViewModel"
+                 CloseWhenBackgroundIsClicked="False">
+    <pages:PopupPage.Content>
+        <mdc:MaterialCard Margin="25,0"
+                          BackgroundColor="White"
+                          CornerRadius="10"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center">
+            <StackLayout Margin="10">
+                <mdc:MaterialLabel FontSize="Large"
+                                   Style="{StaticResource Title}"
+                                   Text="{Binding FullName}" />
+
+                <mdc:MaterialSwitch Margin="0,20,0,0"
+                                    IsToggled="{Binding IsHealthy}"
+                                    Style="{StaticResource Switch}"
+                                    Text="{Binding SwitchText}" />
+
+                <mdc:MaterialLabel FontSize="Small"
+                                   HorizontalTextAlignment="Start"
+                                   Text="{Binding NotesErrorMessage}"
+                                   TextColor="{StaticResource Danger}" />
+
+                <mdc:MaterialEditor LabelText="Izoh"
+                                    Placeholder="Izohingizni kiriting..."
+                                    Style="{StaticResource Editor}"
+                                    Text="{Binding Notes}" />
+
+                <Grid Margin="0,30,0,10" ColumnDefinitions="*,5,*">
+                    <mdc:MaterialButton Grid.Column="0"
+                                        Command="{Binding CancelCommand}"
+                                        HorizontalOptions="FillAndExpand"
+                                        Style="{StaticResource CancelButton}"
+                                        Text="Yopish" />
+                    <mdc:MaterialButton Grid.Column="2"
+                                        Command="{Binding ApproveCommand}"
+                                        HorizontalOptions="FillAndExpand"
+                                        Style="{StaticResource AcceptButton}"
+                                        Text="Tasdiqlash" />
+                </Grid>
+            </StackLayout>
+        </mdc:MaterialCard>
+    </pages:PopupPage.Content>
+</pages:PopupPage>

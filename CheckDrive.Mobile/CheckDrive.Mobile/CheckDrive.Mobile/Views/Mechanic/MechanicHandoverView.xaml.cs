@@ -19,9 +19,9 @@ namespace CheckDrive.Mobile.Views.Mechanic
             BindingContext = _viewModel;
         }
 
-        public Task LoadViewModelData()
+        public async Task LoadViewModelData()
         {
-            return _viewModel.LoadDriversAsync();
+            await _viewModel.LoadDriversAsync();
         }
     }
 }

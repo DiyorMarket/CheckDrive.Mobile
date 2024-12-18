@@ -15,10 +15,14 @@
 
     <ContentPage.Content>
         <xct:TabView TabStripPlacement="Top">
-            <xct:TabViewItem Text="Topshirish" TextColorSelected="{StaticResource Primary}">
+            <xct:TabViewItem FontAttributesSelected="Bold"
+                             Text="Topshirish"
+                             TextColorSelected="{StaticResource Primary}">
                 <views:MechanicHandoverView x:Name="HandoverView" />
             </xct:TabViewItem>
-            <xct:TabViewItem Text="Qabul qilish" TextColorSelected="{StaticResource Primary}">
+            <xct:TabViewItem FontAttributesSelected="Bold"
+                             Text="Qabul qilish"
+                             TextColorSelected="{StaticResource Primary}">
                 <views:MechanicAcceptanceView x:Name="AcceptanceView" />
             </xct:TabViewItem>
         </xct:TabView>

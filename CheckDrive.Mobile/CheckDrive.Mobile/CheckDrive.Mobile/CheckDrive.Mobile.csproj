@@ -28,10 +28,37 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Mechanic\Popups\MechanicFiltersPopup.xaml.cs">
+      <DependentUpon>MechanicFiltersPopup.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Styles.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Doctor\DoctorFiltersPopup.xaml">
+    <EmbeddedResource Update="Views\Dispatcher\DispatcherHistoryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Dispatcher\DispatcherHomePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Dispatcher\Popups\DispatcherFilterPopup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Dispatcher\Popups\DispatcherReviewPopup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Doctor\Popups\DoctorFiltersPopup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Driver\Popups\MechanicAcceptanceConfirmationPopup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Driver\Popups\MechanicHandoverConfirmationPopup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Driver\Popups\OperatorReviewConfirmationPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\EditProfile.xaml">
@@ -64,7 +91,10 @@
     <EmbeddedResource Update="Views\Mechanic\Popups\MechanicHandoverReviewPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Mechanic\Popups\MechanicHistoryFilterPopup.xaml">
+    <EmbeddedResource Update="Views\Mechanic\Popups\MechanicFiltersPopup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Operator\Popups\OperatorFiltersPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Popup\ErrorPopup.xaml">

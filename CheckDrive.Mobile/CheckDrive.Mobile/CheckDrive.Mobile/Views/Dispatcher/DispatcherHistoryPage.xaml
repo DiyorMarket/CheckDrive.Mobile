@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="CheckDrive.Mobile.Views.Dispatcher.DispatcherHistoryPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:CheckDrive.Mobile.Converter"
+             xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+             xmlns:models="clr-namespace:CheckDrive.Mobile.Models.Dispatcher"
+             xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:syncfusion="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             BackgroundColor="White">
+    <ContentPage.Content>
+        <Grid HorizontalOptions="FillAndExpand"
+              RowSpacing="0"
+              VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0"
+                         Margin="25"
+                         HorizontalOptions="FillAndExpand"
+                         Orientation="Horizontal"
+                         VerticalOptions="Start">
+                <mdc:MaterialSearch Margin="0,0,5,0"
+                                    Placeholder="Tarixdan izlash..."
+                                    SearchCommand="{Binding SearchCommand}"
+                                    Style="{StaticResource Search}" />
+                <mdc:MaterialCard Padding="5"
+                                  Animation="Scale"
+                                  BackgroundColor="Black"
+                                  BorderColor="#1c1c1c"
+                                  Type="Outlined">
+                    <mdc:MaterialIconButton Animation="Scale"
+                                            BackgroundColor="White"
+                                            Command="{Binding ShowFiltersCommand}"
+                                            Icon="icon_filter.png" />
+                </mdc:MaterialCard>
+            </StackLayout>
+
+            <RefreshView Grid.Row="1"
+                         Margin="25,0"
+                         BackgroundColor="White"
+                         Command="{Binding RefreshCommand}"
+                         HorizontalOptions="FillAndExpand"
+                         IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         RefreshColor="#1C375C"
+                         VerticalOptions="FillAndExpand">
+                <CollectionView BackgroundColor="White"
+                                EmptyView="Tekshiruvlar topilmadi"
+                                IsGrouped="True"
+                                ItemsSource="{Binding FilteredHistory}"
+                                SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="20" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Label FontAttributes="Bold"
+                                       FontSize="Large"
+                                       HorizontalOptions="Center"
+                                       Text="{Binding Key, StringFormat='{0:MMMM dd}'}" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="10"
+                                   BorderColor="LightGray"
+                                   CornerRadius="5"
+                                   HasShadow="True">
+                                <xct:Expander>
+                                    <xct:Expander.Header>
+                                        <Grid BackgroundColor="White" ColumnDefinitions="*,Auto,5*">
+                                            <StackLayout Grid.Column="0"
+                                                         HorizontalOptions="Center"
+                                                         VerticalOptions="Center">
+                                                <Image HeightRequest="35"
+                                                       Source="icon_success.png"
+                                                       WidthRequest="35" />
+                                            </StackLayout>
+                                            <BoxView Grid.Column="1"
+                                                     BackgroundColor="DarkGray"
+                                                     HorizontalOptions="Start"
+                                                     VerticalOptions="FillAndExpand"
+                                                     WidthRequest="1" />
+                                            <Grid Grid.Column="2"
+                                                  Margin="10"
+                                                  ColumnDefinitions="*,Auto"
+                                                  HorizontalOptions="FillAndExpand"
+                                                  VerticalOptions="Center">
+                                                <Label Grid.Column="0"
+                                                       FontSize="Large"
+                                                       HorizontalTextAlignment="Start"
+                                                       Text="{Binding DriverName}"
+                                                       TextColor="Black"
+                                                       VerticalTextAlignment="Center" />
+                                                <Label Grid.Column="1"
+                                                       FontAttributes="Bold"
+                                                       FontSize="Large"
+                                                       HorizontalTextAlignment="End"
+                                                       Text="{Binding Date, StringFormat='{0:HH:mm}'}"
+                                                       TextColor="Black"
+                                                       VerticalTextAlignment="Center" />
+                                            </Grid>
+                                        </Grid>
+                                    </xct:Expander.Header>
+                                    <Grid ColumnDefinitions="*,Auto,5*">
+                                        <BoxView Grid.Column="1"
+                                                 BackgroundColor="DarkGray"
+                                                 HorizontalOptions="Start"
+                                                 VerticalOptions="FillAndExpand"
+                                                 WidthRequest="1" />
+                                        <StackLayout Grid.Column="2">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label FontSize="Medium" Text="Yakuniy masofa" />
+                                                <Label FontSize="Large" Text="-" />
+                                                <Label FontSize="Medium" Text="{Binding FinalMileage, StringFormat='{}{0:N0} km'}" />
+                                            </StackLayout>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label FontSize="Medium" Text="Yoqilg'i sarfi" />
+                                                <Label FontSize="Medium" Text="{Binding FuelConsumptionAmount, StringFormat='{}{0:N0} litr'}" />
+                                            </StackLayout>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label FontSize="Medium" Text="Qoldig'" />
+                                                <Label FontSize="Large" Text="-" />
+                                                <Label FontSize="Medium" Text="{Binding RemainingFuelAmount, StringFormat='{}{0:N0} litr'}" />
+                                            </StackLayout>
+                                            <Label FontAttributes="Italic"
+                                                   FontSize="Medium"
+                                                   Text="{Binding Notes}" />
+                                        </StackLayout>
+                                    </Grid>
+                                </xct:Expander>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

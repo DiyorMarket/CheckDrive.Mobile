@@ -14,66 +14,73 @@ namespace CheckDrive.Mobile.ViewModels
         private readonly IAuthStore _authStore;
         private readonly IAccountStore _accountService;
 
-        public string ProfileImage { get; set; }
-        public string Login { get; set; }
+        public string UserName { get; set; }
         public string FullName { get; set; }
         public string Passport { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
         public string Birthdate { get; set; }
+        public string Position { get; set; }
+        public string AssignedCar { get; set; }
 
-        public string VehicleMake { get; set; }
-        public string VehicleModel { get; set; }
-        public string VehicleYear { get; set; }
-
-        public ICommand EditProfileCommand { get; }
         public ICommand LogoutCommand { get; }
-        public ICommand BackCommand { get; }
-        public ICommand SaveCommand { get; }
 
         public ProfileViewModel()
         {
             _accountService = DependencyService.Get<IAccountStore>();
             _authStore = DependencyService.Get<IAuthStore>();
 
-            EditProfileCommand = new Command(async () => await OnEditProfileAsync());
             LogoutCommand = new Command(async () => await OnLogoutAsync());
-            BackCommand = new Command(async () => await OnBack());
-            SaveCommand = new Command(async () => await SaveEditsAsync());
         }
 
         public async Task LoadProfileDataAsync()
         {
-            var accountId = await _accountService.GetAccountIdAsync();
-            var account = await _accountService.GetAccountAsync(accountId);
-
-            if (account is null)
+            if (IsBusy)
             {
                 return;
             }
 
-            Login = account.UserName;
-            FullName = $"{account.FirstName} {account.LastName}";
-            Passport = account.Passport;
-            PhoneNumber = account.PhoneNumber;
-            Email = account.Email;
-            Address = account.Address;
-            Birthdate = account.Birthdate.ToString("dd MMMM, yyyy");
+            IsBusy = true;
 
-            OnPropertyChanged(nameof(ProfileImage));
+            try
+            {
+                var accountId = await _accountService.GetAccountIdAsync();
+                var account = await _accountService.GetAccountAsync(accountId);
 
-            OnPropertyChanged(nameof(Login));
-            OnPropertyChanged(nameof(FullName));
-            OnPropertyChanged(nameof(Passport));
-            OnPropertyChanged(nameof(PhoneNumber));
-            OnPropertyChanged(nameof(Email));
-            OnPropertyChanged(nameof(Address));
-            OnPropertyChanged(nameof(Birthdate));
+                if (account is null)
+                {
+                    return;
+                }
 
-            OnPropertyChanged(nameof(VehicleMake));
-            OnPropertyChanged(nameof(VehicleModel));
-            OnPropertyChanged(nameof(VehicleYear));
+                UserName = account.UserName;
+                FullName = $"{account.FirstName} {account.LastName} {account.Patronymic}";
+                Passport = account.Passport;
+                PhoneNumber = account.PhoneNumber;
+                Email = account.Email;
+                Address = account.Address;
+                Birthdate = account.Birthdate.ToString("dd MMMM, yyyy");
+                Position = account.Position.ToString();
+                AssignedCar = "Qora Gentra (AA707B)";
+
+                OnPropertyChanged(nameof(UserName));
+                OnPropertyChanged(nameof(FullName));
+                OnPropertyChanged(nameof(Passport));
+                OnPropertyChanged(nameof(PhoneNumber));
+                OnPropertyChanged(nameof(Email));
+                OnPropertyChanged(nameof(Address));
+                OnPropertyChanged(nameof(Birthdate));
+                OnPropertyChanged(nameof(Position));
+                OnPropertyChanged(nameof(AssignedCar));
+            }
+            catch (Exception ex)
+            {
+                await DisplayErrorAsync($"Profilni yuklashda xato ro'y berdi.", ex.Message);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task OnEditProfileAsync()
@@ -105,7 +112,7 @@ namespace CheckDrive.Mobile.ViewModels
 
         private async Task OnLogoutAsync()
         {
-            var confirmed = await Application.Current.MainPage.DisplayAlert("Logout", "Profildan chiqishni xohlaysizmi?", "Ha", "Yo'q");
+            var confirmed = await Application.Current.MainPage.DisplayAlert("Amalni tasdiqlang", "Hisobingizdan chiqishni istaysizmi?", "Ha", "Yo'q");
 
             if (confirmed)
             {
@@ -124,7 +131,7 @@ namespace CheckDrive.Mobile.ViewModels
         {
             return new AccountDto
             {
-                UserName = Login,
+                UserName = UserName,
                 FirstName = FullName.Split(' ')[0],
                 LastName = FullName.Split(' ').Length > 1 ? FullName.Split(' ')[1] : "",
                 Passport = Passport,

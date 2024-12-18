@@ -4,48 +4,48 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:doctor="clr-namespace:CheckDrive.Mobile.ViewModels.Doctor"
              xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
-             xmlns:models="clr-namespace:CheckDrive.Mobile.Models"
+             xmlns:models="clr-namespace:CheckDrive.Mobile.Models.Driver"
              x:DataType="doctor:DoctorHomeViewModel">
     <ContentPage.Content>
-        <Grid>
-            <StackLayout Margin="20" Spacing="15">
-                <mdc:MaterialLabel FontSize="Large"
-                                   Style="{StaticResource Title}"
-                                   Text="{Binding CurrentDate, StringFormat='{0:MMMM dd, yyyy}'}" />
+        <StackLayout Margin="20,20,20,0" Spacing="15">
+            <mdc:MaterialLabel FontSize="Large"
+                               Style="{StaticResource Title}"
+                               Text="{Binding CurrentDate}" />
 
-                <mdc:MaterialSearch Placeholder="Haydovchilarni izlash..."
-                                    SearchCommand="{Binding SearchCommand}"
-                                    Style="{StaticResource Search}" />
+            <mdc:MaterialSearch Placeholder="Haydovchilarni izlash..."
+                                SearchCommand="{Binding SearchCommand}"
+                                Style="{StaticResource Search}" />
 
-                <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
-                    <CollectionView Margin="0"
-                                    EmptyView="Tekshiruv uchun xaydovichlar topilmadi"
-                                    ItemsSource="{Binding Drivers}"
-                                    SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:DriverDto">
-                                <StackLayout Padding="0,20" BackgroundColor="White">
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label Margin="0"
-                                               FontSize="Medium"
-                                               Text="{Binding FullName}"
-                                               TextColor="{StaticResource Primary}"
-                                               VerticalOptions="StartAndExpand" />
+            <RefreshView Command="{Binding RefreshCommand}"
+                         IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         RefreshColor="{StaticResource Primary}">
+                <CollectionView EmptyView="Tekshiruv uchun haydovichlar topilmadi"
+                                ItemsSource="{Binding Drivers}"
+                                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:DriverDto">
+                            <StackLayout Padding="0,10"
+                                         BackgroundColor="White"
+                                         Orientation="Horizontal">
+                                <Label FontSize="Medium"
+                                       Text="{Binding FullName}"
+                                       TextColor="{StaticResource Primary}"
+                                       VerticalOptions="StartAndExpand" />
 
-                                        <mdc:MaterialButton BackgroundColor="{StaticResource Primary}"
-                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"
-                                                            CommandParameter="{Binding .}"
-                                                            HorizontalOptions="EndAndExpand"
-                                                            Text="Tekshirish" />
-                                    </StackLayout>
-                                </StackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </RefreshView>
-            </StackLayout>
+                                <mdc:MaterialButton Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Style="{StaticResource ReviewButton}"
+                                                    Text="Tekshirish" />
 
-            <mdc:MaterialProgressIndicator IsVisible="{Binding IsBusy}" Style="{StaticResource ProgressIndicator}" />
-        </Grid>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewPopupCommand}" CommandParameter="{Binding .}" />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="CheckDrive.Mobile.Views.Dispatcher.DispatcherHomePage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dispatcher="clr-namespace:CheckDrive.Mobile.ViewModels.Dispatcher"
+             xmlns:mdc="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+             xmlns:models="clr-namespace:CheckDrive.Mobile.Models"
+             x:DataType="dispatcher:DispatcherHomeViewModel">
+    <ContentPage.Content>
+        <StackLayout Margin="20,20,20,0" Spacing="15">
+            <mdc:MaterialLabel FontSize="Large"
+                               Style="{StaticResource Title}"
+                               Text="{Binding CurrentDate}" />
+
+            <mdc:MaterialSearch Placeholder="Haydovchilarni izlash..."
+                                SearchCommand="{Binding SearchCommand}"
+                                Style="{StaticResource Search}" />
+
+            <RefreshView Command="{Binding RefreshCommand}"
+                         IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                         RefreshColor="{StaticResource Primary}">
+                <CollectionView EmptyView="Tekshiruv uchun haydovichlar topilmadi"
+                                ItemsSource="{Binding FilteredCheckPoints}"
+                                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:CheckPointDto">
+                            <StackLayout Padding="0,10"
+                                         BackgroundColor="White"
+                                         Orientation="Horizontal">
+                                <Label FontSize="Medium"
+                                       Text="{Binding DriverName}"
+                                       TextColor="{StaticResource Primary}"
+                                       VerticalOptions="StartAndExpand" />
+
+                                <mdc:MaterialButton Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    Style="{StaticResource ReviewButton}" />
+
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ShowReviewCommand}" CommandParameter="{Binding .}" />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

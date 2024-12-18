@@ -11,5 +11,15 @@ namespace CheckDrive.Mobile.Models.Mechanic
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string SortBy { get; set; } = "date_desc";
+
+        public static MechanicFilter GetDefaultFilters(DateTime startDate, DateTime endDate)
+            => new MechanicFilter
+            {
+                DriverId = null,
+                CarId = null,
+                Status = null,
+                StartDate = startDate,
+                EndDate = endDate,
+            };
     }
 }

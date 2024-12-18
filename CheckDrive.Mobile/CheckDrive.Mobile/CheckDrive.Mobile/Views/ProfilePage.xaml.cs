@@ -18,10 +18,7 @@ namespace CheckDrive.Mobile.Views
 
         protected override async void OnAppearing()
         {
-            if (BindingContext is ProfileViewModel vm)
-            {
-                await vm.LoadProfileDataAsync();
-            }
+            await _viewModel.LoadProfileDataAsync();
 
             base.OnAppearing();
         }

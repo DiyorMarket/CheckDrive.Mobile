@@ -53,6 +53,11 @@ namespace CheckDrive.Mobile.Stores.Auth
         {
             var token = await LocalStorage.GetAsync<string>(LocalStorageKey.Token);
 
+            if (string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
+
             return JwtHelper.IsTokenValid(token);
         }
     }
