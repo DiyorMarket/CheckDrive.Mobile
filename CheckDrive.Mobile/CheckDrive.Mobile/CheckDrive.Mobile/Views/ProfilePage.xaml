@@ -7,7 +7,7 @@
              x:DataType="viewmodels:ProfileViewModel">
     <Grid Padding="20" RowDefinitions="*, Auto">
         <ScrollView Grid.Row="0">
-            <StackLayout Spacing="15">
+            <StackLayout Spacing="25">
                 <!--  Profile Header  -->
                 <StackLayout HorizontalOptions="CenterAndExpand" Spacing="5">
                     <Frame Padding="10"
@@ -35,7 +35,7 @@
                     <StackLayout Spacing="15">
                         <Label FontAttributes="Bold"
                                FontSize="Medium"
-                               Text="Shaxsiy ma'lumotlar" />
+                               Text="Shaxsiy ma'lumotlari" />
                         <Grid ColumnDefinitions="*,2*"
                               RowDefinitions="Auto,Auto"
                               RowSpacing="5">
@@ -62,7 +62,7 @@
                     <StackLayout Spacing="10">
                         <Label FontAttributes="Bold"
                                FontSize="Medium"
-                               Text="Kontakt ma'lumotlar" />
+                               Text="Kontakt ma'lumotlari" />
                         <Grid ColumnDefinitions="*,2*"
                               RowDefinitions="Auto,Auto,Auto"
                               RowSpacing="5">
@@ -95,7 +95,7 @@
                     <StackLayout Spacing="10">
                         <Label FontAttributes="Bold"
                                FontSize="Medium"
-                               Text="Hisob ma'lumotlar" />
+                               Text="Hisob ma'lumotlari" />
                         <Grid ColumnDefinitions="*,2*"
                               RowDefinitions="Auto"
                               RowSpacing="5">
@@ -114,7 +114,6 @@
                         </Grid>
                     </StackLayout>
                 </Frame>
-
             </StackLayout>
         </ScrollView>
 
