@@ -1,4 +1,5 @@
 ﻿using CheckDrive.Mobile.ViewModels.Driver;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,8 +20,9 @@ namespace CheckDrive.Mobile.Views
 
         protected override async void OnAppearing()
         {
-            await _viewModel.InitializeAsync();
-            await _viewModel.OnRefreshAsync();
+            var initializeTask = _viewModel.InitializeAsync();
+            var loadTask = _viewModel.OnRefreshAsync();
+            await Task.WhenAll(initializeTask, loadTask);
             base.OnAppearing();
         }
     }

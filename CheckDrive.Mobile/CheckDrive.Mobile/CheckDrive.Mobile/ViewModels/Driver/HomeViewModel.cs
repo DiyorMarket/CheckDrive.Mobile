@@ -115,6 +115,7 @@ namespace CheckDrive.Mobile.ViewModels.Driver
 
         private void UpdateReviews(CheckPointDto checkPoint)
         {
+            // TODO: if null then reset?
             if (checkPoint is null)
             {
                 return;
@@ -154,7 +155,19 @@ namespace CheckDrive.Mobile.ViewModels.Driver
             MessagingCenter.Subscribe<SignalRService>(this, "CheckPointProgressUpdated", async _ =>
             {
                 await OnRefreshAsync();
+                await CheckPendingReviewsAsync();
             });
+        }
+
+        private async Task CheckPendingReviewsAsync()
+        {
+            foreach (var review in Reviews)
+            {
+                if (review.Status == ReviewStatus.Pending)
+                {
+                    await OnShowConfirmationPopupAsync(review);
+                }
+            }
         }
 
         private async Task OnShowConfirmationPopupAsync(ReviewDto review)
@@ -189,10 +202,6 @@ namespace CheckDrive.Mobile.ViewModels.Driver
             catch (Exception ex)
             {
                 await DisplayErrorAsync("So'rovni tasdiqlashda xato ro'y berdi.", ex.Message);
-            }
-            finally
-            {
-                IsBusy = false;
             }
         }
     }
