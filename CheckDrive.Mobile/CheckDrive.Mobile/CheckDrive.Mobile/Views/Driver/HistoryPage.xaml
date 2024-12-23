@@ -4,171 +4,142 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:CheckDrive.Mobile.Converter"
              xmlns:md="clr-namespace:Plugin.MaterialDesignControls.Material3;assembly=Plugin.MaterialDesignControls"
+             xmlns:models="clr-namespace:CheckDrive.Mobile.Models.Driver"
              xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:CheckPointStatusToIconConverter x:Key="StatusToIconConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <Grid RowDefinitions="Auto,*">
             <StackLayout Grid.Row="0"
                          Margin="25"
                          HorizontalOptions="FillAndExpand"
-                         Orientation="Horizontal">
-                <md:MaterialSearch Margin="0,0,5,0"
-                                   BackgroundColor="White"
-                                   BorderColor="#1c1c1c"
-                                   FocusedBackgroundColor="White"
-                                   FocusedBorderColor="#1C375C"
-                                   HorizontalOptions="FillAndExpand"
-                                   IsEnabled="True"
-                                   LeadingIcon="icon_search.png"
-                                   Placeholder="Tarixdan izlash..."
-                                   SearchOnEveryTextChange="True"
-                                   Text="{Binding Search}" />
-                <md:MaterialCard Padding="5"
-                                 Animation="Scale"
-                                 BackgroundColor="Black"
-                                 BorderColor="#1c1c1c"
-                                 Type="Outlined">
-                    <md:MaterialIconButton Animation="Scale"
-                                           BackgroundColor="White"
-                                           Icon="icon_filter.png" />
-                </md:MaterialCard>
-            </StackLayout>
+                         Orientation="Horizontal" />
+            <md:MaterialSearch Grid.Row="0"
+                               Margin="25"
+                               HorizontalOptions="FillAndExpand"
+                               Placeholder="Tarixdan izlash..."
+                               Style="{StaticResource Search}"
+                               Text="{Binding Search}" />
 
             <RefreshView Grid.Row="1"
-                         Margin="25"
+                         Margin="25,0"
+                         BackgroundColor="White"
                          Command="{Binding RefreshCommand}"
                          HorizontalOptions="FillAndExpand"
                          IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                          RefreshColor="{StaticResource Primary}"
                          VerticalOptions="FillAndExpand">
-                <CollectionView ItemsSource="{Binding Histories}" SelectionMode="None">
+                <CollectionView BackgroundColor="White"
+                                EmptyView="Tarix topilmadi"
+                                IsGrouped="True"
+                                ItemsSource="{Binding Histories}"
+                                SelectionMode="None">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout ItemSpacing="20" Orientation="Vertical" />
                     </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
+                    <CollectionView.GroupHeaderTemplate>
                         <DataTemplate>
-                            <pv:PancakeView BackgroundColor="White"
-                                            HorizontalOptions="FillAndExpand"
-                                            VerticalOptions="StartAndExpand">
-                                <pv:PancakeView.Shadow>
-                                    <pv:DropShadow Opacity="10" Color="#000000" />
-                                </pv:PancakeView.Shadow>
-                                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <BoxView BackgroundColor="{Binding Color}"
-                                             HorizontalOptions="Start"
-                                             VerticalOptions="FillAndExpand"
-                                             WidthRequest="3" />
-                                    <xct:Expander Grid.Column="1">
-                                        <xct:Expander.Header>
-                                            <Grid HorizontalOptions="FillAndExpand">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="5*" />
-                                                </Grid.ColumnDefinitions>
-                                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                                                    <Image HeightRequest="35"
-                                                           Source="{Binding IconSource}"
-                                                           WidthRequest="35" />
-                                                </StackLayout>
-                                                <BoxView Grid.Column="1"
-                                                         BackgroundColor="#F2F4F8"
-                                                         HorizontalOptions="Start"
-                                                         VerticalOptions="FillAndExpand"
-                                                         WidthRequest="1" />
-                                                <StackLayout Grid.Column="2"
-                                                             Margin="10"
-                                                             HorizontalOptions="Start"
-                                                             VerticalOptions="Center">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*" />
-                                                            <ColumnDefinition Width="Auto" />
-                                                        </Grid.ColumnDefinitions>
-                                                        <Label Grid.Column="0"
-                                                               FontSize="15"
-                                                               Text="{Binding CarDetails}"
-                                                               TextColor="Black" />
-                                                        <Label Grid.Column="1"
-                                                               FontAttributes="Bold"
-                                                               FontSize="15"
-                                                               Text="{Binding HistoryDate}"
-                                                               TextColor="Black" />
-                                                    </Grid>
-                                                    <StackLayout Orientation="Horizontal">
-                                                        <Label FontSize="13" TextColor="#2F3246">
-                                                            <Label.FormattedText>
-                                                                <FormattedString>
-                                                                    <Span Text="{Binding FormattedDistanceTravelled}" />
-                                                                    <Span Text=" " />
-                                                                    <Span FontAttributes="Italic" Text="{Binding FormattedDistanceTravelledAdjustment}" />
-                                                                </FormattedString>
-                                                            </Label.FormattedText>
-                                                        </Label>
-                                                        <Label FontSize="13" TextColor="#2F3246">
-                                                            <Label.FormattedText>
-                                                                <FormattedString>
-                                                                    <Span Text="{Binding FormattedFuelConsumption}" />
-                                                                    <Span Text=" " />
-                                                                    <Span FontAttributes="Italic" Text="{Binding FormattedFuelConsumptionAdjustment}" />
-                                                                </FormattedString>
-                                                            </Label.FormattedText>
-                                                        </Label>
-                                                    </StackLayout>
-                                                </StackLayout>
-                                            </Grid>
-                                        </xct:Expander.Header>
-                                        <Grid HorizontalOptions="FillAndExpand">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="5*" />
-                                            </Grid.ColumnDefinitions>
+                            <Label FontAttributes="Bold"
+                                   FontSize="Large"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Key, StringFormat='{0:dd MMMM}'}" />
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:DriverHistory">
+                            <Frame Padding="10"
+                                   BorderColor="LightGray"
+                                   CornerRadius="5"
+                                   HasShadow="True">
+                                <xct:Expander>
+                                    <xct:Expander.Header>
+                                        <Grid BackgroundColor="White" ColumnDefinitions="*,Auto,5*">
+                                            <StackLayout Grid.Column="0"
+                                                         HorizontalOptions="Center"
+                                                         VerticalOptions="Center">
+                                                <Image HeightRequest="35"
+                                                       Source="{Binding Status, Converter={StaticResource StatusToIconConverter}}"
+                                                       WidthRequest="35" />
+                                            </StackLayout>
                                             <BoxView Grid.Column="1"
-                                                     BackgroundColor="#F2F4F8"
+                                                     BackgroundColor="DarkGray"
                                                      HorizontalOptions="Start"
                                                      VerticalOptions="FillAndExpand"
                                                      WidthRequest="1" />
-                                            <StackLayout Grid.Column="2" Spacing="10">
-                                                <Label Margin="0,0"
-                                                       FontSize="12"
-                                                       Text="{Binding Summary}"
-                                                       TextColor="Black" />
-                                                <StackLayout Margin="0,0,10,10"
-                                                             BindableLayout.ItemsSource="{Binding Reviews}"
-                                                             HorizontalOptions="Start"
-                                                             VerticalOptions="Center">
-                                                    <BindableLayout.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <Label FontSize="12" TextColor="#2F3246">
-                                                                <Label.FormattedText>
-                                                                    <FormattedString>
-                                                                        <FormattedString.Spans>
-                                                                            <Span FontAttributes="Bold" Text="{Binding Time}" />
-                                                                            <Span Text=" - " />
-                                                                            <Span FontAttributes="Bold" Text="{Binding ReviewName}" />
-                                                                            <Span Text=" " />
-                                                                            <Span FontAttributes="Bold" Text="{Binding FormattedReviewerName}" />
-                                                                            <Span Text="&#10;&#10;" />
-                                                                            <Span FontAttributes="Italic"
-                                                                                  FontSize="Small"
-                                                                                  Text="{Binding Notes}" />
-                                                                        </FormattedString.Spans>
-                                                                    </FormattedString>
-                                                                </Label.FormattedText>
-                                                            </Label>
-                                                        </DataTemplate>
-                                                    </BindableLayout.ItemTemplate>
+                                            <Grid Grid.Column="2"
+                                                  Margin="10,0"
+                                                  ColumnDefinitions="*,Auto"
+                                                  HorizontalOptions="FillAndExpand"
+                                                  VerticalOptions="Center">
+                                                <StackLayout Grid.Column="0"
+                                                             HorizontalOptions="StartAndExpand"
+                                                             VerticalOptions="CenterAndExpand">
+                                                    <Grid ColumnDefinitions="*, 2*">
+                                                        <Label Grid.Column="0"
+                                                               FontSize="Medium"
+                                                               HorizontalOptions="Start"
+                                                               Text="Masofa"
+                                                               VerticalTextAlignment="Center" />
+                                                        <Label Grid.Column="1"
+                                                               FontSize="Medium"
+                                                               HorizontalTextAlignment="Start"
+                                                               Text="130,530 km"
+                                                               TextColor="Black"
+                                                               VerticalTextAlignment="Center" />
+                                                    </Grid>
+                                                    <Grid ColumnDefinitions="*, 2*">
+                                                        <Label Grid.Column="0"
+                                                               FontSize="Medium"
+                                                               HorizontalOptions="Start"
+                                                               Text="Iste'mol"
+                                                               VerticalTextAlignment="Center" />
+                                                        <Label Grid.Column="1"
+                                                               FontSize="Medium"
+                                                               HorizontalTextAlignment="Start"
+                                                               Text="{Binding FuelConsumptionAmount}"
+                                                               TextColor="Black"
+                                                               VerticalTextAlignment="Center" />
+                                                    </Grid>
+                                                    <Grid ColumnDefinitions="*, 2*" IsVisible="{Binding DebtAmount}">
+                                                        <Label Grid.Column="0"
+                                                               FontSize="Medium"
+                                                               HorizontalOptions="Start"
+                                                               Text="Qarz"
+                                                               VerticalTextAlignment="Center" />
+                                                        <Label Grid.Column="1"
+                                                               FontSize="Medium"
+                                                               HorizontalTextAlignment="Start"
+                                                               Text="{Binding DebtAmount}"
+                                                               TextColor="Black"
+                                                               VerticalTextAlignment="Center" />
+                                                    </Grid>
                                                 </StackLayout>
-                                            </StackLayout>
+                                            </Grid>
                                         </Grid>
-                                    </xct:Expander>
-                                </Grid>
-                            </pv:PancakeView>
+                                    </xct:Expander.Header>
+                                    <Grid ColumnDefinitions="*,Auto,5*">
+                                        <BoxView Grid.Column="1"
+                                                 BackgroundColor="DarkGray"
+                                                 HorizontalOptions="Start"
+                                                 VerticalOptions="FillAndExpand"
+                                                 WidthRequest="1" />
+                                        <StackLayout Grid.Column="2" Margin="10">
+                                            <Label FontSize="Medium"
+                                                   Text="Avtomobil"
+                                                   VerticalTextAlignment="Center" />
+                                            <Label FontAttributes="Bold"
+                                                   FontSize="Medium"
+                                                   Text="{Binding CarName}"
+                                                   VerticalTextAlignment="Center" />
+                                        </StackLayout>
+                                    </Grid>
+                                </xct:Expander>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

@@ -2,6 +2,7 @@
 <ContentPage x:Class="CheckDrive.Mobile.Views.Errors.UnknownErrorPage"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              BackgroundColor="White">
     <ContentPage.Content>
         <StackLayout Padding="20"
@@ -26,6 +27,30 @@
                    Text="Iltimos, qayta urunib ko'ring. Agar muammo davom etsa, texnik yordamga murojaat qiling."
                    TextColor="Gray"
                    VerticalOptions="Center" />
+
+            <xct:Expander Margin="0,20" Tapped="Expander_Tapped">
+                <xct:Expander.Header>
+                    <StackLayout Orientation="Horizontal">
+                        <Label FontAttributes="Bold"
+                               FontSize="Small"
+                               HorizontalTextAlignment="Start"
+                               Text="Texnik yordam uchun"
+                               TextColor="#8c8c8c" />
+                        <Image x:Name="ExpanderIcon"
+                               xct:IconTintColorEffect.TintColor="#8c8c8c"
+                               HeightRequest="25"
+                               HorizontalOptions="EndAndExpand"
+                               Source="arrow_down.png"
+                               WidthRequest="25" />
+                    </StackLayout>
+                </xct:Expander.Header>
+                <StackLayout Margin="0,10,0,0">
+                    <Label x:Name="ErrorDetails"
+                           FontAttributes="Bold"
+                           FontSize="Small"
+                           TextColor="#5a6474" />
+                </StackLayout>
+            </xct:Expander>
 
             <Button Margin="0,15,0,0"
                     Padding="10"

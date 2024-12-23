@@ -33,7 +33,7 @@
                            TextColor="{StaticResource Success}" />
                     <Label FontAttributes="Bold"
                            FontSize="Medium"
-                           HorizontalOptions="StartAndExpand"
+                           HorizontalOptions="CenterAndExpand"
                            Text="{Binding Message}"
                            TextColor="#8c8c8c" />
 

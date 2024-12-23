@@ -54,7 +54,7 @@
                          Command="{Binding RefreshCommand}"
                          HorizontalOptions="FillAndExpand"
                          IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                         RefreshColor="#1C375C"
+                         RefreshColor="{StaticResource Primary}"
                          VerticalOptions="FillAndExpand">
                 <CollectionView BackgroundColor="White"
                                 EmptyView="Tekshiruvlar topilmadi"
@@ -122,7 +122,7 @@
                                                  HorizontalOptions="Start"
                                                  VerticalOptions="FillAndExpand"
                                                  WidthRequest="1" />
-                                        <StackLayout Grid.Column="2">
+                                        <StackLayout Grid.Column="2" Margin="10">
                                             <Label FontAttributes="Italic"
                                                    FontSize="Medium"
                                                    Text="{Binding Notes}"
