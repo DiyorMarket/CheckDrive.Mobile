@@ -43,6 +43,11 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
         public async Task LoadHistoryAsync()
         {
+            if (IsBusy)
+            {
+                return;
+            }
+
             IsBusy = true;
 
             try
@@ -80,7 +85,9 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
             var filteredHistories = string.IsNullOrWhiteSpace(searchText)
                 ? _histories
-                : _histories.Where(x => x.DriverName.ToLower().Contains(searchText)).ToList();
+                : _histories.Where(x =>
+                    x.DriverName.ToLower().Contains(searchText) ||
+                    x.Notes.Contains(searchText));
 
             UpdateHistories(filteredHistories);
         }
@@ -123,8 +130,7 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
         {
             var groupedHistory = histories
                         .GroupBy(d => d.Date.Date)
-                        .Select(g => new Grouping<DateTime, DoctorReview>(g.Key, g))
-                        .ToList();
+                        .Select(g => new Grouping<DateTime, DoctorReview>(g.Key, g));
 
             Histories.Clear();
             foreach (var history in groupedHistory)
