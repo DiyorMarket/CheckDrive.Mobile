@@ -2,10 +2,9 @@
 {
     public enum CheckPointStatus
     {
-        InProgress,
-        Completed,
-        AutomaticallyClosed,
-        PendingManagerReview,
-        InterruptedWithRejection,
+        InProgress = 0,
+        Completed = 1,
+        ClosedByManager = 2,
+        Interrupted = 3
     }
 }

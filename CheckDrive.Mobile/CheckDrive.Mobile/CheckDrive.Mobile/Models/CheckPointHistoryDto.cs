@@ -121,12 +121,6 @@ namespace CheckDrive.Mobile.Models
                     return "icon_success.png";
                 case CheckPointStatus.InProgress:
                     return "icon_warning.png";
-                case CheckPointStatus.PendingManagerReview:
-                    return "icon_warning.png";
-                case CheckPointStatus.AutomaticallyClosed:
-                    return "icon_warning.png";
-                case CheckPointStatus.InterruptedWithRejection:
-                    return "icon_error.png";
                 default:
                     return "icon_error.png";
             }
@@ -180,11 +174,6 @@ namespace CheckDrive.Mobile.Models
                     return "Yakunlanmagan";
                 case CheckPointStatus.Completed:
                     return "Yakunlangan";
-                case CheckPointStatus.PendingManagerReview:
-                    return "Menejer tekshiruvida";
-                case CheckPointStatus.InterruptedWithRejection:
-                    return "Muammo bilan to'xtatilgan";
-                case CheckPointStatus.AutomaticallyClosed:
                     return "Sistema tomonidan yopilgan";
                 default:
                     return "Noaniq xolatda";

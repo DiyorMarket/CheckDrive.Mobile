@@ -44,7 +44,7 @@ namespace CheckDrive.Mobile.Models
                     CheckPointId = Id,
                     Date = DoctorReview.Date,
                     Notes = DoctorReview.Notes,
-                    ReviewerName = DoctorReview.DriverName,
+                    ReviewerName = DoctorReview.DoctorName,
                     Status = DoctorReview.IsHealthy ? ReviewStatus.Approved : ReviewStatus.Rejected,
                     Type = ReviewType.DoctorReview
                 };
