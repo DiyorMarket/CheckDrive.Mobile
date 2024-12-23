@@ -101,7 +101,7 @@ namespace CheckDrive.Mobile.Helpers
                 }
                 else if (review.Status == ReviewStatus.Rejected)
                 {
-                    checkPoint.Status = CheckPointStatus.InterruptedWithRejection;
+                    checkPoint.Status = CheckPointStatus.Interrupted;
                     checkPoint.Stage = GetStage(review.Type);
                 }
             }
