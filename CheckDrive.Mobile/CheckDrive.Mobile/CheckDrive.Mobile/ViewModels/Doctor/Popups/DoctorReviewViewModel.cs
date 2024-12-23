@@ -2,6 +2,7 @@
 using CheckDrive.Mobile.Models.Driver;
 using CheckDrive.Mobile.Stores.Account;
 using Rg.Plugins.Popup.Services;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -75,23 +76,37 @@ namespace CheckDrive.Mobile.ViewModels.Doctor.Popups
 
         private async Task OnApproveAsync()
         {
-            var reviewerId = await _accountStore.GetUserIdAsync();
-            var review = new DoctorReviewRequest(
-                driverId: DriverId,
-                doctorId: reviewerId,
-                isHealthy: IsHealthy,
-                notes: Notes);
+            try
+            {
+                var reviewerId = await _accountStore.GetUserIdAsync();
+                var review = new DoctorReviewRequest(
+                    driverId: DriverId,
+                    doctorId: reviewerId,
+                    isHealthy: IsHealthy,
+                    notes: Notes);
 
-            await PopupNavigation.Instance.PopAsync();
+                await PopupNavigation.Instance.PopAsync();
 
-            _completionSource.SetResult(review);
+                _completionSource.SetResult(review);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         private async Task OnCancelAsync()
         {
-            await PopupNavigation.Instance.PopAsync();
+            try
+            {
+                await PopupNavigation.Instance.PopAsync();
 
-            _completionSource.SetResult(null);
+                _completionSource.SetResult(null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private bool CanApprove()
