@@ -130,7 +130,7 @@ namespace CheckDrive.Mobile
                     await Shell.Current.GoToAsync(nameof(LoginPage), true);
                 }
 
-                await Shell.Current.Navigation.PushAsync(new UnknownErrorPage(), true);
+                await Shell.Current.Navigation.PushAsync(new UnknownErrorPage(ex.Message), true);
             });
         }
     }
