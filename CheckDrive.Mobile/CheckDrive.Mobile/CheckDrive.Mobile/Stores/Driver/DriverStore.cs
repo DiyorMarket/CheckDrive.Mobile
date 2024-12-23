@@ -40,12 +40,12 @@ namespace CheckDrive.Mobile.Stores.Driver
             await _client.PostAsync("drivers/reviews", request);
         }
 
-        public async Task<List<CheckPointHistoryDto>> GetHistoriesAsync()
+        public async Task<List<DriverHistory>> GetHistoriesAsync()
         {
             var userId = await _accountStore.GetUserIdAsync();
-            var checkPoints = await _client.GetAsync<List<CheckPointHistoryDto>>($"reviews/histories/drivers/{userId}");
+            var histories = await _client.GetAsync<List<DriverHistory>>($"reviews/histories/drivers/{userId}");
 
-            return checkPoints;
+            return histories;
         }
     }
 }

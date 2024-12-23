@@ -11,6 +11,6 @@ namespace CheckDrive.Mobile.Stores.Driver
         Task<List<DriverDto>> GetDriversAsync(DriverStatus status = DriverStatus.Available);
         Task<CheckPointDto> GetCurrentCheckPointAsync();
         Task SendReviewConfirmationAsync(ReviewConfirmationRequest request);
-        Task<List<CheckPointHistoryDto>> GetHistoriesAsync();
+        Task<List<DriverHistory>> GetHistoriesAsync();
     }
 }

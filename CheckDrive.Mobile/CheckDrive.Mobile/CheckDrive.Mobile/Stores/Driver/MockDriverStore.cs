@@ -33,5 +33,10 @@ namespace CheckDrive.Mobile.Stores.Driver
         {
             throw new NotImplementedException();
         }
+
+        Task<List<DriverHistory>> IDriverStore.GetHistoriesAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
