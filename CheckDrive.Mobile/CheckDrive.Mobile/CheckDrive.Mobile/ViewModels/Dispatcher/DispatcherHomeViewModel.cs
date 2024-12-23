@@ -1,6 +1,7 @@
 ﻿using CheckDrive.Mobile.Models;
 using CheckDrive.Mobile.Models.Dispatcher;
 using CheckDrive.Mobile.Models.Enums;
+using CheckDrive.Mobile.Services;
 using CheckDrive.Mobile.Stores.CheckPoint;
 using CheckDrive.Mobile.Stores.Dispatcher;
 using CheckDrive.Mobile.Views.Dispatcher.Popups;
@@ -16,6 +17,7 @@ namespace CheckDrive.Mobile.ViewModels.Dispatcher
 {
     public class DispatcherHomeViewModel : BaseViewModel
     {
+        private readonly SignalRService _signalRService;
         private readonly ICheckPointStore _checkPointStore;
         private readonly IDispatcherStore _dispatcherStore;
 
@@ -30,6 +32,7 @@ namespace CheckDrive.Mobile.ViewModels.Dispatcher
 
         public DispatcherHomeViewModel()
         {
+            _signalRService = DependencyService.Get<SignalRService>();
             _checkPointStore = DependencyService.Get<ICheckPointStore>();
             _dispatcherStore = DependencyService.Get<IDispatcherStore>();
 
@@ -41,6 +44,13 @@ namespace CheckDrive.Mobile.ViewModels.Dispatcher
             RefreshCommand = new Command(async () => await LoadCheckPointsAsync());
             ShowReviewCommand = new Command<CheckPointDto>(async (checkPoint) => await OnShowReviewAsync(checkPoint));
             SearchCommand = new Command<string>(OnSearch);
+        }
+
+        public async Task InitializeAsync()
+        {
+            await _signalRService.StartConnectionAsync();
+
+            SubscribeToCheckPointProgressUpdates();
         }
 
         public async Task LoadCheckPointsAsync()
@@ -59,11 +69,7 @@ namespace CheckDrive.Mobile.ViewModels.Dispatcher
                 _allCheckPoints.Clear();
                 _allCheckPoints.AddRange(checkPoints);
 
-                FilteredCheckPoints.Clear();
-                foreach (var checkPoint in checkPoints)
-                {
-                    FilteredCheckPoints.Add(checkPoint);
-                }
+                UpdateCheckPoints(checkPoints);
             }
             catch (Exception ex)
             {
@@ -78,21 +84,18 @@ namespace CheckDrive.Mobile.ViewModels.Dispatcher
         private void OnSearch(string searchText)
         {
             searchText = searchText.Trim().ToLower();
+            var filteredCheckPoints = string.IsNullOrEmpty(searchText)
+                ? _allCheckPoints
+                : _allCheckPoints.Where(x => x.DriverName.ToLower().Contains(searchText));
+
+            UpdateCheckPoints(filteredCheckPoints);
+        }
+
+        private void UpdateCheckPoints(IEnumerable<CheckPointDto> checkPoints)
+        {
             FilteredCheckPoints.Clear();
 
-            if (string.IsNullOrEmpty(searchText))
-            {
-                foreach (var checkPoint in _allCheckPoints)
-                {
-                    FilteredCheckPoints.Add(checkPoint);
-                }
-
-                return;
-            }
-
-            var filteredCheckPoints = _allCheckPoints.Where(x => x.DriverName.Contains(searchText)).ToList();
-
-            foreach (var checkPoint in filteredCheckPoints)
+            foreach (var checkPoint in checkPoints)
             {
                 FilteredCheckPoints.Add(checkPoint);
             }
@@ -149,6 +152,14 @@ namespace CheckDrive.Mobile.ViewModels.Dispatcher
             {
                 IsBusy = false;
             }
+        }
+
+        private void SubscribeToCheckPointProgressUpdates()
+        {
+            MessagingCenter.Subscribe<SignalRService>(this, "CheckPointProgressUpdated", async _ =>
+            {
+                await LoadCheckPointsAsync();
+            });
         }
     }
 }

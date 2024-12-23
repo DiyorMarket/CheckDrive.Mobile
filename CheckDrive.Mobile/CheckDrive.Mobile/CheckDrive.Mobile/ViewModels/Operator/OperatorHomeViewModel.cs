@@ -11,11 +11,13 @@ using CheckDrive.Mobile.Stores.CheckPoint;
 using CheckDrive.Mobile.Stores.Operator;
 using CheckDrive.Mobile.Views.Operator;
 using Rg.Plugins.Popup.Services;
+using CheckDrive.Mobile.Services;
 
 namespace CheckDrive.Mobile.ViewModels.Operator
 {
     public class OperatorHomeViewModel : BaseViewModel
     {
+        private readonly SignalRService _signalRService;
         private readonly ICheckPointStore _checkPointStore;
         private readonly IOperatorStore _operatorStore;
 
@@ -31,6 +33,7 @@ namespace CheckDrive.Mobile.ViewModels.Operator
 
         public OperatorHomeViewModel()
         {
+            _signalRService = DependencyService.Get<SignalRService>();
             _checkPointStore = DependencyService.Get<ICheckPointStore>();
             _operatorStore = DependencyService.Get<IOperatorStore>();
 
@@ -43,6 +46,12 @@ namespace CheckDrive.Mobile.ViewModels.Operator
             ShowReviewPopupCommand = new Command<CheckPointDto>(async (checkPoint) => await OnShowReviewPopupAsync(checkPoint));
             SearchCommand = new Command<string>(OnSearch);
             RefreshCommand = new Command(async () => await LoadDataAsync());
+        }
+
+        public async Task InitializeAsync()
+        {
+            await _signalRService.StartConnectionAsync();
+            SubscribeToCheckPointProgressUpdates();
         }
 
         public async Task LoadDataAsync()
@@ -144,6 +153,14 @@ namespace CheckDrive.Mobile.ViewModels.Operator
             {
                 FilteredCheckPoints.Add(checkPoint);
             }
+        }
+
+        private void SubscribeToCheckPointProgressUpdates()
+        {
+            MessagingCenter.Subscribe<SignalRService>(this, "CheckPointProgressUpdated", async _ =>
+            {
+                await LoadDataAsync();
+            });
         }
     }
 }

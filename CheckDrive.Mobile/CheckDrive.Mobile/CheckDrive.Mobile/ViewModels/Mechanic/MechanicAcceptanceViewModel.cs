@@ -11,11 +11,13 @@ using Xamarin.Forms;
 using System.Linq;
 using CheckDrive.Mobile.Models.Mechanic.Acceptance;
 using Rg.Plugins.Popup.Services;
+using CheckDrive.Mobile.Services;
 
 namespace CheckDrive.Mobile.ViewModels.Mechanic
 {
     public class MechanicAcceptanceViewModel : BaseViewModel
     {
+        private readonly SignalRService _signalRService;
         private readonly ICheckPointStore _checkPointStore;
         private readonly IMechanicStore _mechanicStore;
 
@@ -30,6 +32,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
 
         public MechanicAcceptanceViewModel()
         {
+            _signalRService = DependencyService.Get<SignalRService>();
             _checkPointStore = DependencyService.Get<ICheckPointStore>();
             _mechanicStore = DependencyService.Get<IMechanicStore>();
 
@@ -41,6 +44,12 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             SearchCommand = new Command<string>(OnSearch);
             RefreshCommand = new Command(async () => await LoadDriversAsync());
             ShowReviewPopupCommand = new Command<CheckPointDto>(async (checkPoint) => await ShowReviewPopup(checkPoint));
+        }
+
+        public async Task InitializeAsync()
+        {
+            await _signalRService.StartConnectionAsync();
+            SubscribeToCheckPointProgressUpdates();
         }
 
         public async Task LoadDriversAsync()
@@ -56,7 +65,9 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             {
                 var checkPoints = await _checkPointStore.GetCheckPointsAsync(CheckPointStage.OperatorReview);
 
+                _allCheckPoints.Clear();
                 _allCheckPoints.AddRange(checkPoints);
+
                 UpdateCheckPoints(checkPoints);
             }
             catch (Exception ex)
@@ -77,6 +88,24 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
                 : _allCheckPoints.Where(x => x.DriverName.Contains(searchText));
 
             UpdateCheckPoints(filteredCheckPoints);
+        }
+
+        private void UpdateCheckPoints(IEnumerable<CheckPointDto> checkPoints)
+        {
+            FilteredCheckPoints.Clear();
+
+            foreach (var checkPoint in checkPoints)
+            {
+                FilteredCheckPoints.Add(checkPoint);
+            }
+        }
+
+        private void SubscribeToCheckPointProgressUpdates()
+        {
+            MessagingCenter.Subscribe<SignalRService>(this, "CheckPointProgressUpdated", async _ =>
+            {
+                await LoadDriversAsync();
+            });
         }
 
         private async Task ShowReviewPopup(CheckPointDto checkPoint)
@@ -129,16 +158,6 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             finally
             {
                 IsBusy = false;
-            }
-        }
-
-        private void UpdateCheckPoints(IEnumerable<CheckPointDto> checkPoints)
-        {
-            FilteredCheckPoints.Clear();
-
-            foreach (var checkPoint in checkPoints)
-            {
-                FilteredCheckPoints.Add(checkPoint);
             }
         }
     }

@@ -20,6 +20,7 @@ namespace CheckDrive.Mobile.Views.Dispatcher
 
         protected override async void OnAppearing()
         {
+            await _viewModel.InitializeAsync();
             await _viewModel.LoadCheckPointsAsync();
             base.OnAppearing();
         }

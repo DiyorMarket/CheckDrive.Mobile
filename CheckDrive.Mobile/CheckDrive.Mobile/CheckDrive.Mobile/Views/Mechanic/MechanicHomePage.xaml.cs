@@ -15,7 +15,7 @@ namespace CheckDrive.Mobile.Views.Mechanic
         protected override async void OnAppearing()
         {
             await HandoverView.LoadViewModelData();
-            Task.Run(() => AcceptanceView.LoadCheckPointsAsync());
+            await Task.Run(async () => await AcceptanceView.InitializeAsync());
 
             base.OnAppearing();
         }

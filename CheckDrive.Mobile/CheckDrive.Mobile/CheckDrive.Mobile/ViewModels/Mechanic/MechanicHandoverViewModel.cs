@@ -12,11 +12,13 @@ using CheckDrive.Mobile.Views.Mechanic.Popups;
 using CheckDrive.Mobile.Models.Enums;
 using CheckDrive.Mobile.Models.Mechanic.Handover;
 using Rg.Plugins.Popup.Services;
+using CheckDrive.Mobile.Services;
 
 namespace CheckDrive.Mobile.ViewModels.Mechanic
 {
     public class MechanicHandoverViewModel : BaseViewModel
     {
+        private readonly SignalRService _signalRService;
         private readonly ICheckPointStore _checkPointStore;
         private readonly IMechanicStore _mechanicStore;
         private readonly ICarStore _carStore;
@@ -33,6 +35,7 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
 
         public MechanicHandoverViewModel()
         {
+            _signalRService = DependencyService.Get<SignalRService>();
             _checkPointStore = DependencyService.Get<ICheckPointStore>();
             _mechanicStore = DependencyService.Get<IMechanicStore>();
             _carStore = DependencyService.Get<ICarStore>();
@@ -46,6 +49,12 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
             SearchCommand = new Command<string>(OnSearch);
             RefreshCommand = new Command(async () => await LoadDriversAsync());
             ShowReviewPopupCommand = new Command<CheckPointDto>(async (driver) => await ShowReviewPopup(driver));
+        }
+
+        public async Task InitializeAsync()
+        {
+            await _signalRService.StartConnectionAsync();
+            SubscribeToCheckPointProgressUpdates();
         }
 
         public async Task LoadDriversAsync()
@@ -62,15 +71,12 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
                 var checkPoints = await _checkPointStore.GetCheckPointsAsync(CheckPointStage.DoctorReview);
                 var cars = await _carStore.GetAvailableCarsAsync();
 
+                _allCheckPoints.Clear();
                 _allCheckPoints.AddRange(checkPoints);
-                FilteredCheckPoints.Clear();
-                foreach (var checkPoint in checkPoints)
-                {
-                    FilteredCheckPoints.Add(checkPoint);
-                }
-
                 _cars.Clear();
                 _cars.AddRange(cars);
+
+                UpdateCheckPoints(checkPoints);
             }
             catch (Exception ex)
             {
@@ -159,5 +165,13 @@ namespace CheckDrive.Mobile.ViewModels.Mechanic
 
         private bool CanShowReviewPopup()
             => _cars.Any() && PopupNavigation.Instance.PopupStack.Count == 0;
+
+        private void SubscribeToCheckPointProgressUpdates()
+        {
+            MessagingCenter.Subscribe<SignalRService>(this, "CheckPointProgressUpdated", async _ =>
+            {
+                await LoadDriversAsync();
+            });
+        }
     }
 }

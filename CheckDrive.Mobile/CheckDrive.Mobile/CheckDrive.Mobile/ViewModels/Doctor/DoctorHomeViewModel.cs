@@ -81,16 +81,16 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
 
         private async Task ShowReviewPopup(DriverDto driver)
         {
-            if (PopupNavigation.Instance.PopupStack.Count > 0)
+            if (driver is null)
             {
                 return;
             }
 
-            var completionSource = new TaskCompletionSource<DoctorReviewRequest>();
-            var reviewPopup = new DoctorReviewPopup(driver, completionSource);
-
             try
             {
+                var completionSource = new TaskCompletionSource<DoctorReviewRequest>();
+                var reviewPopup = new DoctorReviewPopup(driver, completionSource);
+
                 await PopupNavigation.Instance.PushAsync(reviewPopup);
 
                 var result = await completionSource.Task;
@@ -119,8 +119,12 @@ namespace CheckDrive.Mobile.ViewModels.Doctor
                 await DisplayReviewSuccessAsync();
 
                 var driver = _drivers.Find(x => x.Id == request.DriverId);
-                _drivers.Remove(driver);
-                Drivers.Remove(driver);
+
+                if (driver != null)
+                {
+                    _drivers.Remove(driver);
+                    Drivers.Remove(driver);
+                }
             }
             catch (Exception ex)
             {

@@ -20,9 +20,10 @@ namespace CheckDrive.Mobile.Views.Mechanic
             BindingContext = _viewModel;
         }
 
-        public Task LoadCheckPointsAsync()
+        public async Task InitializeAsync()
         {
-            return _viewModel.LoadDriversAsync();
+            await _viewModel.InitializeAsync();
+            await _viewModel.LoadDriversAsync();
         }
     }
 }

@@ -21,6 +21,7 @@ namespace CheckDrive.Mobile.Views.Mechanic
 
         public async Task LoadViewModelData()
         {
+            await _viewModel.InitializeAsync();
             await _viewModel.LoadDriversAsync();
         }
     }

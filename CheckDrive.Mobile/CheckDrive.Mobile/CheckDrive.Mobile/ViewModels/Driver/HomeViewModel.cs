@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CheckDrive.Mobile.ViewModels.Driver
@@ -83,7 +84,6 @@ namespace CheckDrive.Mobile.ViewModels.Driver
 
                 UpdateReviews(checkPoint);
                 UpdateCar(checkPoint);
-                // await CheckPendingReviews(checkPoint);
             }
             catch (HttpRequestException ex)
             {
@@ -91,7 +91,7 @@ namespace CheckDrive.Mobile.ViewModels.Driver
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                await DisplayErrorAsync("", ex.Message);
             }
             finally
             {
@@ -165,6 +165,7 @@ namespace CheckDrive.Mobile.ViewModels.Driver
             {
                 if (review.Status == ReviewStatus.Pending)
                 {
+                    Vibration.Vibrate();
                     await OnShowConfirmationPopupAsync(review);
                 }
             }
@@ -172,6 +173,11 @@ namespace CheckDrive.Mobile.ViewModels.Driver
 
         private async Task OnShowConfirmationPopupAsync(ReviewDto review)
         {
+            if (IsBusy)
+            {
+                return;
+            }
+
             if (review.Status != ReviewStatus.Pending)
             {
                 return;
@@ -197,7 +203,7 @@ namespace CheckDrive.Mobile.ViewModels.Driver
                 var request = await completionSource.Task;
 
                 await _driverStore.SendReviewConfirmationAsync(request);
-                await OnRefreshAsync();
+                // await OnRefreshAsync();
             }
             catch (Exception ex)
             {
