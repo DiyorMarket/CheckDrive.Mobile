@@ -18,11 +18,18 @@ jobs:
         with: 
           dotnet-version: '6.0.x'
 
+      # For classic Xamarin.Forms on macOS, you usually don't need to manually install Mono
+      # because it's already present on macos-latest:
+      #
+      # If you do need a particular version, you can still do:
+      # - name: Install Mono
+      #   run: brew install mono
+
       - name: Restore NuGet packages
         run: dotnet restore CheckDrive.Mobile/CheckDrive.Mobile.sln
-
+      
       - name: Build solution
         run: dotnet build CheckDrive.Mobile/CheckDrive.Mobile.sln --configuration Release --no-restore
-
+      
       - name: Run tests
         run: dotnet test CheckDrive.Mobile/CheckDrive.Mobile.sln --configuration Release --no-build
