@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-test-deploy:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout
@@ -18,17 +18,11 @@ jobs:
         with: 
           dotnet-version: '6.0.x'
 
-      - name: Install Mono
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mono-complete
-      
       - name: Restore NuGet packages
         run: dotnet restore CheckDrive.Mobile/CheckDrive.Mobile.sln
-      
+
       - name: Build solution
         run: dotnet build CheckDrive.Mobile/CheckDrive.Mobile.sln --configuration Release --no-restore
-      
+
       - name: Run tests
         run: dotnet test CheckDrive.Mobile/CheckDrive.Mobile.sln --configuration Release --no-build
-        
