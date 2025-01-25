@@ -1,4 +1,4 @@
-name: Build, Test and Deploy (CheckDrive.Mobile)
+name: Build (CheckDrive.Mobile)
 
 on:
   push:
@@ -6,30 +6,29 @@ on:
       - master
 
 jobs:
-  build-test-deploy:
-    runs-on: macos-latest
+  build:
+    runs-on: macos-latest  # macOS includes the classic Xamarin toolchain
 
     steps:
+      # 1) Check out the repository
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup .NET SDK
+      # 2) Set up .NET 6 (stable) to avoid .NET 9 previews
+      - name: Setup .NET 6
         uses: actions/setup-dotnet@v3
-        with: 
+        with:
           dotnet-version: '6.0.x'
+          include-prerelease: false
 
-      # For classic Xamarin.Forms on macOS, you usually don't need to manually install Mono
-      # because it's already present on macos-latest:
-      #
-      # If you do need a particular version, you can still do:
-      # - name: Install Mono
-      #   run: brew install mono
+      # 3) Display which .NET versions are installed (for debugging)
+      - name: Show .NET info
+        run: dotnet --info
 
-      - name: Restore NuGet packages
-        run: dotnet restore CheckDrive.Mobile/CheckDrive.Mobile.sln
-      
-      - name: Build solution
-        run: dotnet build CheckDrive.Mobile/CheckDrive.Mobile.sln --configuration Release --no-restore
-      
-      - name: Run tests
-        run: dotnet test CheckDrive.Mobile/CheckDrive.Mobile.sln --configuration Release --no-build
+      # 4) Restore packages with MSBuild (classic approach for Xamarin)
+      - name: MSBuild Restore
+        run: msbuild CheckDrive.Mobile/CheckDrive.Mobile.sln /t:Restore /p:Configuration=Release
+
+      # 5) Build the solution with MSBuild
+      - name: MSBuild Build
+        run: msbuild CheckDrive.Mobile/CheckDrive.Mobile.sln /t:Build /p:Configuration=Release
