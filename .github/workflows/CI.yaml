@@ -1,5 +1,4 @@
 name: Build (CheckDrive.Mobile)
-
 on:
   push:
     branches:
@@ -7,28 +6,29 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest  # macOS includes the classic Xamarin toolchain
+    runs-on: macos-latest
 
     steps:
-      # 1) Check out the repository
       - name: Checkout
         uses: actions/checkout@v3
 
-      # 2) Set up .NET 6 (stable) to avoid .NET 9 previews
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.x'
           include-prerelease: false
 
-      # 3) Display which .NET versions are installed (for debugging)
       - name: Show .NET info
         run: dotnet --info
 
-      # 4) Restore packages with MSBuild (classic approach for Xamarin)
+      # Install Xamarin.Android via Homebrew cask
+      - name: Install Xamarin.Android
+        run: |
+          brew update
+          brew install --cask xamarin-android
+
       - name: MSBuild Restore
         run: msbuild CheckDrive.Mobile/CheckDrive.Mobile.sln /t:Restore /p:Configuration=Release
 
-      # 5) Build the solution with MSBuild
       - name: MSBuild Build
         run: msbuild CheckDrive.Mobile/CheckDrive.Mobile.sln /t:Build /p:Configuration=Release
