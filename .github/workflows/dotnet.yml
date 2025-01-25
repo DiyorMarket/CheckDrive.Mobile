@@ -1,50 +1,34 @@
-name: .NET
+name: Build, Test and Deploy (CheckDrive.Mobile)
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
 
 jobs:
-  build-android:
+  build-test-deploy:
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Install .NET workloads for Android
-      run: |
-        dotnet workload install android
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: CheckDrive.Mobile
-    - name: Build Android
-      run: dotnet build --no-restore
-      working-directory: CheckDrive.Mobile
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      working-directory: CheckDrive.Mobile
 
-  build-ios:
-    runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Install .NET workloads for iOS
-      run: |
-        dotnet workload install ios
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: CheckDrive.Mobile
-    - name: Build iOS
-      run: dotnet build --no-restore
-      working-directory: CheckDrive.Mobile
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      working-directory: CheckDrive.Mobile
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with: 
+          dotnet-version: '6.0.x'
+
+      - name: Install Mono
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mono-complete
+      
+      - name: Restore NuGet packages
+        run: dotnet restore CheckDrive.Mobile/CheckDrive.Mobile.sln
+      
+      - name: Build solution
+        run: dotnet build CheckDrive.Mobile/CheckDrive.Mobile.sln --configuration Release --no-restore
+      
+      - name: Run tests
+        run: dotnet test CheckDrive.Mobile/CheckDrive.Mobile.sln --configuration Release --no-build
+        
